@@ -1,7 +1,7 @@
 ---
 name: content-refresher
 description: 'Use when the user asks to "update outdated content" or "fix traffic/ranking decay"; scores decay, prioritizes refresh work, and produces an update plan with GEO and republishing guidance. Not for net-new content — use seo-content-writer. 内容更新/排名恢复'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when updating outdated content, refreshing old articles, impro
 argument-hint: "<URL of outdated content>"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   geo-relevance: "medium"
 ---
 

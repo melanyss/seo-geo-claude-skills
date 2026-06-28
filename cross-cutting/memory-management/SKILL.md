@@ -1,7 +1,7 @@
 ---
 name: memory-management
 description: 'Use when the user asks to "remember project context"; manages the SEO/GEO memory lifecycle — hot-cache, active work, archive tiers, and privacy cleanup. Not for content or domain scoring — use the auditors. 项目记忆/跨会话'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when reviewing, archiving, or cleaning up campaign memory. Als
 argument-hint: "[review|archive|cleanup]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   geo-relevance: "low"
 ---
 
@@ -144,7 +144,7 @@ When a user references something unclear, follow this lookup sequence:
 
 **Step 3: Check Cold Storage**
 - Search `memory/archive/` first for dated `YYYY-MM-DD-` archived files.
-- If the archive points to a source category, follow that trail back to `memory/research/`, `memory/audits/`, or `memory/monitoring/`.
+- If the archive points to a source category, follow that trail back to `memory/research/`, `memory/audits/`, `memory/monitoring/`, or `memory/influencer/`.
 - Treat COLD findings as historical unless refreshed by the current session.
 
 **Step 4: Ask User**

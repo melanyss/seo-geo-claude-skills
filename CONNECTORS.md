@@ -93,6 +93,30 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 | Communication | `~~team chat` | Slack, Teams, Discord | — |
 | Reporting | `~~reporting` | Looker Studio, Tableau, Power BI | — |
 
+### Influencer / IMPACT categories
+
+The 18 influencer-marketing skills use these additional placeholders (plus `~~CRM`, `~~content platform`/`~~CMS`, `~~team chat`, and `~~reporting` shared with the table above). Every one works at Tier 1 — paste the data manually; the right-hand column is the keyless / own-data path.
+
+| Category | Placeholder | Example paid tools | Free / own-data path |
+|----------|-------------|--------------------|----------------------|
+| Influencer Database | `~~influencer database` | Modash, HypeAuditor, Upfluence, GRIN | manual creator CSV (handles + public metrics) |
+| Social Platform Analytics | `~~social platform analytics` | IG/TikTok/YouTube creator APIs, Dash Hudson | native creator dashboards (manual export of own/partner data) |
+| Social Listening | `~~social listening` | Brandwatch, Sprout Social, Talkwalker | Google Alerts / F5Bot / platform search |
+| Audience Intelligence | `~~audience intelligence` | HypeAuditor, Audiense, SparkToro | platform audience demographics (own/manual) |
+| Audience Overlap | `~~audience overlap` | Audiense, SparkToro | manual follower-sample comparison |
+| Trend Database | `~~trend database` | Exploding Topics, TrendTok | Google Trends / platform trending pages |
+| Ad Platform | `~~ad platform` | Meta Ads, TikTok Ads, Google Ads | native ad manager (own data, manual export) |
+| Web Analytics | `~~web analytics` | GA4, Adobe Analytics, Plausible | GA4 Data API (own data) |
+| E-commerce / Sales | `~~ecommerce / sales platform` / `~~ecommerce / analytics` | Shopify, WooCommerce, Stripe | platform order export (own data) |
+| A/B Testing | `~~A/B testing platform` | Optimizely, VWO | server-side split / manual variant test |
+| Landing / Page Builder | `~~CMS / landing page builder` | Webflow, Unbounce, Instapage | static HTML / existing CMS |
+| DAM / Asset Library | `~~DAM / asset library` | Bynder, Brandfolder | shared Drive / Dropbox folder |
+| Email / DM | `~~email/DM tool` | Klaviyo, Mailchimp, native DMs | native DM + manual email |
+| Compliance Reference | `~~compliance reference` | platform policy portals | FTC 16 CFR §255 / Part 465 (public) |
+| Competitor Tracking | `~~competitor tracking` | Social Blade, BuzzSumo | manual competitor profile review |
+| Customer Survey | `~~customer survey data` | Typeform, SurveyMonkey, Qualtrics | Google Forms |
+| E-signature | `~~e-signature` | DocuSign, Dropbox Sign, PandaDoc | PDF + manual signature |
+
 ## How placeholders work
 
 A skill might say: *"Pull keyword rankings from `~~SEO tool` and cross-reference with `~~search console` impressions."* If you use Ahrefs + Google Search Console, read it as Ahrefs + GSC. If you use no paid tool, read it as "the Search Console Search Analytics API (above)" — or just paste the data.
@@ -108,7 +132,7 @@ A skill might say: *"Pull keyword rankings from `~~SEO tool` and cross-reference
 | Ahrefs | `https://api.ahrefs.com/mcp/mcp` | streamable HTTP | API key (MCP scope; Lite+ plan) | subscription | keyword & backlink data, site audit |
 | Semrush | `https://mcp.semrush.com/v1/mcp` | streamable HTTP | OAuth, or `Authorization: Apikey KEY` | subscription | `organic_research`, `keyword_research`, `backlink_research` |
 | SE Ranking | `https://api.seranking.com/mcp` | streamable HTTP | OAuth or API key (`X-Api-Key`) | subscription | keyword/backlink/domain, AI-search visibility (160+ tools) |
-| SISTRIX | `https://api.sistrix.com/mcp/` | HTTP | OAuth / Bearer / `X-API-Key` | subscription | `domain`, `keyword`, `links`, `ai` modules |
+| SISTRIX | `https://api.sistrix.com/mcp` | HTTP | OAuth / Bearer / `X-API-Key` | subscription | `domain`, `keyword`, `links`, `ai` modules |
 | SimilarWeb | `https://mcp.similarweb.com` | HTTP | OAuth / key | subscription | traffic estimates, competitive intel |
 | OpenSEO (self-hosted) | `https://<your-host>/mcp` (edit `.mcp.json`) | streamable HTTP | none (local Docker) / OAuth (Cloudflare) | **free app + pay-as-you-go data** | `research_keywords`, `get_ranked_keywords`, `get_serp_results`, `find_serp_competitors`, `get_domain_overview`, `get_backlinks_overview`, `get_search_console_performance`, local-SERP/Maps tools |
 

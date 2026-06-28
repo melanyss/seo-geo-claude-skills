@@ -19,7 +19,7 @@ parameters:
 
 # Research Command
 
-Understand the opportunity and landscape: keyword demand, SERP intent, competitors, content gaps, and site/topic/entity architecture.
+Understand the opportunity and competitive picture: keyword demand, SERP intent, competitors, content gaps, and site/topic/entity architecture.
 
 ## Route
 

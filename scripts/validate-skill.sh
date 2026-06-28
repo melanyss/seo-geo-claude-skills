@@ -211,13 +211,27 @@ fi
 # --- Body length advisory ---
 BODY_LINES=$(awk 'BEGIN{n=0} /^---/{n++; next} n>=2{print}' "$SKILL_FILE" | wc -l | tr -d ' ')
 IS_AUDITOR=$(echo "$FRONTMATTER" | grep -qE '^class: *auditor' && echo "yes" || echo "no")
+# Influencer (IMPACT) skills intentionally inline their step matrices rather than
+# extracting to references/ (see CLAUDE.md Contribution Rules); exempt them from the
+# >250-line references/ advisory by phase directory.
+PHASE_DIR=$(basename "$(dirname "$SKILL_DIR")")
+case "$PHASE_DIR" in insight|map|plan|activate|convert|track) IS_INFLUENCER="yes";; *) IS_INFLUENCER="no";; esac
 
 if [ "$IS_AUDITOR" = "yes" ]; then
     pass "Auditor skill reads the shared runbook + keeps framework-specific examples inline ($BODY_LINES lines)"
+elif [ "$IS_INFLUENCER" = "yes" ] && [ "$BODY_LINES" -gt 250 ] && [ ! -d "$SKILL_DIR/references" ]; then
+    pass "Influencer (IMPACT) skill intentionally inlines its step matrices ($BODY_LINES lines) — see CLAUDE.md"
 elif [ "$BODY_LINES" -gt 250 ] && [ ! -d "$SKILL_DIR/references" ]; then
     warn "Skill body is $BODY_LINES lines but no references/ directory found. Consider extracting detailed tables/rubrics."
 else
     pass "Skill body length OK: $BODY_LINES lines"
+fi
+
+# --- Eval coverage advisory (non-fatal) ---
+if [ -n "$NAME" ] && [ -f "$REPO_ROOT/evals/$NAME/cases.md" ]; then
+    pass "eval cases present: evals/$NAME/cases.md"
+elif [ -n "$NAME" ]; then
+    warn "no eval cases at evals/$NAME/cases.md — add a simulated seed case (see evals/README.md)"
 fi
 
 # --- Shared contract section checks ---

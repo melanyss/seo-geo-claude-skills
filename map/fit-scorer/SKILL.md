@@ -1,7 +1,7 @@
 ---
 name: fit-scorer
 description: 'Use when the user asks to "score this influencer", "rank these creators for our campaign", or "tell me which influencer is the best fit"; produces weighted fit scores across audience match, content quality, brand alignment, engagement authenticity, and partnership potential, plus a ranked comparison and a go/pass verdict. Not for finding new influencers — use influencer-discovery; not for sending outreach — use outreach-manager.'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when a user has a shortlist of influencers and needs an object
 argument-hint: "<brand or campaign> <influencer handle(s)> [campaign goal: awareness|engagement|conversion]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   family: influencer-marketing
   impact-phase: Map
 ---
@@ -87,6 +87,14 @@ When a user requests influencer scoring:
    
    **Scoring Scale**: 1-5 (1=Poor, 2=Below Average, 3=Average, 4=Good, 5=Excellent)
    ```
+
+   **C³ ACE alignment & veto gate.** This skill is the C³ **Creator** scorer ([ACE](../../references/c3/ace-creator-benchmark.md)). Map the dimensions onto ACE: Audience Match → **A**udience; Engagement Quality → **E**ngagement; and the **Brand Safety** sub-check (below) → **C**redibility (C1). Note: the value/aesthetic/messaging-fit part of Brand Alignment is *creator × brand fit*, which C³ scores in ROI.Orchestration (O1), **not** in ACE — ACE is brand-independent, so keep brand-fit out of the Credibility dimension. Before ranking, screen every creator against the three ACE veto items; any failure is disqualifying → verdict **PASS (do not partner)** AND cap the numeric Final Rating at the Poor / Below-Average band (**≤ 2.9 / 5**, i.e. ACE ≤ 59/100) so the score never contradicts the decline verdict. State the veto ID + evidence:
+
+   | Veto | Item | Fail condition |
+   |------|------|----------------|
+   | **A2** | Real-Follower Rate | < 70% real followers, or audit refused (follower fraud) |
+   | **C1** | Brand Safety | disqualifying content / active scandal |
+   | **E2** | Engagement Authenticity | pod / bought engagement (see Engagement Quality below) |
 
 2. **Score Audience Match**
 
@@ -443,7 +451,7 @@ Adjust weights based on campaign goals:
 - [skill-contract.md](../../references/skill-contract.md) — shared contract and handoff summary format.
 - [state-model.md](../../references/state-model.md) — memory tiers and save-path conventions.
 - [CONNECTORS.md](../../CONNECTORS.md) — free/keyless data recipe per connector category.
-- Scoring rubric reference: the C3 benchmark at [references/c3/scoring-architecture.md](../../references/c3/scoring-architecture.md) for weighting and cap methodology.
+- Scoring rubric: the C³ benchmark — [c3-benchmark.md](../../references/c3-benchmark.md) (CVI rollup), [c3/ace-creator-benchmark.md](../../references/c3/ace-creator-benchmark.md) (the ACE Creator rubric this skill emits, incl. the A2/C1/E2 veto items applied above), and [c3/scoring-architecture.md](../../references/c3/scoring-architecture.md) for weighting and cap methodology.
 - Sibling skills: [influencer-discovery](../influencer-discovery/SKILL.md), [competitor-tracker](../competitor-tracker/SKILL.md), [audience-analyzer](../../insight/audience-analyzer/SKILL.md), [outreach-manager](../../activate/outreach-manager/SKILL.md).
 
 ## Next Best Skill

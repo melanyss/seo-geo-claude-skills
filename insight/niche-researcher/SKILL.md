@@ -1,7 +1,7 @@
 ---
 name: niche-researcher
 description: 'Use when the user asks to "research a niche community", "deep-dive a subculture", or "find micro-niches for a brand"; produces a community map, culture decode (language, norms, taboos), key-voice tiers, content ecosystem, brand-fit score, and a phased entry strategy. Not for finding specific creators to contract — use influencer-discovery.'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Entering a new market or category, understanding a subculture befo
 argument-hint: "<niche or community> [parent category] [brand or product]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   family: influencer-marketing
   impact-phase: Insight
 ---
@@ -345,7 +345,7 @@ When a user requests niche research:
    - [Sensitivity 1]: [how to navigate]
    - [Sensitivity 2]: [how to navigate]
    
-   ### Competitive Landscape
+   ### Competitive Map
    
    | Competitor | Niche Presence | Strategy | Performance |
    |------------|----------------|----------|-------------|

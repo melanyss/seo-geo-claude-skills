@@ -1,6 +1,6 @@
 # Skill Contract
 
-This repository uses one contract across all 20 skills. The contract keeps each skill specialized while making the full library feel like one operating system.
+This repository uses one contract across all 38 skills — 20 Search (SEO/GEO) skills and 18 influencer-marketing (IMPACT) skills. The contract keeps each skill specialized while making the full library feel like one operating system. The Search skills score on [CORE-EEAT](core-eeat-benchmark.md) and [CITE](cite-domain-rating.md); the influencer skills score on [C³](c3-benchmark.md).
 
 ## Skill Authoring Discipline
 
@@ -203,9 +203,20 @@ Auditor skills (`content-quality-auditor`, `domain-authority-auditor`) MUST igno
 - Writes: gates, truth records, and memory structure
 - Promotes: the canonical state other skills should trust
 
+### Influencer categories (IMPACT discipline)
+
+The 18 influencer-marketing skills span six phases and score on the [C³ framework](c3-benchmark.md) (Creator/Content/Campaign on ACE/ART/ROI). They write to `memory/influencer/<skill>/`.
+
+- **Insight** (audience-analyzer, niche-researcher, trend-spotter) — Reads: audience signals, niche, trends, platform data. Writes: audience profiles, niche dossiers, trend reports. Promotes: target-audience facts, niche positioning, durable trends.
+- **Map** (influencer-discovery, fit-scorer, competitor-tracker) — Reads: brand/campaign context, creator shortlists, competitor partnerships. Writes: shortlists, fit scores, competitor partner maps. Promotes: vetted creators, fit verdicts, competitor benchmarks.
+- **Plan** (campaign-planner, brief-generator, budget-optimizer) — Reads: goals, KPIs, budget, creator set. Writes: campaign plans, briefs, budget allocations. Promotes: approved plan, budget envelope, key messages.
+- **Activate** (outreach-manager, content-reviewer, contract-helper) — Reads: shortlists, briefs, content submissions, deal terms. Writes: outreach threads, review decisions, contract drafts. Promotes: confirmed partnerships, approved content, signed terms and blockers.
+- **Convert** (content-amplifier, ugc-repurposer, landing-optimizer) — Reads: published content, UGC assets, landing pages. Writes: amplification plans, repurposed assets, landing-page optimizations. Promotes: winning creatives, conversion blockers.
+- **Track** (performance-analyzer, roi-calculator, report-generator) — Reads: campaign metrics, costs, baselines. Writes: performance analyses, ROI/CVI calculations, reports. Promotes: confirmed results, ROI verdicts, follow-up actions.
+
 ## Protocol Layer vs Execution Layer
 
-| Behavior | Execution Layer (16 skills) | Protocol Layer (4 skills) |
+| Behavior | Execution Layer (34 skills) | Protocol Layer (4 skills) |
 |----------|---------------------------|--------------------------|
 | Triggering | User invocation or intent match | User + hook auto-trigger + other skill recommendation |
 | Output format | Report or asset + handoff summary | Gate verdict (SHIP/FIX/BLOCK or TRUSTED/CAUTIOUS/UNTRUSTED) + handoff summary |
@@ -310,6 +321,7 @@ These norms apply to all skills when their output incorporates data from multipl
 | Optimize (4 skills) | `memory/audits/<skill>/` | per-skill audit summaries, veto items, fix priorities |
 | Monitor (4 skills) | `memory/monitoring/` | rank deltas, alert history, backlink changes |
 | Cross-cutting (4 skills) | per-role paths | see protocol-layer definitions |
+| Influencer / IMPACT (18 skills) | `memory/influencer/<skill>/` | audience profiles, creator fit scores, campaign plans, briefs, outreach, content reviews, ROI/CVI calculations, reports |
 | **Protocol gate aggregate (v7.1.0+)** | `memory/audits/YYYY-MM.md` | **owned by `memory-management`**; monthly archive of `content-quality-auditor` and `domain-authority-auditor` handoffs in the structured format defined in [memory-management SKILL.md §Writes](../cross-cutting/memory-management/SKILL.md); consumed by the Runbook §5 cross-version rule |
 
 **Note on `memory/audits/`**: two conventions coexist. The `<skill>/` subdirectory pattern (Optimize category, per-skill files) is for skill-specific audit artifacts (e.g., `memory/audits/technical-seo-checker/2026-04-11-example.md`). The flat `YYYY-MM.md` pattern (Protocol gate aggregate, monthly) is for the CORE-EEAT / CITE protocol-layer handoff archive. They are siblings, not a conflict.

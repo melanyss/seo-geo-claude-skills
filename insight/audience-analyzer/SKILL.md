@@ -1,7 +1,7 @@
 ---
 name: audience-analyzer
 description: 'Use when the user asks to "analyze my target audience" or "build an audience profile for influencer targeting"; produces demographic/psychographic profiles, platform-priority matrices, named personas, and influencer-selection criteria. Not for finding specific creators — use influencer-discovery; not for niche community deep-dives — use niche-researcher.'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Run at the start of an influencer program or when entering a new a
 argument-hint: "<brand or product> [category] [geographic focus]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   family: influencer-marketing
   impact-phase: Insight
 ---

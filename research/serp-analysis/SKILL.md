@@ -1,7 +1,7 @@
 ---
 name: serp-analysis
 description: 'Use when the user asks to "analyze the SERP" or "SERP分析"; maps SERP features, layout, ranking factors, search intent, AI Overviews, and snippet opportunities for a query. Not for keyword demand discovery — use keyword-research. SERP分析/搜索结果'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -10,7 +10,7 @@ argument-hint: "<keyword or query>"
 allowed-tools: WebFetch
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   geo-relevance: "high"
 ---
 
