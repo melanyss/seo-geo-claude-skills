@@ -221,6 +221,10 @@ When a user requests content review:
    **Status**: ✅ Pass / ❌ Fail (no partial pass for compliance)
    ```
 
+   **C³ ART veto enforcement.** This compliance gate is the C³ **Content** review ([ART](../../references/c3/art-content-benchmark.md)). Two ART items are veto-level — a failure forces the overall decision to **Reject** (never "revise"), and you must cite the veto ID:
+   - **T1 · FTC Disclosure** (maps to the Disclosure Check + FTC compliance rows above) — missing or inadequate disclosure on sponsored content → **Reject (T1)**. Regulatory basis: FTC 16 CFR §255 and the 2024 Trade Regulation Rule (16 CFR Part 465). Not legal advice.
+   - **T2 · Claim Integrity** (maps to Claims substantiation) — false or unsubstantiated claims → **Reject (T2)**.
+
 5. **Quality Assessment**
 
    ```markdown
@@ -439,12 +443,14 @@ When a user requests content review:
 | Compliance | 5/10 | ❌ |
 | Quality | 9/10 | ✅ |
 
-**Decision**: 🔄 REVISIONS REQUIRED
+**Decision**: ❌ REJECTED — **Reject (T1 · FTC Disclosure veto)**
+
+> A missing/inadequate disclosure on sponsored content is the ART **T1 veto** — it forces a Reject, not a revise (FTC 16 CFR §255). The creator must fix the veto item and resubmit; the non-veto items below are required on resubmission.
 
 ## Issues Found
 
-### Must Fix (Compliance)
-1. **Missing disclosure** - No #ad or sponsored disclosure visible
+### Veto — forces Reject (Compliance)
+1. **Missing disclosure** - No #ad or sponsored disclosure visible → **T1 veto → Reject**
    - Fix: Add #ad in caption and/or verbal disclosure in first 3 seconds
 
 2. **Promo code not mentioned** - Brief required promo code "FIONA20"
@@ -505,6 +511,7 @@ When a user requests content review:
 - [skill-contract.md](../../references/skill-contract.md) — shared contract and Handoff Summary format.
 - [state-model.md](../../references/state-model.md) — memory tiers and save-path conventions.
 - [CONNECTORS.md](../../CONNECTORS.md) — keyless data recipes for the `~~` connector placeholders.
+- C³ scoring: [c3-benchmark.md](../../references/c3-benchmark.md) and [c3/art-content-benchmark.md](../../references/c3/art-content-benchmark.md) — the ART Content rubric this review gates on, incl. the T1 (FTC disclosure) and T2 (claim integrity) veto items.
 - [brief-generator](../../plan/brief-generator/SKILL.md) — the brief whose criteria this review checks against.
 - [contract-helper](../../activate/contract-helper/SKILL.md) — bake content guidelines and approval terms into the agreement.
 - [content-amplifier](../../convert/content-amplifier/SKILL.md) — amplify content once approved.

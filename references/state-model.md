@@ -188,6 +188,21 @@ Store:
 - stakeholder reporting summaries
 - dated supporting CSV or export files when helpful
 
+### `memory/influencer/`
+
+Per-skill subfolders, one per influencer-marketing (IMPACT) skill: `memory/influencer/<skill>/` (e.g. `audience-analyzer/`, `fit-scorer/`, `roi-calculator/`). Scored on the [C³ framework](c3-benchmark.md).
+
+Store:
+
+- audience profiles, niche dossiers, trend reports (Insight)
+- creator shortlists, fit scores (ACE), competitor partner maps (Map)
+- campaign plans, briefs, budget allocations (Plan)
+- outreach threads, content reviews (ART), contract drafts (Activate)
+- amplification plans, repurposed UGC, landing-page optimizations (Convert)
+- performance analyses, ROI/CVI calculations, reports (Track)
+
+Same WARM lifecycle as the other categories: dated files `YYYY-MM-DD-<topic>.md`, demoted to `memory/archive/` after 90 days by `last_updated`.
+
 ## Writing Guidance
 
 When a skill describes state updates, it should:

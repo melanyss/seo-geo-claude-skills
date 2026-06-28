@@ -437,6 +437,16 @@ When a user requests ROI calculation:
    *Report Generated: [Date]*
    ```
 
+9. **Roll up into the C³ Campaign Value Index (CVI)**
+
+   This skill emits the **ROI** scope score of [C³](../../references/c3-benchmark.md) and the **CVI** rollup. Score ROI on the **0–100 rubric** in [c3/roi-campaign-benchmark.md](../../references/c3/roi-campaign-benchmark.md) (Return · Orchestration · Impact, each on Pass/Partial/Fail → scaled to 0–100). **This 0–100 ROI score is not the financial ROI % from steps 1–8** — feed the rubric score into the formula, never the percentage (R1 simply *consumes* your ROI%/ROAS as one of its inputs). Then combine it with the Creator and Content scope scores — from [fit-scorer](../../map/fit-scorer/SKILL.md) (ACE) and [content-reviewer](../../activate/content-reviewer/SKILL.md) (ART) — as a geometric mean:
+
+   ```
+   CVI = ( ACE_avg × ART_avg × ROI )^(1/3)
+   ```
+
+   `ACE_avg` is the **budget-weighted** mean of the campaign's creator ACE scores; `ART_avg` is the simple mean of its content ART scores (per scoring-architecture §8). Keep the three scope scores beside the CVI — the index ranks and alerts, the three scores diagnose. If ACE or ART is unavailable, emit the ROI score and mark CVI **pending (needs ACE/ART)** rather than guessing. A blocked scope (e.g. an ART T1/T2 veto on the content, or an ACE A2/C1/E2 veto on the creator) caps the rollup — surface it, don't average it away.
+
 ## Example
 
 **User**: "Calculate ROI for our influencer campaign: $25K spend, $72K revenue, 2.1M reach"
@@ -491,6 +501,7 @@ This campaign outperformed the typical 2:1 ROAS benchmark for influencer marketi
 - [skill-contract.md](../../references/skill-contract.md) — shared contract and Handoff Summary format.
 - [state-model.md](../../references/state-model.md) — memory tiers and save-path conventions.
 - [CONNECTORS.md](../../CONNECTORS.md) — free/keyless data recipe per connector category.
+- C³ scoring: [c3-benchmark.md](../../references/c3-benchmark.md) (CVI rollup formula) and [c3/roi-campaign-benchmark.md](../../references/c3/roi-campaign-benchmark.md) — the ROI Campaign rubric this skill emits into the CVI.
 - [performance-analyzer](../performance-analyzer/SKILL.md) — supplies the results data this skill consumes.
 - [report-generator](../../track/report-generator/SKILL.md) — wraps these numbers into a full report.
 - [budget-optimizer](../../plan/budget-optimizer/SKILL.md) — uses ROI output to reallocate spend.

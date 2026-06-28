@@ -144,7 +144,7 @@ When a user references something unclear, follow this lookup sequence:
 
 **Step 3: Check Cold Storage**
 - Search `memory/archive/` first for dated `YYYY-MM-DD-` archived files.
-- If the archive points to a source category, follow that trail back to `memory/research/`, `memory/audits/`, or `memory/monitoring/`.
+- If the archive points to a source category, follow that trail back to `memory/research/`, `memory/audits/`, `memory/monitoring/`, or `memory/influencer/`.
 - Treat COLD findings as historical unless refreshed by the current session.
 
 **Step 4: Ask User**
