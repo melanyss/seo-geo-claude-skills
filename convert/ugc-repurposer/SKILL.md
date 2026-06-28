@@ -1,7 +1,7 @@
 ---
 name: ugc-repurposer
 description: 'Use when the user asks to "repurpose influencer content", "turn one video into multiple ads", or "build a UGC asset library"; produces a content inventory with rights, a multi-channel repurposing map (1 video to 10+ assets), per-format transformation specs, and a 30-day distribution plan. Not for paid amplification spend planning — use content-amplifier.'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when a brand has influencer or user-generated content (videos,
 argument-hint: "<campaign or content set> [target channels]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   family: influencer-marketing
   impact-phase: Convert
 ---

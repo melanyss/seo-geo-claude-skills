@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Marketing capability pack: 38 skills + 5 /aaron-marketing: commands across SEO/GEO and influencer marketing (IMPACT). Frameworks: CORE-EEAT, CITE, C3.",
-    "version": "10.0.0",
+    "version": "10.0.1",
     "repository": "https://github.com/aaron-he-zhu/aaron-marketing-skills"
   },
   "plugins": [
@@ -14,7 +14,7 @@
       "name": "aaron-marketing",
       "source": "./",
       "description": "38 marketing skills and 5 commands on one shared contract: SEO/GEO (keyword research, content, technical audits, schema, monitoring, quality gates, entity truth) plus influencer marketing on the IMPACT framework (audience, discovery, planning, outreach, amplification, ROI).",
-      "version": "10.0.0",
+      "version": "10.0.1",
       "category": "marketing",
       "commands": "./commands/",
       "tags": [

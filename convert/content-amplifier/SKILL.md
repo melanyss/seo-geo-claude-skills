@@ -1,7 +1,7 @@
 ---
 name: content-amplifier
 description: 'Use when the user asks to "amplify influencer content with paid media", "set up whitelisting or Spark Ads", or "decide which posts to boost"; produces a content-selection scorecard, a paid amplification strategy (whitelisting/boosting/dark posts), audience targeting, and a budget+optimization plan. Not for creating ad variations from raw clips — use ugc-repurposer.'
-version: "10.0.0"
+version: "10.0.1"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Activate when the user has organic influencer content and wants to
 argument-hint: "<campaign or content set> [budget] [platform]"
 metadata:
   author: aaron-he-zhu
-  version: "10.0.0"
+  version: "10.0.1"
   family: influencer-marketing
   impact-phase: Convert
 ---
