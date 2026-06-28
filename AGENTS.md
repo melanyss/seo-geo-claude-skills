@@ -57,7 +57,7 @@ See [CLAUDE.md § Inter-Skill Handoff](CLAUDE.md). Key fields: objective, findin
 
 - **Branch naming**: `feature/skill-name`, `fix/skill-name`, `docs/description`
 - **Conventional Commits**: `feat:`, `fix:`, `docs:`
-- **After skill changes**: update tracking files (VERSIONS.md, `.claude-plugin/plugin.json`, marketplace.json, README.md, CLAUDE.md). For release bumps, also sync localized README badges and marketplace mirrors.
+- **After skill changes**: update the tracking files — the authoritative 8-file list is in [CONTRIBUTING.md §6](CONTRIBUTING.md) (VERSIONS.md, `.claude-plugin/plugin.json`, root `marketplace.json` + its `.claude-plugin/marketplace.json` mirror, README.md, CLAUDE.md, AGENTS.md, docs/README.zh.md). For release bumps, also sync localized README badges.
 - **Use `references/` for detail** — keep `SKILL.md` focused. Auditor-class skills inline the protocol runbook directly in their `SKILL.md` body.
 - **Validate**: `./scripts/validate-skill.sh <category>/<skill-name>` before release PRs.
 

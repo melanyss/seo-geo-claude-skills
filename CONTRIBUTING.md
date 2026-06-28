@@ -66,14 +66,17 @@ Auditor-class skills are the exception: they inline the authoritative auditor ru
 
 ### 6. Update tracking files
 
-After adding or updating a skill, keep these 5 files in sync:
+After adding or updating a skill, keep these **8 tracking files** in sync. **This list is authoritative** — `CLAUDE.md` and `AGENTS.md` point here instead of restating it, so update this list if the set changes.
 - `VERSIONS.md` — version and date
-- `.claude-plugin/plugin.json` — skills array
-- `marketplace.json` (repo root) — must match plugin.json; copy to `.claude-plugin/marketplace.json` afterward
-- `README.md` — skills table
-- `CLAUDE.md` — category table
+- `.claude-plugin/plugin.json` — skills array + version
+- `marketplace.json` (repo root) — must match plugin.json
+- `.claude-plugin/marketplace.json` — **byte-identical mirror** of the root `marketplace.json` (copy it after editing the root)
+- `README.md` — skills table + version badge
+- `CLAUDE.md` — category table + version
+- `AGENTS.md` — name/count line + framework item/dimension counts
+- `docs/README.zh.md` — Chinese README: the 38 / 20 / 18 / 5 counts + version badge
 
-For release bumps, also sync README badges, localized README badges, and both marketplace files.
+For release bumps, also sync README badges and localized README badges.
 
 ## Improving Existing Skills
 
