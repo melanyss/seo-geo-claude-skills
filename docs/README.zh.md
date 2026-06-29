@@ -1,6 +1,6 @@
 # Aaron 营销技能库
 
-**52 个技能。5 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
+**52 个技能。7 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
@@ -287,7 +287,7 @@
 
 ## 命令
 
-5 个命令端到端覆盖 SEO/GEO 工作流；红人与付费技能按名称调用或经 `/aaron-marketing:auto` 路由。源文件：[commands/](../commands/)。
+7 个命令：四个 SEO/GEO 模式命令（research、create、audit、track）+ `/aaron-marketing:impact`（红人）+ `/aaron-marketing:paid`（付费）；`/aaron-marketing:auto` 跨三学科推断意图。源文件：[commands/](../commands/)。
 
 | 命令 | 用途 | 参数 |
 |------|------|------|
@@ -296,8 +296,10 @@
 | `/aaron-marketing:create` | brief、写作、系列、刷新、CMS 中立发布包 | `--brief` `--series` `--refresh` `--publish` `--meta` `--schema` |
 | `/aaron-marketing:audit` | on-page + CORE-EEAT 质量、技术 SEO、AI 可见性、域权威 | `--full` `--tech` `--visibility` `--authority` |
 | `/aaron-marketing:track` | 排名、告警、绩效报告、项目记忆 | `--alert` `--report` `--remember` |
+| `/aaron-marketing:impact` | 红人（IMPACT）：受众洞察、发现与适配、规划、外联、放大、ROI | `--phase insight\|map\|plan\|activate\|convert\|track` |
+| `/aaron-marketing:paid` | 付费广告（ROAS 循环）：分群、结构、创意、实验设计、审计门、衡量 | `--phase research\|orchestrate\|activate\|scale` |
 
-日常工作通常从 `/aaron-marketing:auto` 开始，它执行你目标隐含的工作流，只在阻塞性决策处停下。其余四个是显式的模式入口。
+日常工作通常从 `/aaron-marketing:auto` 开始，它执行你目标隐含的工作流，只在阻塞性决策处停下。其余命令是显式的模式/学科入口。
 
 **改名说明：** 命令使用 `/aaron-marketing:` 前缀。旧 `/seo:*` 与 `/aaron-seo-geo:*` 可经 `auto` 恢复——例如 `/aaron-marketing:auto /aaron-seo-geo:audit https://example.com/blog/post` 返回 `/aaron-marketing:audit https://example.com/blog/post`。
 
@@ -377,7 +379,7 @@ research/ build/ optimize/ monitor/                  # SEO/GEO(22)
 protocol/                                            # 协议层(4) — 跨学科门/实体/记忆
 insight/ map/ plan/ activate/ convert/ track/        # 红人 — IMPACT(18)
 paid/                                                 # 付费广告 — ROAS(8,平铺)
-commands/        # 5 个斜杠命令
+commands/        # 7 个斜杠命令
 references/      # 共享契约、状态模型、四套基准、auditor runbook、平台资料包
 evals/           # 各技能结构化 eval 用例 + structure-manifest.json
 hooks/           # hooks.json + claude-hook.sh(唯一运行逻辑)

@@ -4,7 +4,7 @@ Guidelines for AI agents working in this repository. For full runtime context, s
 
 ## Repository Overview
 
-- **Name**: aaron-marketing-skills — 52 skills (22 SEO/GEO + 18 influencer + 8 paid ads + 4 protocol), 3 disciplines + a protocol layer, 5 commands, shared references
+- **Name**: aaron-marketing-skills — 52 skills (22 SEO/GEO + 18 influencer + 8 paid ads + 4 protocol), 3 disciplines + a protocol layer, 7 commands, shared references
 - **Repository**: https://github.com/aaron-he-zhu/aaron-marketing-skills
 - **Author**: Aaron He Zhu | **License**: Apache 2.0
 - **Specs**: [Agent Skills](https://agentskills.io/specification.md)
