@@ -12,9 +12,10 @@
 
 A library of Claude Skills and slash commands that turns a chat agent into a marketing operator across **three disciplines on one operating contract**:
 
-- **SEO/GEO** — **26 skills**: keyword research, content creation, programmatic/parasite/local/comparison builds, on-page & technical audits, schema, site architecture, rank/backlink/AI-traffic monitoring, plus the quality, entity, and memory protocol layer.
+- **SEO/GEO** — **22 skills**: keyword research, content creation, programmatic/parasite/local/comparison builds, on-page & technical audits, schema, site architecture, and rank/backlink/AI-traffic monitoring.
 - **Influencer marketing (IMPACT)** — **18 skills**: audience insight, creator discovery & fit scoring, campaign planning, briefs, outreach, content review, amplification, UGC repurposing, and ROI tracking.
 - **Paid ads (ROAS)** — **8 skills**: account structure, audience segments, ad creative, experiment design, the account-audit gate, conversion-signal QA, the measurement loop, and attribution reconciliation.
+- **Protocol layer (cross-cutting)** — **4 skills**: the CORE-EEAT/CITE quality & authority gates, entity truth, and HOT/WARM/COLD memory — shared across all three disciplines.
 
 Everything is **plain Markdown** (the only code is a Bash hook runner, a Bash validator, and zero-dependency Python-stdlib data helpers — no `pip`, no build step). **Every skill runs at Tier 1 with nothing but data you paste in**; optional connectors only automate retrieval. Four scoring frameworks ship inside and back the publish/trust/quality gates: [CORE-EEAT](references/core-eeat-benchmark.md), [CITE](references/cite-domain-rating.md), [C³](references/c3-benchmark.md), and [ROAS](references/roas-benchmark.md).
 
@@ -30,9 +31,10 @@ Everything is **plain Markdown** (the only code is a Bash hook runner, a Bash va
 - [Operating model](#operating-model)
 - [Quality frameworks](#quality-frameworks)
 - [Skill catalog](#skill-catalog)
-  - [SEO/GEO (26)](#seogeo-26)
+  - [SEO/GEO (22)](#seogeo-22)
   - [Influencer — IMPACT (18)](#influencer--impact-18)
   - [Paid Ads — ROAS (8)](#paid-ads--roas-8)
+  - [Protocol layer (4)](#protocol-layer-4)
 - [Commands](#commands)
 - [Connectors & enhancement tiers](#connectors--enhancement-tiers)
 - [Memory & automation hooks](#memory--automation-hooks)
@@ -149,7 +151,7 @@ Four benchmarks make "good" measurable. Each defines dimensions, a rollup method
 
 Skill links open each `SKILL.md`. Expand the **Details** under each discipline for a one-line purpose per skill.
 
-### SEO/GEO (26)
+### SEO/GEO (22)
 
 | Phase | Skills |
 |-------|--------|
@@ -157,7 +159,6 @@ Skill links open each `SKILL.md`. Expand the **Details** under each discipline f
 | **Build** | [seo-content-writer](build/seo-content-writer/SKILL.md), [geo-content-optimizer](build/geo-content-optimizer/SKILL.md), [meta-tags-optimizer](build/meta-tags-optimizer/SKILL.md), [schema-markup-generator](build/schema-markup-generator/SKILL.md), [programmatic-seo](build/programmatic-seo/SKILL.md), [parasite-seo](build/parasite-seo/SKILL.md), [comparison-page-builder](build/comparison-page-builder/SKILL.md), [local-seo](build/local-seo/SKILL.md) |
 | **Optimize** | [on-page-seo-auditor](optimize/on-page-seo-auditor/SKILL.md), [technical-seo-checker](optimize/technical-seo-checker/SKILL.md), [internal-linking-optimizer](optimize/internal-linking-optimizer/SKILL.md), [content-refresher](optimize/content-refresher/SKILL.md), [site-architecture](optimize/site-architecture/SKILL.md) |
 | **Monitor** | [rank-tracker](monitor/rank-tracker/SKILL.md), [backlink-analyzer](monitor/backlink-analyzer/SKILL.md), [performance-reporter](monitor/performance-reporter/SKILL.md), [alert-manager](monitor/alert-manager/SKILL.md), [ai-traffic](monitor/ai-traffic/SKILL.md) |
-| **Cross-cutting** | [content-quality-auditor](cross-cutting/content-quality-auditor/SKILL.md), [domain-authority-auditor](cross-cutting/domain-authority-auditor/SKILL.md), [entity-optimizer](cross-cutting/entity-optimizer/SKILL.md), [memory-management](cross-cutting/memory-management/SKILL.md) |
 
 <details><summary><b>Per-skill purpose (SEO/GEO)</b></summary>
 
@@ -185,6 +186,21 @@ Skill links open each `SKILL.md`. Expand the **Details** under each discipline f
 | performance-reporter | Multi-metric SEO/GEO performance reports and stakeholder dashboards. |
 | alert-manager | Alerts for rankings, traffic, backlinks, technical issues, AI visibility. |
 | ai-traffic | Measure referral traffic from AI assistants in your own GA4 / GSC / server logs. |
+
+</details>
+
+### Protocol layer (4)
+
+Cross-cutting skills that serve all three disciplines — the CORE-EEAT/CITE quality & authority gates, entity truth, and project memory. They live under `protocol/` and are counted separately, not inside SEO/GEO.
+
+| Group | Skills |
+|-------|--------|
+| **Protocol** | [content-quality-auditor](protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](protocol/entity-optimizer/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
+
+<details><summary><b>Per-skill purpose (Protocol)</b></summary>
+
+| Skill | What it does |
+|-------|--------------|
 | content-quality-auditor | 80-item CORE-EEAT publish-readiness gate. |
 | domain-authority-auditor | 40-item CITE domain-trust gate. |
 | entity-optimizer | Canonical entity profile for Knowledge Graph, Wikidata, AI disambiguation. |
@@ -346,7 +362,8 @@ For a full trust review, pair `content-quality-auditor` with `domain-authority-a
 ## Repository layout
 
 ```
-research/ build/ optimize/ monitor/ cross-cutting/   # SEO/GEO (26)
+research/ build/ optimize/ monitor/                  # SEO/GEO (22)
+protocol/                                            # Protocol layer (4) — shared gates, entity, memory
 insight/ map/ plan/ activate/ convert/ track/        # Influencer — IMPACT (18)
 paid/                                                 # Paid Ads — ROAS (8, flat)
 commands/        # 5 slash commands

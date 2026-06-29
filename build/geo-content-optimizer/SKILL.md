@@ -95,4 +95,4 @@ On user confirmation, save to `memory/content/YYYY-MM-DD-<topic>.md` — see [Sk
 
 ## Next Best Skill
 
-- **Primary**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — verify the optimized content is strong enough to ship and cite.
+- **Primary**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — verify the optimized content is strong enough to ship and cite.

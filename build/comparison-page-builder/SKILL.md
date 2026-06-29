@@ -35,7 +35,7 @@ Write a "[Competitor] alternatives" page (plural) listing real options with us f
 - **Writes**: the page draft, a reusable competitor data file, and the handoff summary.
 - **Promotes**: chosen positioning, the page format/URL, and any unverified competitor claims to `memory/hot-cache.md` and `memory/open-loops.md`; propose durable decisions as pending-decision items.
 - **Done when**: the format and target keyword are set; every competitor claim is sourced or flagged `[needs source]`; the page names who each option is best for; and a single-source competitor data file backs the page.
-- **Primary next skill**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) to gate publish readiness.
+- **Primary next skill**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) to gate publish readiness.
 
 ### Handoff Summary
 
@@ -66,4 +66,4 @@ On user confirmation, save the page and competitor data file to `memory/content/
 
 ## Next Best Skill
 
-- **Primary**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — gate the page for publish readiness (honesty and source items map to CORE-EEAT trust). Global termination rules apply: stop if already visited this chain, max-depth 3, and stop-on-ambiguity.
+- **Primary**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — gate the page for publish readiness (honesty and source items map to CORE-EEAT trust). Global termination rules apply: stop if already visited this chain, max-depth 3, and stop-on-ambiguity.

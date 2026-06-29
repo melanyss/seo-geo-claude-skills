@@ -1,6 +1,6 @@
 # Skill Contract
 
-This repository uses one contract across all 52 skills — 26 SEO/GEO, 18 influencer-marketing (IMPACT), and 8 paid-ads skills. The contract keeps each skill specialized while making the full library feel like one operating system. The SEO/GEO skills score on [CORE-EEAT](core-eeat-benchmark.md) and [CITE](cite-domain-rating.md); the influencer skills on [C³](c3-benchmark.md); the paid-ads skills on [ROAS](roas-benchmark.md).
+This repository uses one contract across all 52 skills — 22 SEO/GEO, 18 influencer-marketing (IMPACT), 8 paid-ads, and 4 protocol-layer skills. The contract keeps each skill specialized while making the full library feel like one operating system. The SEO/GEO skills score on [CORE-EEAT](core-eeat-benchmark.md) and [CITE](cite-domain-rating.md); the influencer skills on [C³](c3-benchmark.md); the paid-ads skills on [ROAS](roas-benchmark.md).
 
 ## Skill Authoring Discipline
 
@@ -197,7 +197,7 @@ Auditor skills (`content-quality-auditor`, `domain-authority-auditor`) MUST igno
 - Writes: deltas, trend summaries, alerts, reports
 - Promotes: major changes, confirmed anomalies, follow-up actions
 
-### Cross-cutting
+### Protocol layer
 
 - Reads: outputs from every other category
 - Writes: gates, truth records, and memory structure
@@ -320,9 +320,9 @@ These norms apply to all skills when their output incorporates data from multipl
 | Build (8 skills) | `memory/content/` | content briefs, meta tag decisions, schema annotations, publish status |
 | Optimize (5 skills) | `memory/audits/<skill>/` | per-skill audit summaries, veto items, fix priorities |
 | Monitor (5 skills) | `memory/monitoring/` | rank deltas, alert history, backlink changes |
-| Cross-cutting (4 skills) | per-role paths | see protocol-layer definitions |
+| Protocol layer (4 skills) | per-role paths | see protocol-layer definitions |
 | Influencer / IMPACT (18 skills) | `memory/influencer/<skill>/` (working state) + `memory/audits/influencer/` (content-reviewer's gated C³ ART verdicts) | audience profiles, creator fit scores, campaign plans, briefs, outreach, content reviews, ROI/CVI calculations, reports |
 | Paid Ads / ROAS (8 skills) | `memory/paid-ads/<skill>/` (working state) + `memory/audits/paid/` (ad-account-auditor's gated RQS verdicts) | account/campaign structures, audience segments, ad-creative scores, experiment designs, account-audit gates, conversion-signal QA, measurement-loop results, attribution reconciliations |
-| **Protocol gate aggregate (v7.1.0+)** | `memory/audits/YYYY-MM.md` | **owned by `memory-management`**; monthly archive of `content-quality-auditor` and `domain-authority-auditor` handoffs in the structured format defined in [memory-management SKILL.md §Writes](../cross-cutting/memory-management/SKILL.md); consumed by the Runbook §5 cross-version rule |
+| **Protocol gate aggregate (v7.1.0+)** | `memory/audits/YYYY-MM.md` | **owned by `memory-management`**; monthly archive of `content-quality-auditor` and `domain-authority-auditor` handoffs in the structured format defined in [memory-management SKILL.md §Writes](../protocol/memory-management/SKILL.md); consumed by the Runbook §5 cross-version rule |
 
 **Note on `memory/audits/`**: two conventions coexist. The `<skill>/` subdirectory pattern (Optimize category, per-skill files) is for skill-specific audit artifacts (e.g., `memory/audits/technical-seo-checker/2026-04-11-example.md`). The flat `YYYY-MM.md` pattern (Protocol gate aggregate, monthly) is for the CORE-EEAT / CITE protocol-layer handoff archive. They are siblings, not a conflict.

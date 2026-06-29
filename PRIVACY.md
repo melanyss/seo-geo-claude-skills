@@ -35,7 +35,7 @@ By default, this library:
 - `memory/audits/` may contain competitor URLs, target keywords, audit findings
 - `memory/entities/` may contain third-party brand/person names
 - Session hooks may read `memory/hot-cache.md` into model context; users should be aware when committing repo to public Git, sharing with AI agents, using cloud-hosted model sessions, or syncing across devices
-- See [memory-management SKILL.md §GDPR / Privacy Compliance](cross-cutting/memory-management/SKILL.md) for retention + deletion guidance
+- See [memory-management SKILL.md §GDPR / Privacy Compliance](protocol/memory-management/SKILL.md) for retention + deletion guidance
 
 ### In scope for security review
 - Memory poisoning across sessions (malicious content written to `memory/` affecting future sessions)

@@ -61,7 +61,7 @@ jobs:
       - name: Validate all skills
         run: |
           set -euo pipefail
-          find research build optimize monitor cross-cutting \
+          find research build optimize monitor protocol \
             insight map plan activate convert track paid \
             -mindepth 2 -maxdepth 2 -name SKILL.md \
             -print | sort | while read -r file; do

@@ -3,7 +3,7 @@
 Formalizes the data contract between `entity-optimizer` (writes canonical entity profiles) and `geo-content-optimizer` (reads entity facts to produce AI-citable content).
 
 Referenced by:
-- [entity-optimizer/SKILL.md](../cross-cutting/entity-optimizer/SKILL.md) — as an authoritative contract for its Writes
+- [entity-optimizer/SKILL.md](../protocol/entity-optimizer/SKILL.md) — as an authoritative contract for its Writes
 - [geo-content-optimizer/SKILL.md](../build/geo-content-optimizer/SKILL.md) — as an authoritative contract for its Reads
 
 ---

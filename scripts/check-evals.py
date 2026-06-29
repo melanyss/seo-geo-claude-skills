@@ -32,7 +32,7 @@ EVALS = os.path.join(ROOT, "evals")
 MANIFEST = os.path.join(EVALS, "structure-manifest.json")
 
 PHASE_DIRS = [
-    "research", "build", "optimize", "monitor", "cross-cutting",   # SEO/GEO
+    "research", "build", "optimize", "monitor", "protocol",   # SEO/GEO
     "insight", "map", "plan", "activate", "convert", "track",      # influencer
     "paid",                                                        # paid ads (when present)
 ]

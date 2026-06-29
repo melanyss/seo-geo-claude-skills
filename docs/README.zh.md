@@ -12,9 +12,10 @@
 
 一套 Claude 技能与斜杠命令，让聊天 Agent 成为营销操作员，**三类学科共用一套运行契约**：
 
-- **SEO/GEO** — **26 个技能**：关键词研究、内容创作、程序化/寄生/本地/对比页构建、on-page 与技术审计、结构化数据、站点架构、排名/外链/AI 流量监控，以及质量、实体、记忆协议层。
+- **SEO/GEO** — **22 个技能**：关键词研究、内容创作、程序化/寄生/本地/对比页构建、on-page 与技术审计、结构化数据、站点架构、排名/外链/AI 流量监控。
 - **红人营销（IMPACT）** — **18 个技能**：受众洞察、红人发现与适配打分、活动规划、brief、外联、内容审核、放大、UGC 二次利用、ROI 追踪。
 - **付费广告（ROAS）** — **8 个技能**：账户结构、受众分群、广告创意、实验设计、账户审计门、转化信号 QA、衡量回读循环、归因对账。
+- **协议层（跨学科）** — **4 个技能**：CORE-EEAT/CITE 质量与权威门、实体事实、HOT/WARM/COLD 记忆——服务全部三个学科。
 
 全部为**纯 Markdown**（唯一的代码是一个 Bash hook runner、一个 Bash 校验器、以及零依赖的 Python 标准库数据助手——无 `pip`、无构建步骤）。**每个技能都能在 Tier 1 仅凭你粘贴的数据运行**；可选连接器只是自动化取数。内置四套评分框架并支撑发布/信任/质量门：[CORE-EEAT](../references/core-eeat-benchmark.md)、[CITE](../references/cite-domain-rating.md)、[C³](../references/c3-benchmark.md)、[ROAS](../references/roas-benchmark.md)。
 
@@ -146,7 +147,7 @@
 
 技能链接打开各自的 `SKILL.md`。展开每个学科下的 **详情** 可看每个技能的一句话用途。
 
-### SEO/GEO(26)
+### SEO/GEO(22)
 
 | 阶段 | 技能 |
 |------|------|
@@ -154,7 +155,6 @@
 | **构建** | [seo-content-writer](../build/seo-content-writer/SKILL.md), [geo-content-optimizer](../build/geo-content-optimizer/SKILL.md), [meta-tags-optimizer](../build/meta-tags-optimizer/SKILL.md), [schema-markup-generator](../build/schema-markup-generator/SKILL.md), [programmatic-seo](../build/programmatic-seo/SKILL.md), [parasite-seo](../build/parasite-seo/SKILL.md), [comparison-page-builder](../build/comparison-page-builder/SKILL.md), [local-seo](../build/local-seo/SKILL.md) |
 | **优化** | [on-page-seo-auditor](../optimize/on-page-seo-auditor/SKILL.md), [technical-seo-checker](../optimize/technical-seo-checker/SKILL.md), [internal-linking-optimizer](../optimize/internal-linking-optimizer/SKILL.md), [content-refresher](../optimize/content-refresher/SKILL.md), [site-architecture](../optimize/site-architecture/SKILL.md) |
 | **监控** | [rank-tracker](../monitor/rank-tracker/SKILL.md), [backlink-analyzer](../monitor/backlink-analyzer/SKILL.md), [performance-reporter](../monitor/performance-reporter/SKILL.md), [alert-manager](../monitor/alert-manager/SKILL.md), [ai-traffic](../monitor/ai-traffic/SKILL.md) |
-| **协议层** | [content-quality-auditor](../cross-cutting/content-quality-auditor/SKILL.md), [domain-authority-auditor](../cross-cutting/domain-authority-auditor/SKILL.md), [entity-optimizer](../cross-cutting/entity-optimizer/SKILL.md), [memory-management](../cross-cutting/memory-management/SKILL.md) |
 
 <details><summary><b>逐技能用途（SEO/GEO）</b></summary>
 
@@ -182,6 +182,21 @@
 | performance-reporter | 多指标 SEO/GEO 绩效报告与利益相关者看板。 |
 | alert-manager | 排名、流量、外链、技术问题、AI 可见性的告警。 |
 | ai-traffic | 在你自己的 GA4 / GSC / 服务器日志中度量来自 AI 助手的引荐流量。 |
+
+</details>
+
+### 协议层 — 跨学科（4）
+
+服务全部三个学科的跨领域技能——CORE-EEAT/CITE 质量与权威门、实体事实、项目记忆。它们位于 `protocol/`，单独计数，不算进 SEO/GEO。
+
+| 组 | 技能 |
+|------|------|
+| **协议层** | [content-quality-auditor](../protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](../protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](../protocol/entity-optimizer/SKILL.md), [memory-management](../protocol/memory-management/SKILL.md) |
+
+<details><summary><b>逐技能用途（协议层）</b></summary>
+
+| 技能 | 用途 |
+|------|------|
 | content-quality-auditor | 80 项 CORE-EEAT 发布就绪门。 |
 | domain-authority-auditor | 40 项 CITE 域名信任门。 |
 | entity-optimizer | 面向知识图谱、Wikidata、AI 消歧的规范实体档案。 |
@@ -343,7 +358,8 @@ Artifact Gate 是**框架无关**的——同一个 hook 校验 CORE-EEAT、CITE
 ## 仓库结构
 
 ```
-research/ build/ optimize/ monitor/ cross-cutting/   # SEO/GEO(26)
+research/ build/ optimize/ monitor/                  # SEO/GEO(22)
+protocol/                                            # 协议层(4) — 跨学科门/实体/记忆
 insight/ map/ plan/ activate/ convert/ track/        # 红人 — IMPACT(18)
 paid/                                                 # 付费广告 — ROAS(8,平铺)
 commands/        # 5 个斜杠命令

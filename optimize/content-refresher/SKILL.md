@@ -51,7 +51,7 @@ Label every metric **Measured** (tool/export), **User-provided**, or **Estimated
 
 When a user requests content refresh help:
 
-1. **CORE-EEAT Quick Score** — Estimate all 8 dimensions, prioritize red/yellow areas, and hand off to [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) for full scoring when needed.
+1. **CORE-EEAT Quick Score** — Estimate all 8 dimensions, prioritize red/yellow areas, and hand off to [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) for full scoring when needed.
 2. **Identify Refresh Candidates** — Use age, dated claims, declining traffic, lost rankings, broken links, SERP shifts, and missing topics. **Numeric decline trigger**: flag a page for refresh when organic traffic drops more than 30% against its trailing baseline (the page's own median over the prior comparable window — e.g., last 28 days vs the 28 days before, or year-over-year for seasonal pages). Mark the drop Measured when from analytics, Estimated otherwise.
 3. **Analyze Page-Level Decay** — Compare 6-month-old vs current performance, keyword deltas, SERP intent, competitor updates, and the why-refresh rationale.
 4. **Define Updates Needed** — Capture outdated elements, competitor/PAA gaps, SEO updates, GEO updates, links, images, sources, and dates.
@@ -100,4 +100,4 @@ Ask to save results; if yes, write a dated summary to `memory/audits/content-ref
 
 ## Next Best Skill
 
-Primary: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — re-score refreshed content before shipping.
+Primary: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — re-score refreshed content before shipping.

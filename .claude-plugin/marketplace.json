@@ -5,7 +5,7 @@
     "url": "https://github.com/aaron-he-zhu"
   },
   "metadata": {
-    "description": "Marketing capability pack: 52 skills + 5 /aaron-marketing: commands across three disciplines — SEO/GEO, influencer marketing (IMPACT), and paid ads. Frameworks: CORE-EEAT, CITE, C3, ROAS.",
+    "description": "Marketing capability pack: 52 skills + 5 /aaron-marketing: commands across three disciplines — SEO/GEO, influencer marketing (IMPACT), and paid ads, plus a shared protocol layer. Frameworks: CORE-EEAT, CITE, C3, ROAS.",
     "version": "11.0.0",
     "repository": "https://github.com/aaron-he-zhu/aaron-marketing-skills"
   },
@@ -13,7 +13,7 @@
     {
       "name": "aaron-marketing",
       "source": "./",
-      "description": "52 marketing skills and 5 commands on one shared contract across three disciplines: SEO/GEO (incl. programmatic/parasite/local SEO, site architecture, AI-traffic), influencer marketing on the IMPACT framework, and paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement, attribution reconciliation). Frameworks: CORE-EEAT, CITE, C3, ROAS.",
+      "description": "52 marketing skills and 5 commands on one shared contract across three disciplines: SEO/GEO (incl. programmatic/parasite/local SEO, site architecture, AI-traffic), influencer marketing on the IMPACT framework, and paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement, attribution reconciliation), plus a shared protocol layer (quality/authority gates, entity, memory). Frameworks: CORE-EEAT, CITE, C3, ROAS.",
       "version": "11.0.0",
       "category": "marketing",
       "commands": "./commands/",
@@ -56,10 +56,10 @@
         "./monitor/backlink-analyzer",
         "./monitor/performance-reporter",
         "./monitor/rank-tracker",
-        "./cross-cutting/content-quality-auditor",
-        "./cross-cutting/domain-authority-auditor",
-        "./cross-cutting/entity-optimizer",
-        "./cross-cutting/memory-management",
+        "./protocol/content-quality-auditor",
+        "./protocol/domain-authority-auditor",
+        "./protocol/entity-optimizer",
+        "./protocol/memory-management",
         "./insight/audience-analyzer",
         "./insight/niche-researcher",
         "./insight/trend-spotter",

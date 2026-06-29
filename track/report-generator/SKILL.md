@@ -43,7 +43,7 @@ Generate an executive summary for our Q3 influencer campaigns
   1. The report matches the requested audience template (executive, client, team, or board).
   2. Every metric is paired with context (target, benchmark, or prior period).
   3. The report ends with concrete recommendations and, where relevant, action items.
-- **Primary next skill**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md)
+- **Primary next skill**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md)
 
 ### Handoff Summary
 
@@ -584,11 +584,11 @@ Increase Q1 influencer budget by 25% with focus on TikTok micro-influencers and 
 - [roi-calculator](../roi-calculator/SKILL.md) — supplies ROI/ROAS figures
 - [campaign-planner](../../plan/campaign-planner/SKILL.md) — original plan to compare results against
 - [content-amplifier](../../convert/content-amplifier/SKILL.md) — amplification results to report on
-- [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — quality gate for the report itself
+- [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — quality gate for the report itself
 
 ## Next Best Skill
 
-**Primary**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — run the finished report through the publish-readiness gate before it goes to a stakeholder.
+**Primary**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — run the finished report through the publish-readiness gate before it goes to a stakeholder.
 
 **Alternates (same Track phase / IMPACT family)**:
 

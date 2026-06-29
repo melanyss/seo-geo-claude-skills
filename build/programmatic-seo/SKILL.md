@@ -39,7 +39,7 @@ Pick the right pSEO playbook for my integrations directory and define the templa
 - **Writes**: the page-system plan to `memory/content/` and a reusable summary.
 - **Promotes**: chosen playbook, data-tier verdict, index-bloat/thin-content blockers, and the publish-batch decision to `memory/hot-cache.md` and `memory/open-loops.md`; propose durable choices as pending-decision items.
 - **Done when**: a playbook is selected with a justified data-tier verdict; the template has an evidence block with unique per-row value; dedup (N-gram) and selective-indexation rules are defined; and any thin/duplicate or licensing blocker is flagged, not shipped silently.
-- **Primary next skill**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) to gate a representative page sample before mass publish.
+- **Primary next skill**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) to gate a representative page sample before mass publish.
 
 ### Handoff Summary
 
@@ -69,4 +69,4 @@ On user confirmation, save to `memory/content/YYYY-MM-DD-<pattern>-pseo-plan.md`
 
 ## Next Best Skill
 
-- **Primary**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — gate a representative page sample for thin/duplicate risk before mass publish.
+- **Primary**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — gate a representative page sample for thin/duplicate risk before mass publish.

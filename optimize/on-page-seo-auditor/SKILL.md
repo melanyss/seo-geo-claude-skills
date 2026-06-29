@@ -21,7 +21,7 @@ This skill audits the structural on-page SEO signals a single page controls and 
 
 ## What This Skill Does
 
-Audits structural on-page signals (title tag, meta description, header structure, keyword placement, internal/external links, images) with scored results and prioritized fix recommendations. For E-E-A-T and publish-readiness scoring, hand off to [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md); for crawl, indexing, and Core Web Vitals, use [technical-seo-checker](../technical-seo-checker/SKILL.md).
+Audits structural on-page signals (title tag, meta description, header structure, keyword placement, internal/external links, images) with scored results and prioritized fix recommendations. For E-E-A-T and publish-readiness scoring, hand off to [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md); for crawl, indexing, and Core Web Vitals, use [technical-seo-checker](../technical-seo-checker/SKILL.md).
 
 ## Quick Start
 
@@ -101,7 +101,7 @@ When a user requests an on-page SEO audit, use the compact step templates in [re
 2. **Audit Title Tag** — length (50-60 chars), keyword inclusion/position, uniqueness, compelling copy, intent match; score /10 and recommend an optimized title
 3. **Audit Meta Description** — length (150-160 chars), keyword, CTA, uniqueness, accuracy, compelling copy; score /10 and recommend an optimized description
 4. **Audit Header Structure** — single H1, H1 keyword, logical hierarchy, H2 keyword coverage, no skipped levels, descriptive headers; score /10 and recommend changes.
-5. **Audit On-Page Content Structure** — word count, reading level, formatting, content-elements checklist, and structural gaps. This is a structural pass, not a quality verdict — route depth/E-E-A-T scoring to [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md).
+5. **Audit On-Page Content Structure** — word count, reading level, formatting, content-elements checklist, and structural gaps. This is a structural pass, not a quality verdict — route depth/E-E-A-T scoring to [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md).
 6. **Audit Keyword Usage** — primary/secondary keyword placement across page elements, related terms, and density analysis.
 7. **Audit Internal Links** — link count, anchor relevance, broken links, and recommended additions.
 8. **Audit Images** — alt text, file names, sizes, formats, and lazy loading.

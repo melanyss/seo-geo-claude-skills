@@ -26,8 +26,8 @@ CORE = os.path.join(ROOT, "references", "core-eeat-benchmark.md")
 CITE = os.path.join(ROOT, "references", "cite-domain-rating.md")
 C3 = os.path.join(ROOT, "references", "c3-benchmark.md")
 ROAS = os.path.join(ROOT, "references", "roas-benchmark.md")
-CQA = os.path.join(ROOT, "cross-cutting", "content-quality-auditor", "SKILL.md")
-DAA = os.path.join(ROOT, "cross-cutting", "domain-authority-auditor", "SKILL.md")
+CQA = os.path.join(ROOT, "protocol", "content-quality-auditor", "SKILL.md")
+DAA = os.path.join(ROOT, "protocol", "domain-authority-auditor", "SKILL.md")
 
 fails = []
 def check(cond, msg):

@@ -24,10 +24,10 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 | backlink-analyzer | monitor | 11.0.0 | 2026-06-28 |
 | performance-reporter | monitor | 11.0.0 | 2026-06-28 |
 | alert-manager | monitor | 11.0.0 | 2026-06-28 |
-| content-quality-auditor | cross-cutting | 11.0.0 | 2026-06-28 |
-| domain-authority-auditor | cross-cutting | 11.0.0 | 2026-06-28 |
-| entity-optimizer | cross-cutting | 11.0.0 | 2026-06-28 |
-| memory-management | cross-cutting | 11.0.0 | 2026-06-28 |
+| content-quality-auditor | protocol | 11.0.0 | 2026-06-28 |
+| domain-authority-auditor | protocol | 11.0.0 | 2026-06-28 |
+| entity-optimizer | protocol | 11.0.0 | 2026-06-28 |
+| memory-management | protocol | 11.0.0 | 2026-06-28 |
 | audience-analyzer | insight | 11.0.0 | 2026-06-28 |
 | niche-researcher | insight | 11.0.0 | 2026-06-28 |
 | trend-spotter | insight | 11.0.0 | 2026-06-28 |
@@ -85,7 +85,7 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 - **Paid Ads discipline (8 skills + ROAS framework)** across the 4-phase ROAS loop — Research: campaign-architect, audience-segment-builder; Orchestrate: ad-creative-builder, ad-test-designer; Activate: ad-account-auditor (auditor-class gate → `memory/audits/paid/`), conversion-signal-qa; Scale: paid-measurement-loop, attribution-reconciler. `roas-benchmark.md` (R/O/A/S, RQS arithmetic rollup, vetoes R1/R2/O1/O2/A1). content-reviewer promoted to the C³ ART gate consumer (`memory/audits/influencer/`). Per the Balanced anti-bloat design, search-term mining and bid-pacing/learning-phase ship as **modes** of campaign-architect and budget-optimizer (not standalone skills); budget-optimizer/landing-optimizer/roi-calculator/report-generator/performance-analyzer are reused cross-discipline.
 - **Deferred by design**: `disciplines.md` registry, `/aaron-marketing:paid` + `/impact` commands (routing seeds added), creator-entity, eval runner, standalone bid/search-term/policy skills (shipped as modes) — per the roadmap's over-engineering guard.
 
-**Versions**: all **52** skills (26 SEO/GEO + 18 influencer + 8 paid), plugin manifests, and marketplace mirrors unified at `11.0.0`.
+**Versions**: all **52** skills (22 SEO/GEO + 18 influencer + 8 paid + 4 protocol), plugin manifests, and marketplace mirrors unified at `11.0.0`.
 
 ### v10.0.0 — Marketing umbrella: SEO/GEO + influencer-marketing merge + rename (2026-06-28)
 
@@ -149,7 +149,7 @@ Final 9.x release consolidating the entire post-v9.0.0 development line into a s
 - **Bulk + force retire flows**: `/aaron-marketing:guard --wiki --retire-preview --bulk-confirmed` retires all `safe`-marked candidates in one operation; `force-retire <path>` bypasses C5 (frontmatter-coverage) only. Day-cap (20/UTC-day) still enforced.
 - **Multi-project guardrail**: pre-compile prompt when ≥2 distinct project slugs in hot-cache history.
 - **PII compile guardrail**: heuristic detection of natural-person entities (title-case names / LinkedIn / `entity_type: person`); surfaces GDPR Art 5(1)(c) data-minimization warning before compile.
-- **GDPR purge schema**: honest, minimal template at `cross-cutting/memory-management/references/gdpr-purge-log-template.md` — a human-readable record of erasure requests (date, redacted_label, legal_basis, action, scope, working_tree_only), never raw subject data. Working-tree redaction only; git history is the user's responsibility (no salted fingerprint / reingest tombstone).
+- **GDPR purge schema**: honest, minimal template at `protocol/memory-management/references/gdpr-purge-log-template.md` — a human-readable record of erasure requests (date, redacted_label, legal_basis, action, scope, working_tree_only), never raw subject data. Working-tree redaction only; git history is the user's responsibility (no salted fingerprint / reingest tombstone).
 - **`/aaron-marketing:series` command**: plan / write / continue / publish-handoff modes for content series workflows.
 - **Multi-agent compatibility**: Gemini, Qwen, Amp, Kimi, CodeBuddy manifest support.
 - **31 eval cases** under `evals/memory-management/` (was 6 pre-9.5.0) covering retirement, recovery, contradiction reconciliation, GDPR, multi-project, PII, force-retire.

@@ -35,7 +35,7 @@ Here's my content brief: [brief]. Write SEO-optimized content following this out
 - **Writes**: a user-facing content deliverable and reusable summary.
 - **Promotes**: approved angles, messaging choices, missing evidence, and publish blockers to `memory/hot-cache.md` and `memory/open-loops.md`; propose durable decisions as pending-decision items.
 - **Done when**: the draft satisfies the target intent with the primary keyword placed naturally; H1/H2 structure, meta description, and at least one snippet-targetable block are present; and every claim needing a source is either cited or flagged.
-- **Primary next skill**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) when the draft is ready for gating.
+- **Primary next skill**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) when the draft is ready for gating.
 
 ### Handoff Summary
 
@@ -87,4 +87,4 @@ On user confirmation, save to `memory/content/YYYY-MM-DD-<topic>.md` — see [Sk
 
 ## Next Best Skill
 
-- **Primary**: [content-quality-auditor](../../cross-cutting/content-quality-auditor/SKILL.md) — gate the draft before publishing.
+- **Primary**: [content-quality-auditor](../../protocol/content-quality-auditor/SKILL.md) — gate the draft before publishing.

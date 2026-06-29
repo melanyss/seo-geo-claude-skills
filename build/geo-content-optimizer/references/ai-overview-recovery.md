@@ -106,6 +106,6 @@ If no recovery at T+28:
 
 ## See also
 
-- [entity-optimizer](../../../cross-cutting/entity-optimizer/SKILL.md)
+- [entity-optimizer](../../../protocol/entity-optimizer/SKILL.md)
 - [content-refresher](../../../optimize/content-refresher/SKILL.md)
 - [technical-seo-checker LLM crawler guide](../../../optimize/technical-seo-checker/references/llm-crawler-handling.md)

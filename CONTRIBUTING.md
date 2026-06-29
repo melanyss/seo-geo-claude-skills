@@ -16,7 +16,7 @@ Thanks for your interest in contributing! This guide covers adding skills, impro
 | Build | `build/` | Creates new content or markup (SEO/GEO) |
 | Optimize | `optimize/` | Improves existing content or site health (SEO/GEO) |
 | Monitor | `monitor/` | Tracks performance over time (SEO/GEO) |
-| Cross-cutting | `cross-cutting/` | Spans multiple phases (quality frameworks, entity, memory) |
+| Protocol | `protocol/` | Cross-cutting layer (quality/authority gates, entity, memory) — shared across disciplines |
 | Insight | `insight/` | Understands audience, niche, trends (influencer/IMPACT) |
 | Map | `map/` | Discovers and scores influencers (influencer/IMPACT) |
 | Plan | `plan/` | Designs campaigns, briefs, budgets (influencer/IMPACT) |
