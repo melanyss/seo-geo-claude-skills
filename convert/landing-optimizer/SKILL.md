@@ -18,6 +18,8 @@ metadata:
 
 This skill helps you create and optimize landing pages specifically for influencer marketing traffic. When users click from an influencer's post, the landing experience should feel connected and optimized for conversion.
 
+> **Cross-discipline (paid ads):** this is also the **paid-ads** post-click skill — the page half of the ROAS **Offer** message-match (it pairs with [ad-creative-builder](../../paid/ad-creative-builder/SKILL.md), which owns the ad half). The same diagnose-and-fix flow applies to paid landing pages; save paid runs under `memory/paid-ads/landing-optimizer/`.
+
 ## Quick Start
 
 Shortest invocation:

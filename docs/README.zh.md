@@ -1,6 +1,6 @@
 # Aaron 营销技能库
 
-**48 个技能。5 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
+**52 个技能。5 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
@@ -12,7 +12,7 @@
 
 - **搜索（SEO/GEO）** — 26 个技能：关键词研究、内容创作、程序化与本地 SEO、技术审计、结构化数据、监控、质量门、实体事实、项目记忆。
 - **红人营销（IMPACT）** — 18 个技能：受众洞察、红人发现、活动规划、外联、内容放大、ROI 追踪。
-- **付费广告（Paid Ads）** — 4 个技能：账户结构、广告创意、投放审计门、衡量回读循环。
+- **付费广告（Paid Ads）** — 8 个技能（ROAS 循环 Research → Orchestrate → Activate → Scale）：账户结构、受众分群、广告创意、实验设计、投放审计门、转化信号 QA、衡量回读循环、归因对账。
 
 技能内容为零依赖 Markdown；Claude Code hooks 使用轻量 Bash runner。内置四套评估框架：[CORE-EEAT](../references/core-eeat-benchmark.md)（80 项内容质量）、[CITE](../references/cite-domain-rating.md)（40 项域名权威）、[C³](../references/c3-benchmark.md)（红人 创作者/内容/活动）、[ROAS](../references/roas-benchmark.md)（付费广告 回报/广告创意/受众/花费效率）。
 
@@ -69,13 +69,18 @@ Slash 命令宿主的稳定入口：
 | Convert 转化 | `content-amplifier` 内容放大；`ugc-repurposer` UGC 二次利用；`landing-optimizer` 落地页优化 |
 | Track 追踪 | `performance-analyzer` 表现分析；`roi-calculator` ROI 与 CVI；`report-generator` 活动报告 |
 
-### 付费广告 — Paid Ads（4）
+### 付费广告 — Paid Ads（8）
+
+阶段为 ROAS 循环的概念分组（Research → Orchestrate → Activate → Scale）；所有付费技能平铺在 `paid/` 下。
 
 | 阶段 | 技能与用途 |
 |------|------------|
-| Build 构建 | `campaign-architect` 账户与活动结构；`ad-creative-builder` 广告创意搭建 |
-| Launch 投放 | `ad-account-auditor` 投放审计门（ROAS RQS，结果写入 `memory/audits/paid/`） |
-| Scale 放大 | `paid-measurement-loop` 衡量回读循环 |
+| Research 研究 | `campaign-architect` 账户与活动结构（含搜索词挖掘模式）；`audience-segment-builder` 把自有客户/CRM/GA4 导出转为种子受众、相似种子、排除人群 |
+| Orchestrate 编排 | `ad-creative-builder` 广告创意搭建；`ad-test-designer` 实验设计与显著性判读（promote/kill） |
+| Activate 激活 | `ad-account-auditor` 投放审计门（ROAS RQS + 上线 go/no-go，结果写入 `memory/audits/paid/`）；`conversion-signal-qa` 上线前转化追踪信号 QA |
+| Scale 放大 | `paid-measurement-loop` 衡量回读循环；`attribution-reconciler` 跨平台订单ID去重对账与增量 |
+
+跨学科复用（计入阶段，不重复造轮子）：`budget-optimizer`（预算分配 + 出价节奏模式）、`landing-optimizer`（落地页）、`roi-calculator`（回报计算）、`report-generator`、`performance-analyzer`。
 
 ## 命令
 5 个命令覆盖搜索工作流端到端；红人技能按名称调用或经 `/aaron-marketing:auto` 路由。日常工作从 `/aaron-marketing:auto` 开始；其余四个是显式的模式入口：

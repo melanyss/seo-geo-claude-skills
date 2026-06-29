@@ -2,7 +2,7 @@
   "id": "aaron-marketing",
   "name": "aaron-marketing",
   "version": "11.0.0",
-  "description": "48 marketing skills and 5 commands on one shared contract across three disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring, quality gates, entity truth, campaign memory), influencer marketing on the IMPACT framework (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), and paid ads (campaign architecture, ad creative, account audit, measurement loop). Frameworks: CORE-EEAT, CITE, C3, ROAS.",
+  "description": "52 marketing skills and 5 commands on one shared contract across three disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring, quality gates, entity truth, campaign memory), influencer marketing on the IMPACT framework (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), and paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation). Frameworks: CORE-EEAT, CITE, C3, ROAS.",
   "author": {
     "name": "Aaron He Zhu",
     "email": "hello@zhuhe.io",
@@ -82,8 +82,12 @@
     "./optimize/site-architecture",
     "./monitor/ai-traffic",
     "./paid/campaign-architect",
+    "./paid/audience-segment-builder",
     "./paid/ad-creative-builder",
+    "./paid/ad-test-designer",
     "./paid/ad-account-auditor",
-    "./paid/paid-measurement-loop"
+    "./paid/conversion-signal-qa",
+    "./paid/paid-measurement-loop",
+    "./paid/attribution-reconciler"
   ]
 }

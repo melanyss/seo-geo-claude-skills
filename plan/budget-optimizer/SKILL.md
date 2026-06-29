@@ -49,6 +49,10 @@ Output: a tier/platform/content allocation table, projected reach + CPM/CPE, 2-3
 
 > Emit the standard shape from [skill-contract.md §Handoff Summary Format](../../references/skill-contract.md).
 
+## Cross-discipline: paid-ads spend + bid-pacing mode
+
+This skill also allocates **paid-ads** spend — the tier/platform tables map to channels/campaigns; use the ROAS goal-weight (DR vs Prospecting) as the scenario axis and read CPA/ROAS targets instead of CPM/CPE. For paid it carries a **bid-pacing / learning-phase mode**: from a live campaign/spend export, check pacing vs plan, respect the learning phase (don't churn a campaign mid-learning), and issue scale-up/down moves — as **advisory** recommendations from own-export data (keyed bid automation is an opt-in Tier-2/3 MCP, never required). Scope: this sets/adjusts the **plan**; [paid-measurement-loop](../../paid/paid-measurement-loop/SKILL.md) reads one shipped change back against a control, and premature scaling is an **S guardrail flag** in [ad-account-auditor](../../paid/ad-account-auditor/SKILL.md), not a separate skill or a veto. Save paid runs under `memory/paid-ads/budget-optimizer/`.
+
 ## Data Sources
 
 This family has no required live integrations (Tier 1). The skill works with nothing but the numbers you provide — give it your total budget, target platforms, and campaign goal, and it runs against the built-in cost benchmarks below.

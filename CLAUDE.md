@@ -1,6 +1,6 @@
 # Aaron Marketing Skills — Claude Code Context
 
-This plugin provides **48 skills and 5 commands** across three marketing disciplines: Search (SEO/GEO), influencer marketing (IMPACT), and Paid Ads (ROAS). All 48 skills follow one shared contract: trigger, quick start, skill contract, handoff summary, and next best skill. Skills are auto-loaded by context; commands are invoked with `/aaron-marketing:`. Current bundle version: `11.0.0` (see [VERSIONS.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)).
+This plugin provides **52 skills and 5 commands** across three marketing disciplines: Search (SEO/GEO), influencer marketing (IMPACT), and Paid Ads (ROAS). All 52 skills follow one shared contract: trigger, quick start, skill contract, handoff summary, and next best skill. Skills are auto-loaded by context; commands are invoked with `/aaron-marketing:`. Current bundle version: `11.0.0` (see [VERSIONS.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)).
 
 > Umbrella repo, renamed from `seo-geo-claude-skills` (stars/forks/issues/history carried over by the GitHub rename). The SEO/GEO-only product still lives, unchanged, at the original [seo-geo-claude-skills](https://github.com/aaron-he-zhu/seo-geo-claude-skills) URL as a standalone repo.
 
@@ -27,13 +27,16 @@ This plugin provides **48 skills and 5 commands** across three marketing discipl
 | **Convert** | `content-amplifier`, `ugc-repurposer`, `landing-optimizer` |
 | **Track** | `performance-analyzer`, `roi-calculator`, `report-generator` |
 
-**Paid Ads — ROAS (4):**
+**Paid Ads — ROAS (8):** phases are the conceptual ROAS loop (Research → Orchestrate → Activate → Scale); all paid skills live flat under `paid/`.
 
 | Phase | Skills |
 |-------|--------|
-| **Build** | `campaign-architect` (structure), `ad-creative-builder` (creative) |
-| **Launch** | `ad-account-auditor` |
-| **Scale** | `paid-measurement-loop` |
+| **Research** | `campaign-architect` (structure + search-term-mining mode), `audience-segment-builder` |
+| **Orchestrate** | `ad-creative-builder`, `ad-test-designer` |
+| **Activate** | `ad-account-auditor` (RQS gate + launch go/no-go mode), `conversion-signal-qa` |
+| **Scale** | `paid-measurement-loop`, `attribution-reconciler` |
+
+Reused cross-discipline (counted in the phases, not duplicated): `budget-optimizer` (spend allocation + bid-pacing/learning-phase mode), `landing-optimizer` (post-click), `roi-calculator` (return math), `report-generator`, `performance-analyzer`.
 
 ## One-Shot Commands
 

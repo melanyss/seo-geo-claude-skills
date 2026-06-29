@@ -4,7 +4,7 @@ Guidelines for AI agents working in this repository. For full runtime context, s
 
 ## Repository Overview
 
-- **Name**: aaron-marketing-skills — 48 skills (26 SEO/GEO + 18 influencer + 4 paid ads), 3 disciplines, 5 commands, shared references
+- **Name**: aaron-marketing-skills — 52 skills (26 SEO/GEO + 18 influencer + 8 paid ads), 3 disciplines, 5 commands, shared references
 - **Repository**: https://github.com/aaron-he-zhu/aaron-marketing-skills
 - **Author**: Aaron He Zhu | **License**: Apache 2.0
 - **Specs**: [Agent Skills](https://agentskills.io/specification.md)
@@ -14,7 +14,7 @@ Install instructions live in [README.md](README.md). Keep this file focused on a
 
 ### New skills (v11.0.0)
 
-Ten skills added in the 38 → 48 expansion. Full per-phase listings are in [CLAUDE.md § Skills by Phase](CLAUDE.md).
+Fourteen skills added across the 38 → 52 expansion (six SEO/GEO + four paid in v11, then four more paid in the Balanced paid-ads expansion). Full per-phase listings are in [CLAUDE.md § Skills by Phase](CLAUDE.md). Paid phases are the conceptual ROAS loop (Research → Orchestrate → Activate → Scale); all paid skills live flat under `paid/`.
 
 | Discipline | Phase | Skill |
 |------------|-------|-------|
@@ -24,10 +24,14 @@ Ten skills added in the 38 → 48 expansion. Full per-phase listings are in [CLA
 | SEO/GEO | Build | `local-seo` |
 | SEO/GEO | Optimize | `site-architecture` |
 | SEO/GEO | Monitor | `ai-traffic` |
-| Paid Ads | Build (structure) | `campaign-architect` |
-| Paid Ads | Build (creative) | `ad-creative-builder` |
-| Paid Ads | Launch (auditor-class gate; ROAS RQS) | `ad-account-auditor` |
+| Paid Ads | Research (structure + search-term mining) | `campaign-architect` |
+| Paid Ads | Research (audiences) | `audience-segment-builder` |
+| Paid Ads | Orchestrate (creative) | `ad-creative-builder` |
+| Paid Ads | Orchestrate (experiment design) | `ad-test-designer` |
+| Paid Ads | Activate (auditor-class gate; ROAS RQS + launch go/no-go) | `ad-account-auditor` |
+| Paid Ads | Activate (conversion-signal QA) | `conversion-signal-qa` |
 | Paid Ads | Scale (readback) | `paid-measurement-loop` |
+| Paid Ads | Scale (attribution de-dup / incrementality) | `attribution-reconciler` |
 
 ## Skill Format Specifications
 

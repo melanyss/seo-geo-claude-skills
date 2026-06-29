@@ -18,6 +18,8 @@ metadata:
 
 This skill helps you calculate and communicate the return on investment for influencer marketing campaigns using various methodologies appropriate for your goals and available data.
 
+> **Cross-discipline (paid ads):** this is the shared **return-math engine** for paid ads — [paid-measurement-loop](../../paid/paid-measurement-loop/SKILL.md), [attribution-reconciler](../../paid/attribution-reconciler/SKILL.md), and budget-optimizer delegate ROAS/CPA/payback ratios here rather than recomputing them. Save paid runs under `memory/paid-ads/roi-calculator/`.
+
 ## Quick Start
 
 Shortest invocation:

@@ -18,6 +18,8 @@ metadata:
 
 This skill helps you create professional influencer marketing reports that tell the story of your campaign performance. It adapts content and depth based on the audience.
 
+> **Cross-discipline (paid ads):** this is also the **paid-ads** reporting surface — build exec/client/channel reports from RQS history (`memory/audits/paid/`) and measurement-loop readback verdicts. It presents metrics; it does not compute them (return math stays in [roi-calculator](../roi-calculator/SKILL.md)). Save paid runs under `memory/paid-ads/report-generator/`.
+
 ## Quick Start
 
 Shortest invocation:

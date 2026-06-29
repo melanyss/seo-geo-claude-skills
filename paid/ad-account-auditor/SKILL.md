@@ -102,6 +102,8 @@ Check the five red lines before scoring. A single veto caps the overall at `min(
 
 Premature scaling / learning-phase violation is a high-severity **guardrail under S**, not a veto.
 
+**Signal seams**: [conversion-signal-qa](../conversion-signal-qa/SKILL.md) BUILDS/FIXES the R1/R2 measurement signal **pre-flight**, and [attribution-reconciler](../attribution-reconciler/SKILL.md) is the standing R2 **de-dup / incrementality workbook**. This auditor **judges** R1/R2 once as scored vetoes — it does not build or reconcile the signal. If R1/R2 fail, route the fix to conversion-signal-qa (instrumentation) or attribution-reconciler (double-counting), then re-audit.
+
 ### Step 3: Score the four dimensions
 
 Score each sub-item Pass=10 / Partial=5 / Fail=0; dimension = mean × 10 → 0–100. Cover R (Return + measurement integrity), O (Offer + claim/policy), A (Audience + brand safety), S (Spend-efficiency + pacing). Mark items N/A with a reason where an export is missing.
@@ -133,6 +135,10 @@ Then apply [auditor-runbook.md §2](../../references/auditor-runbook.md):
 ### Worked example reference
 
 Walk the [roas-benchmark.md worked-example fixture](../../references/roas-benchmark.md) (input `R=75 O=80 A=85 S=78`): DR goal → `floor(78.25) = 78`; prospecting → `floor(80.25) = 80`; R1 failing on the DR example caps the overall to `min(78, 60) = 60`, `cap_applied: true`.
+
+### Launch go/no-go mode
+
+Before budgets first go live (as opposed to the scale-readiness RQS audit above), run a fast **go/no-go checklist** instead of the full four-dimension score: tracking live and verified (defer instrumentation to [conversion-signal-qa](../conversion-signal-qa/SKILL.md)), budget caps set, bid strategy chosen, negatives loaded, creative approved (O1/O2 clean), landing page live and message-matched, brand/placement safety set, naming convention applied. Any unchecked item is a **no-go**. This is a mode of this gate, not a separate skill; for the full pre-scale audit, use the RQS path above.
 
 ## Validation Checkpoints
 

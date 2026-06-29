@@ -2,9 +2,12 @@
   "skills": [
     "ad-account-auditor",
     "ad-creative-builder",
+    "ad-test-designer",
     "ai-traffic",
     "alert-manager",
+    "attribution-reconciler",
     "audience-analyzer",
+    "audience-segment-builder",
     "backlink-analyzer",
     "brief-generator",
     "budget-optimizer",
@@ -19,6 +22,7 @@
     "content-refresher",
     "content-reviewer",
     "contract-helper",
+    "conversion-signal-qa",
     "domain-authority-auditor",
     "entity-optimizer",
     "fit-scorer",
@@ -49,7 +53,7 @@
     "trend-spotter",
     "ugc-repurposer"
   ],
-  "count": 48,
+  "count": 52,
   "required_case_keys": [
     "id",
     "type",

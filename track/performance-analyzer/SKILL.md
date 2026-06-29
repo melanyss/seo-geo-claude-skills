@@ -18,6 +18,8 @@ metadata:
 
 This skill helps you analyze influencer marketing campaign performance comprehensively. It goes beyond surface metrics to understand what truly worked and why.
 
+> **Cross-discipline (paid ads):** this is also the cross-channel **paid-ads** scorecard/anomaly lens — account-wide metric rollups vs target/benchmark that feed [ad-test-designer](../../paid/ad-test-designer/SKILL.md) (what to test) and [paid-measurement-loop](../../paid/paid-measurement-loop/SKILL.md) (what to read back). Save paid runs under `memory/paid-ads/performance-analyzer/`.
+
 ## Quick Start
 
 Shortest invocation:

@@ -1,6 +1,6 @@
 # Aaron Marketing Skills
 
-**48 skills. 5 commands. SEO/GEO, influencer, and paid ads marketing on one shared contract.**
+**52 skills. 5 commands. SEO/GEO, influencer, and paid ads marketing on one shared contract.**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
@@ -88,13 +88,18 @@ Shared refs: [skill-contract.md](references/skill-contract.md), [state-model.md]
 | Convert | [content-amplifier](convert/content-amplifier/SKILL.md), [ugc-repurposer](convert/ugc-repurposer/SKILL.md), [landing-optimizer](convert/landing-optimizer/SKILL.md) |
 | Track | [performance-analyzer](track/performance-analyzer/SKILL.md), [roi-calculator](track/roi-calculator/SKILL.md), [report-generator](track/report-generator/SKILL.md) |
 
-### Paid Ads (4)
+### Paid Ads (8)
+
+Phases are the conceptual ROAS loop (Research → Orchestrate → Activate → Scale); skills live flat under `paid/`.
 
 | Phase | Skills |
 |-------|--------|
-| Build | [campaign-architect](paid/campaign-architect/SKILL.md), [ad-creative-builder](paid/ad-creative-builder/SKILL.md) |
-| Launch | [ad-account-auditor](paid/ad-account-auditor/SKILL.md) |
-| Scale | [paid-measurement-loop](paid/paid-measurement-loop/SKILL.md) |
+| Research | [campaign-architect](paid/campaign-architect/SKILL.md), [audience-segment-builder](paid/audience-segment-builder/SKILL.md) |
+| Orchestrate | [ad-creative-builder](paid/ad-creative-builder/SKILL.md), [ad-test-designer](paid/ad-test-designer/SKILL.md) |
+| Activate | [ad-account-auditor](paid/ad-account-auditor/SKILL.md), [conversion-signal-qa](paid/conversion-signal-qa/SKILL.md) |
+| Scale | [paid-measurement-loop](paid/paid-measurement-loop/SKILL.md), [attribution-reconciler](paid/attribution-reconciler/SKILL.md) |
+
+Reused cross-discipline: [budget-optimizer](plan/budget-optimizer/SKILL.md) (spend + bid-pacing mode), [landing-optimizer](convert/landing-optimizer/SKILL.md), [roi-calculator](track/roi-calculator/SKILL.md), [report-generator](track/report-generator/SKILL.md), [performance-analyzer](track/performance-analyzer/SKILL.md).
 
 ## Commands
 
