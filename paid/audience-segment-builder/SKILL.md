@@ -10,6 +10,8 @@ argument-hint: "<customer/CRM CSV or GA4 export> [goal: DR|prospecting] [platfor
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: research
   geo-relevance: "low"
 ---
 

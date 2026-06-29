@@ -10,6 +10,8 @@ argument-hint: "<site/account topic> [platforms] [GA4 conversions + traffic-acqu
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: activate
   geo-relevance: "low"
 ---
 

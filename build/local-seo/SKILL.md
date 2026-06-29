@@ -10,6 +10,8 @@ argument-hint: "<business name> <location(s)> <storefront|service-area>"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: build
   geo-relevance: "low"
 ---
 

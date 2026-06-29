@@ -10,6 +10,8 @@ argument-hint: "<brand or industry> [platform] [time horizon]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: insight
   family: influencer-marketing
   impact-phase: Insight
 ---

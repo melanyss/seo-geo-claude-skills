@@ -10,6 +10,8 @@ argument-hint: "<URL of outdated content>"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: optimize
   geo-relevance: "medium"
 ---
 

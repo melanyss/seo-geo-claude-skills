@@ -10,6 +10,8 @@ argument-hint: "<campaign or content set> [target channels]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: convert
   family: influencer-marketing
   impact-phase: Convert
 ---

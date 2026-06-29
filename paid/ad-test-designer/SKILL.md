@@ -10,6 +10,8 @@ argument-hint: "<what to test / results CSV> [goal: DR|prospecting] [baseline CV
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: orchestrate
   geo-relevance: "low"
 ---
 

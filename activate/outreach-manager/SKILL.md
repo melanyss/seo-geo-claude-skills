@@ -10,6 +10,8 @@ argument-hint: "<influencer handle or list> [platform] [budget]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: activate
   family: influencer-marketing
   impact-phase: Activate
 ---

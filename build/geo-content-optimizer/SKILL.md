@@ -10,6 +10,8 @@ argument-hint: "<content URL or text> [target AI engine]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: build
   geo-relevance: "high"
 ---
 

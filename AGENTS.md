@@ -51,6 +51,7 @@ Fourteen skills added across the 38 → 52 expansion (six SEO/GEO + four paid in
 | `compatibility` | Platform list |
 | `allowed-tools` | Pre-approved tools (e.g., `WebFetch`) |
 | `metadata.author/version/geo-relevance/tags/triggers` | Discovery and categorization. `metadata.version` must match top-level `version`. |
+| `metadata.discipline` + `metadata.phase` | On every skill (52/52): `discipline` = seo-geo/influencer/paid/protocol; `phase` = lifecycle phase. Uniform routing/clustering tags. |
 | `when_to_use` | Trigger scenarios for auto-invocation (underscores, not hyphens) |
 | `argument-hint` | Argument format hint in command picker |
 

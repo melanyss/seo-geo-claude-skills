@@ -10,6 +10,8 @@ argument-hint: "<GA4/ecommerce order-ID export> [platform conversion exports] [g
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: scale
   geo-relevance: "low"
 ---
 

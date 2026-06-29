@@ -10,6 +10,8 @@ argument-hint: "<total budget> [platforms] [campaign goal]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: plan
   family: influencer-marketing
   impact-phase: Plan
 ---

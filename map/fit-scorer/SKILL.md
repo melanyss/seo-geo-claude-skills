@@ -10,6 +10,8 @@ argument-hint: "<brand or campaign> <influencer handle(s)> [campaign goal: aware
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: map
   family: influencer-marketing
   impact-phase: Map
 ---

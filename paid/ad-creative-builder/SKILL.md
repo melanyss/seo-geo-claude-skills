@@ -10,6 +10,8 @@ argument-hint: "<product/offer> <destination URL> [platform: google|meta|...]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: orchestrate
   geo-relevance: "low"
 ---
 

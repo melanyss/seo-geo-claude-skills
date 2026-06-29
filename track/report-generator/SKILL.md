@@ -10,6 +10,8 @@ argument-hint: "<campaign name> [audience: executive|client|team|board]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: track
   family: influencer-marketing
   impact-phase: Track
 ---

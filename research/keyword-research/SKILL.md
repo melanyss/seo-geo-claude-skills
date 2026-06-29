@@ -10,6 +10,8 @@ argument-hint: "<topic or seed keyword> [market/language]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: research
   geo-relevance: "medium"
 ---
 

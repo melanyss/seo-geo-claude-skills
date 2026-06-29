@@ -10,6 +10,8 @@ argument-hint: "<entity name or brand>"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: protocol
+  phase: protocol
   geo-relevance: "high"
 ---
 

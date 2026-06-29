@@ -10,6 +10,8 @@ argument-hint: "<domain> [metric]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: monitor
   geo-relevance: "low"
 ---
 

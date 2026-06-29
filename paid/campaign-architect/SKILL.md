@@ -10,6 +10,8 @@ argument-hint: "<account/campaign goal> [platforms] [target keywords or themes]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: research
   geo-relevance: "low"
 ---
 

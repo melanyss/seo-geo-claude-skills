@@ -10,6 +10,8 @@ argument-hint: "<campaign or product> [platform] [content type]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: plan
   family: influencer-marketing
   impact-phase: Plan
 ---

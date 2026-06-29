@@ -10,6 +10,8 @@ argument-hint: "<brand or niche> [platform] [follower-range]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: map
   family: influencer-marketing
   impact-phase: Map
 ---

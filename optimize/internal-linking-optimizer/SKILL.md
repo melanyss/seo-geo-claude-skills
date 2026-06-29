@@ -10,6 +10,8 @@ argument-hint: "<URL or sitemap>"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: optimize
   geo-relevance: "low"
 ---
 

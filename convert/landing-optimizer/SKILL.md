@@ -10,6 +10,8 @@ argument-hint: "<landing page URL or campaign> [influencer handle] [promo code]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: convert
   family: influencer-marketing
   impact-phase: Convert
 ---

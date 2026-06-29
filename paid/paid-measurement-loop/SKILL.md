@@ -10,6 +10,8 @@ argument-hint: "<campaign/change> [readback window]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: paid
+  phase: scale
   geo-relevance: "low"
 ---
 

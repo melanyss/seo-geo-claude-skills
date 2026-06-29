@@ -40,6 +40,8 @@ Optional sections such as `What This Skill Does`, `Example`, `Tips for Success`,
 | `name` | kebab-case | Yes | Skill identifier, must match directory |
 | `description` | String ≤1024 chars | Yes | UI display + vector search discovery |
 | `version` | Semver | Yes | Skill version tracking |
+| `metadata.discipline` | `seo-geo` / `influencer` / `paid` / `protocol` | Recommended | Uniform discipline tag on every skill — enables clustering / routing / discovery |
+| `metadata.phase` | phase slug | Recommended | Lifecycle phase within the discipline (see [CLAUDE.md § Skills by Phase](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/CLAUDE.md) meta-lifecycle table) |
 | `when_to_use` | String (underscores) | Recommended | Detailed trigger scenarios for auto-invocation |
 | `argument-hint` | String | Recommended | Shows argument format in command picker |
 | `allowed-tools` | String or array | Optional | Pre-approved tools (e.g., `WebFetch`) |

@@ -10,6 +10,8 @@ argument-hint: "<deliverables and compensation> [platform] | review <pasted term
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: activate
   family: influencer-marketing
   impact-phase: Activate
 ---

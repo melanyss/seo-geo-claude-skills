@@ -10,6 +10,8 @@ argument-hint: "<topic> <target keyword>"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: seo-geo
+  phase: build
   geo-relevance: "medium"
 ---
 

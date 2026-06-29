@@ -10,6 +10,8 @@ argument-hint: "<niche or community> [parent category] [brand or product]"
 metadata:
   author: aaron-he-zhu
   version: "11.0.0"
+  discipline: influencer
+  phase: insight
   family: influencer-marketing
   impact-phase: Insight
 ---
