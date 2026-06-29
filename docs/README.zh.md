@@ -5,119 +5,402 @@
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills)](https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-purple)](https://claude.ai/download)
 
 [English](../README.md) | **中文**
 
-面向三类营销工作、共用一套运行契约的 Claude 技能与命令集：
+一套 Claude 技能与斜杠命令，让聊天 Agent 成为营销操作员，**三类学科共用一套运行契约**：
 
-- **搜索（SEO/GEO）** — 26 个技能：关键词研究、内容创作、程序化与本地 SEO、技术审计、结构化数据、监控、质量门、实体事实、项目记忆。
-- **红人营销（IMPACT）** — 18 个技能：受众洞察、红人发现、活动规划、外联、内容放大、ROI 追踪。
-- **付费广告（Paid Ads）** — 8 个技能（ROAS 循环 Research → Orchestrate → Activate → Scale）：账户结构、受众分群、广告创意、实验设计、投放审计门、转化信号 QA、衡量回读循环、归因对账。
+- **搜索（SEO/GEO）** — **26 个技能**：关键词研究、内容创作、程序化/寄生/本地/对比页构建、on-page 与技术审计、结构化数据、站点架构、排名/外链/AI 流量监控，以及质量、实体、记忆协议层。
+- **红人营销（IMPACT）** — **18 个技能**：受众洞察、红人发现与适配打分、活动规划、brief、外联、内容审核、放大、UGC 二次利用、ROI 追踪。
+- **付费广告（ROAS）** — **8 个技能**：账户结构、受众分群、广告创意、实验设计、账户审计门、转化信号 QA、衡量回读循环、归因对账。
 
-技能内容为零依赖 Markdown；Claude Code hooks 使用轻量 Bash runner。内置四套评估框架：[CORE-EEAT](../references/core-eeat-benchmark.md)（80 项内容质量）、[CITE](../references/cite-domain-rating.md)（40 项域名权威）、[C³](../references/c3-benchmark.md)（红人 创作者/内容/活动）、[ROAS](../references/roas-benchmark.md)（付费广告 回报/广告创意/受众/花费效率）。
+全部为**纯 Markdown**（唯一的代码是一个 Bash hook runner、一个 Bash 校验器、以及零依赖的 Python 标准库数据助手——无 `pip`、无构建步骤）。**每个技能都能在 Tier 1 仅凭你粘贴的数据运行**；可选连接器只是自动化取数。内置四套评分框架并支撑发布/信任/质量门：[CORE-EEAT](../references/core-eeat-benchmark.md)、[CITE](../references/cite-domain-rating.md)、[C³](../references/c3-benchmark.md)、[ROAS](../references/roas-benchmark.md)。
 
-> 本仓库为合集（由 `seo-geo-claude-skills` 改名而来，stars/fork/issue/历史一并继承）。只做搜索的用户可继续使用原 [seo-geo-claude-skills](https://github.com/aaron-he-zhu/seo-geo-claude-skills) URL 上的独立仓库（内容不变）。
+> SEO/GEO 部分也作为独立仓库不变地存在于 [seo-geo-claude-skills](https://github.com/aaron-he-zhu/seo-geo-claude-skills)，供只做搜索的用户使用。
 
-## 快速开始
+---
 
-常用安装方式如下。
+## 目录
 
-| 工具 | 安装 |
+- [为什么选它](#为什么选它)
+- [安装](#安装)
+- [初次使用](#初次使用)
+- [运行模型](#运行模型)
+- [质量框架](#质量框架)
+- [技能目录](#技能目录)
+- [命令](#命令)
+- [连接器与层级](#连接器与层级)
+- [记忆与自动化](#记忆与自动化)
+- [推荐工作流](#推荐工作流)
+- [仓库结构](#仓库结构)
+- [设计哲学](#设计哲学)
+- [质量守卫](#质量守卫)
+- [贡献与文档](#贡献与文档)
+- [免责声明](#免责声明)
+- [许可证](#许可证)
+
+---
+
+## 为什么选它
+
+| 原则 | 落到实处 |
+|------|----------|
+| **默认 keyless** | 每个技能都能在 **Tier 1** 仅凭粘贴的数据、或从免费/第一方来源拉取的数据运行。付费工具与 MCP 服务器是可选项，绝非前提。付费广告技能基于**自有账户手动导出**评分——带密钥的广告 API 永不必需。 |
+| **是 Markdown，不是框架** | 技能即内容。唯一可执行代码是 `hooks/claude-hook.sh`(Bash)、`scripts/validate-skill.sh`(Bash)、`scripts/connectors/*.py`（**仅标准库**）。无需安装、审计或维护。 |
+| **一套共享契约** | 52 个技能暴露同样的七段结构，整个库像一套操作系统：每个技能都知道自己的输入、输出，以及下一个该交棒的技能。 |
+| **带门的质量** | 四套基准（[CORE-EEAT](../references/core-eeat-benchmark.md)、[CITE](../references/cite-domain-rating.md)、[C³](../references/c3-benchmark.md)、[ROAS](../references/roas-benchmark.md)）驱动四个 auditor-class 门，产出结构化、可机器校验的判定——不是凭感觉。 |
+| **跨轮记忆** | HOT/WARM/COLD 记忆模型在技能与会话之间携带发现、分数与未决事项，并在写入时净化。 |
+| **人话** | 技能内置 AI 腔检测器与禁用词表，让输出读起来像人写的。 |
+
+---
+
+## 安装
+
+可配合 Claude Code、任意 Agent Skills 兼容宿主，或直接 `git clone`:
+
+| 宿主 | 安装 |
 |------|------|
-| Claude Code | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` 然后 `/plugin install aaron-marketing@aaron` |
-| skills.sh / 通用 Agent Skills 宿主 | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
-| 任意宿主 | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
+| **Claude Code** | `/plugin marketplace add aaron-he-zhu/aaron-marketing-skills` 然后 `/plugin install aaron-marketing@aaron` |
+| **skills.sh / 通用 Agent Skills 宿主** | `npx skills add aaron-he-zhu/aaron-marketing-skills` |
+| **任意宿主** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
 在 Claude Code 中，`marketplace add` 只是注册目录——还需运行 `/plugin install aaron-marketing@aaron`（或在 `/plugin` 中选择）才能真正启用技能与命令。通用宿主单技能安装：`npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research`。
 
-自然语言示例（需宿主支持自动路由）：
+安装插件**不会**往你的 `/mcp` 列表添加任何东西——`.mcp.json` 中的 MCP 目录只是复制粘贴参考，不会自动注册（见[连接器与层级](#连接器与层级)）。
+
+---
+
+## 初次使用
+
+若宿主支持自动技能路由，直接描述目标即可：
 
 ```text
-帮我研究"云原生"相关的关键词机会
+帮我研究面向小团队的 SaaS 产品的关键词
 ```
+```text
+帮一个护肤品牌找 TikTok 红人并给适配度打分
+```
+```text
+在我加预算前，审计这个 Google Ads 账户——导出文件已附上
+```
+
+或用斜杠命令驱动搜索工作流：
 
 ```text
-帮我为一个护肤品牌找 TikTok 红人并给适配度打分
+/aaron-marketing:auto audit https://example.com/blog/my-article
 ```
 
-Slash 命令宿主的稳定入口：
+`/aaron-marketing:auto` 会推断意图并执行最小够用的工作流，只在阻塞性决策处停下。每个技能都能用粘贴的数据运行；可选工具见 [CONNECTORS.md](../CONNECTORS.md)。
 
-```text
-/aaron-marketing:auto audit https://example.com
-```
-
-## 技能
-
-### 搜索 — SEO/GEO（26）
-
-| 阶段 | 技能与用途 |
-|------|------------|
-| 研究 | `keyword-research` 关键词机会与选题；`competitor-analysis` 竞品差距；`serp-analysis` 搜索结果与意图；`content-gap-analysis` 内容缺口与编辑日历 |
-| 构建 | `seo-content-writer` SEO/GEO 内容草稿；`geo-content-optimizer` AI 引用优化；`meta-tags-optimizer` 标题与元描述；`schema-markup-generator` JSON-LD 结构化数据；`programmatic-seo` 程序化批量页面；`parasite-seo` 高权重平台寄生发布；`comparison-page-builder` 对比页搭建；`local-seo` 本地 SEO 与 GBP |
-| 优化 | `on-page-seo-auditor` 页面 SEO 与 CORE-EEAT；`technical-seo-checker` 抓取、索引、速度、安全；`internal-linking-optimizer` 内链与站点架构；`content-refresher` 旧内容刷新；`site-architecture` 站点架构与信息结构 |
-| 监控 | `rank-tracker` 排名与 SERP 变化；`backlink-analyzer` 外链质量与机会；`performance-reporter` SEO/GEO 报告；`alert-manager` 预警与监控规则；`ai-traffic` AI 引用流量监控 |
-| 协议层 | `content-quality-auditor` 发布质量门；`domain-authority-auditor` CITE 域名可信度；`entity-optimizer` 实体与知识图谱；`memory-management` 项目记忆 |
-
-### 红人 — IMPACT（18）
-
-| 阶段 | 技能与用途 |
-|------|------------|
-| Insight 洞察 | `audience-analyzer` 受众画像；`niche-researcher` 细分赛道与关键声音；`trend-spotter` 趋势与话题 |
-| Map 匹配 | `influencer-discovery` 跨平台红人发现；`fit-scorer` 红人-品牌适配度（C³ ACE 打分）；`competitor-tracker` 竞品红人策略 |
-| Plan 规划 | `campaign-planner` 活动策略；`brief-generator` 红人 brief；`budget-optimizer` 预算分配 |
-| Activate 启动 | `outreach-manager` 外联与谈判；`content-reviewer` 内容审核（ART 门，含 FTC 披露）；`contract-helper` 合作协议 |
-| Convert 转化 | `content-amplifier` 内容放大；`ugc-repurposer` UGC 二次利用；`landing-optimizer` 落地页优化 |
-| Track 追踪 | `performance-analyzer` 表现分析；`roi-calculator` ROI 与 CVI；`report-generator` 活动报告 |
-
-### 付费广告 — Paid Ads（8）
-
-阶段为 ROAS 循环的概念分组（Research → Orchestrate → Activate → Scale）；所有付费技能平铺在 `paid/` 下。
-
-| 阶段 | 技能与用途 |
-|------|------------|
-| Research 研究 | `campaign-architect` 账户与活动结构（含搜索词挖掘模式）；`audience-segment-builder` 把自有客户/CRM/GA4 导出转为种子受众、相似种子、排除人群 |
-| Orchestrate 编排 | `ad-creative-builder` 广告创意搭建；`ad-test-designer` 实验设计与显著性判读（promote/kill） |
-| Activate 激活 | `ad-account-auditor` 投放审计门（ROAS RQS + 上线 go/no-go，结果写入 `memory/audits/paid/`）；`conversion-signal-qa` 上线前转化追踪信号 QA |
-| Scale 放大 | `paid-measurement-loop` 衡量回读循环；`attribution-reconciler` 跨平台订单ID去重对账与增量 |
-
-跨学科复用（计入阶段，不重复造轮子）：`budget-optimizer`（预算分配 + 出价节奏模式）、`landing-optimizer`（落地页）、`roi-calculator`（回报计算）、`report-generator`、`performance-analyzer`。
-
-## 命令
-5 个命令覆盖搜索工作流端到端；红人技能按名称调用或经 `/aaron-marketing:auto` 路由。日常工作从 `/aaron-marketing:auto` 开始；其余四个是显式的模式入口：
-
-- `/aaron-marketing:auto` — 推断意图并执行最小够用的工作流（加 `--deep` 进行穷尽/压测）
-- `/aaron-marketing:research` — 关键词需求、SERP 意图、竞品、内容缺口、站点/主题/实体地图
-- `/aaron-marketing:create` — brief、写作、系列、刷新、CMS 中立发布包（`--brief`/`--series`/`--refresh`/`--publish`/`--meta`/`--schema`）
-- `/aaron-marketing:audit` — on-page + CORE-EEAT 质量、技术 SEO、AI 可见性、域权威（`--full`/`--tech`/`--visibility`/`--authority`）
-- `/aaron-marketing:track` — 排名、告警、绩效报告、项目记忆（`--alert`/`--report`/`--remember`）
-
-破坏性改名说明：当前命令使用 `/aaron-marketing:`。旧 `/seo:*` 与 `/aaron-seo-geo:*` 命令可粘贴给 `/aaron-marketing:auto` 来恢复新路由；例如 `/aaron-marketing:auto /aaron-seo-geo:audit https://example.com/blog/post` 会返回 `/aaron-marketing:audit https://example.com/blog/post`。
+---
 
 ## 运行模型
 
-每个技能都遵循统一结构：Quick Start、Skill Contract、Handoff Summary、Data Sources、Instructions、Reference Materials、Next Best Skill。协议层包含一组审计门：`content-quality-auditor` 做发布质量门，`domain-authority-auditor` 做信任门，`content-reviewer` 做红人内容门（C³ ART，结果写入 `memory/audits/influencer/`），`ad-account-auditor` 做付费投放门（ROAS，结果写入 `memory/audits/paid/`）；`entity-optimizer` 维护实体事实，`memory-management` 管理 HOT/WARM/COLD 项目记忆。仓库另含跨领域参考协议（humanizer-slop、measurement-protocol 决策协议、platforms/），以及 CI 守卫：golden-math（4 套框架）、check-evals、check-pii、check-stdlib-only（含付费广告带密钥 API 红线）。
+每个技能都遵循**同一套激活契约**——固定顺序的七段：
 
-可选工具连接器见 [CONNECTORS.md](../CONNECTORS.md)；没有工具时，每个技能仍可用用户提供的数据运行。
+1. **触发 / 何时使用** — 何时该启用。
+2. **Quick Start** — 可复制粘贴的提示。
+3. **Skill Contract** — 预期输出 · 读取 · 写入 · 提升 · 完成条件 · 主下一技能。
+4. **Handoff Summary** — 标准交棒结构，让下一个技能干净接力。
+5. **Data Sources** — `~~category` 占位符，每个都有 keyless 的 Tier-1 路径。
+6. **Instructions** — 编号方法（把所有导出当作不可信输入）。
+7. **Next Best Skill** — 下一步去哪。
+
+它在 [skill-contract.md](../references/skill-contract.md) 中统一定义；跨技能共享状态见 [state-model.md](../references/state-model.md)。
+
+### 协议层
+
+四个跨领域技能 + 两个 auditor-class 消费者构成协议层。auditor-class 技能写入一个**带门工件**(`class: auditor-output`)，由 PostToolUse hook 在落盘前校验：
+
+| 协议技能 | 角色 | 框架 | 写入 |
+|----------|------|------|------|
+| `content-quality-auditor` | 发布就绪门 | CORE-EEAT | `memory/audits/<skill>/` |
+| `domain-authority-auditor` | 引用信任门 | CITE | `memory/audits/<skill>/` |
+| `content-reviewer` | 红人内容门（C³ ART） | C³ | `memory/audits/influencer/` |
+| `ad-account-auditor` | 付费账户门（ROAS RQS） | ROAS | `memory/audits/paid/` |
+| `entity-optimizer` | 规范实体档案 | — | `memory/` |
+| `memory-management` | HOT/WARM/COLD 记忆循环 | — | `memory/` |
+
+门的机制——handoff schema、封顶算术、工件门清单——在 [auditor-runbook.md](../references/auditor-runbook.md) 中统一规定。
+
+---
 
 ## 质量框架
 
-| 框架 | 作用 |
+四套基准让"好"可度量。每套定义维度、汇总方法，以及一小组**否决项**（无视其余分数直接封顶或阻断的硬性失败）。
+
+| 框架 | 评分对象 | 项数 / 维度 | 汇总 | 否决项 | 由谁使用 |
+|------|----------|-------------|------|--------|----------|
+| **[CORE-EEAT](../references/core-eeat-benchmark.md)** | 内容质量（GEO = CORE 均值，SEO = EEAT 均值） | 80 项 / 8 维 | 各维度均值 | `T04`、`C01`、`R10` | `content-quality-auditor`、`/audit` |
+| **[CITE](../references/cite-domain-rating.md)** | 域名权威与引用信任 | 40 项 / 4 维 | 算术加权平均 | `T03`、`T05`、`T09` | `domain-authority-auditor` |
+| **[C³](../references/c3-benchmark.md)** | 红人 创作者/内容/活动 | ACE / ART / ROI · 9 维 | **CVI =(ACE × ART × ROI)^⅓**（几何） | ACE `A2`/`C1`/`E2`、ART `T1`/`T2` | `fit-scorer`(ACE)、`content-reviewer`(ART) |
+| **[ROAS](../references/roas-benchmark.md)** | 付费广告 回报/创意/受众/花费效率 | R / O / A / S | **RQS = floor（目标加权均值）**（算术） | `R1`/`R2`/`O1`/`O2`/`A1` | `ad-account-auditor` |
+
+**封顶法（共享）：** 单个否决项把受影响维度与总分封顶到 `min(raw, 60)`；**两个及以上否决项 → `BLOCKED`**（无最终分）。判定对用户翻译成人话（渲染报告里不出现项目 ID）。四套框架的算术由一个确定性 golden 测试锁定（见[质量守卫](#质量守卫)）。
+
+---
+
+## 技能目录
+
+技能链接打开各自的 `SKILL.md`。展开每个学科下的 **详情** 可看每个技能的一句话用途。
+
+### 搜索 — SEO/GEO(26)
+
+| 阶段 | 技能 |
 |------|------|
-| [CORE-EEAT](../references/core-eeat-benchmark.md) | 80 项内容质量评分 |
-| [CITE](../references/cite-domain-rating.md) | 40 项域名权威评分 |
-| [C³](../references/c3-benchmark.md) | 红人 创作者/内容/活动 评分（ACE/ART/ROI，9 维，CVI 几何平均，否决项 ACE A2/C1/E2 + ART T1/T2） |
-| [ROAS](../references/roas-benchmark.md) | 付费广告评分（R 回报 / O 广告创意 / A 受众 / S 花费效率，RQS 算术加权平均，否决项 R1/R2/O1/O2/A1） |
-| [Auditor Runbook](../references/auditor-runbook.md) | 审计 handoff、分数封顶、Artifact Gate |
+| **研究** | [keyword-research](../research/keyword-research/SKILL.md), [competitor-analysis](../research/competitor-analysis/SKILL.md), [serp-analysis](../research/serp-analysis/SKILL.md), [content-gap-analysis](../research/content-gap-analysis/SKILL.md) |
+| **构建** | [seo-content-writer](../build/seo-content-writer/SKILL.md), [geo-content-optimizer](../build/geo-content-optimizer/SKILL.md), [meta-tags-optimizer](../build/meta-tags-optimizer/SKILL.md), [schema-markup-generator](../build/schema-markup-generator/SKILL.md), [programmatic-seo](../build/programmatic-seo/SKILL.md), [parasite-seo](../build/parasite-seo/SKILL.md), [comparison-page-builder](../build/comparison-page-builder/SKILL.md), [local-seo](../build/local-seo/SKILL.md) |
+| **优化** | [on-page-seo-auditor](../optimize/on-page-seo-auditor/SKILL.md), [technical-seo-checker](../optimize/technical-seo-checker/SKILL.md), [internal-linking-optimizer](../optimize/internal-linking-optimizer/SKILL.md), [content-refresher](../optimize/content-refresher/SKILL.md), [site-architecture](../optimize/site-architecture/SKILL.md) |
+| **监控** | [rank-tracker](../monitor/rank-tracker/SKILL.md), [backlink-analyzer](../monitor/backlink-analyzer/SKILL.md), [performance-reporter](../monitor/performance-reporter/SKILL.md), [alert-manager](../monitor/alert-manager/SKILL.md), [ai-traffic](../monitor/ai-traffic/SKILL.md) |
+| **协议层** | [content-quality-auditor](../cross-cutting/content-quality-auditor/SKILL.md), [domain-authority-auditor](../cross-cutting/domain-authority-auditor/SKILL.md), [entity-optimizer](../cross-cutting/entity-optimizer/SKILL.md), [memory-management](../cross-cutting/memory-management/SKILL.md) |
+
+<details><summary><b>逐技能用途（搜索）</b></summary>
+
+| 技能 | 用途 |
+|------|------|
+| keyword-research | 为页面/主题/活动开启关键词工作——意图、需求、临门一脚机会。 |
+| competitor-analysis | 分析竞品 SEO 策略，对比域名，挖出其关键词与缺口。 |
+| serp-analysis | 读懂 SERP——特性、摘要、People Also Ask、某查询的排名规律。 |
+| content-gap-analysis | 找出相对竞品缺失的主题与覆盖空洞。 |
+| seo-content-writer | 撰写 SEO 优化的文章、博文、落地页、产品文案。 |
+| geo-content-optimizer | 为 AI 引擎（ChatGPT、Perplexity、AI Overviews、Gemini、Claude、Copilot）优化内容。 |
+| meta-tags-optimizer | 标题标签、元描述、Open Graph、Twitter Cards。 |
+| schema-markup-generator | 生成 JSON-LD / Schema.org 结构化数据。 |
+| programmatic-seo | 用一个模板 + 结构化数据集生成成百上千个页面。 |
+| parasite-seo | 在高权重第三方平台（Medium、Reddit、LinkedIn、Quora、GitHub）发布以获取排名/AI 引用。 |
+| comparison-page-builder | 搭建"vs"、alternatives、竞品对比页（SEO + 销售赋能）。 |
+| local-seo | Google Business Profile、NAP 一致性、引用建设、地点/服务区页。 |
+| on-page-seo-auditor | 审计页面级 on-page 健康度——标题层级、关键词布局、图片、质量信号。 |
+| technical-seo-checker | 站点速度、Core Web Vitals、索引、可抓取性、robots。 |
+| internal-linking-optimizer | 内链结构、锚文本分布、孤立页。 |
+| content-refresher | 刷新过时或下滑的内容，补充新信息。 |
+| site-architecture | 页面层级、导航、URL 分类、hub/spoke 主题集群。 |
+| rank-tracker | 跟踪关键词排名、位次变化与跌幅。 |
+| backlink-analyzer | 外链档案、链接质量、毒链、锚文本分布。 |
+| performance-reporter | 多指标 SEO/GEO 绩效报告与利益相关者看板。 |
+| alert-manager | 排名、流量、外链、技术问题、AI 可见性的告警。 |
+| ai-traffic | 在你自己的 GA4 / GSC / 服务器日志中度量来自 AI 助手的引荐流量。 |
+| content-quality-auditor | 80 项 CORE-EEAT 发布就绪门。 |
+| domain-authority-auditor | 40 项 CITE 域名信任门。 |
+| entity-optimizer | 面向知识图谱、Wikidata、AI 消歧的规范实体档案。 |
+| memory-management | 审阅、提升、降级、归档 HOT/WARM/COLD 项目记忆。 |
+
+</details>
+
+### 红人 — IMPACT(18)
+
+| 阶段 | 技能 |
+|------|------|
+| **Insight 洞察** | [audience-analyzer](../insight/audience-analyzer/SKILL.md), [niche-researcher](../insight/niche-researcher/SKILL.md), [trend-spotter](../insight/trend-spotter/SKILL.md) |
+| **Map 匹配** | [influencer-discovery](../map/influencer-discovery/SKILL.md), [fit-scorer](../map/fit-scorer/SKILL.md), [competitor-tracker](../map/competitor-tracker/SKILL.md) |
+| **Plan 规划** | [campaign-planner](../plan/campaign-planner/SKILL.md), [brief-generator](../plan/brief-generator/SKILL.md), [budget-optimizer](../plan/budget-optimizer/SKILL.md) |
+| **Activate 启动** | [outreach-manager](../activate/outreach-manager/SKILL.md), [content-reviewer](../activate/content-reviewer/SKILL.md), [contract-helper](../activate/contract-helper/SKILL.md) |
+| **Convert 转化** | [content-amplifier](../convert/content-amplifier/SKILL.md), [ugc-repurposer](../convert/ugc-repurposer/SKILL.md), [landing-optimizer](../convert/landing-optimizer/SKILL.md) |
+| **Track 追踪** | [performance-analyzer](../track/performance-analyzer/SKILL.md), [roi-calculator](../track/roi-calculator/SKILL.md), [report-generator](../track/report-generator/SKILL.md) |
+
+<details><summary><b>逐技能用途（红人）</b></summary>
+
+| 技能 | 用途 |
+|------|------|
+| audience-analyzer | 在项目开始或进入新细分时做受众画像。 |
+| niche-researcher | 在合作前摸清某个亚文化 / 微社群。 |
+| trend-spotter | 活动节奏与主题——趋势话题、声音、内容格式、文化时刻。 |
+| influencer-discovery | 从零搭建红人名单、拓展新平台、规模化找 nano/micro。 |
+| fit-scorer | 对候选名单做客观加权适配打分（基于 C³ ACE）。 |
+| competitor-tracker | 竞品的合作红人、活动、格式、估算触达/花费与缺口。 |
+| campaign-planner | 规划活动、产品发布、tentpole 或常态化创作者项目。 |
+| brief-generator | 标准化红人 brief 与可复用团队模板。 |
+| budget-optimizer | 跨层级/平台分配预算、预测 ROI、建模场景（同时服务付费广告的花费 + 出价节奏）。 |
+| outreach-manager | pitch、跟进节奏、再激活、费率谈判、状态跟踪。 |
+| content-reviewer | 对红人提交内容做发布前门决策（C³ ART 门）。 |
+| contract-helper | 起草/审阅创作者协议——使用权、独家、标准条款。 |
+| content-amplifier | 用付费投放放大自然创作者内容（白名单、Spark Ads、暗帖）。 |
+| ugc-repurposer | 把 UGC 二次利用到付费、网站、邮件、自然社媒。 |
+| landing-optimizer | 面向创作者/付费流量的落地页——信息一致、移动端、A/B（同时服务付费点击后）。 |
+| performance-analyzer | 评估创作者结果、横比创作者、情感、转化（同时是付费跨渠道记分卡）。 |
+| roi-calculator | 度量/预测 ROI、为预算辩护、评估创作者/层级价值（共享回报计算引擎，含付费）。 |
+| report-generator | 周期结束后面向特定利益相关者的书面报告（同时出付费广告报告）。 |
+
+</details>
+
+### 付费广告 — ROAS(8)
+
+阶段是概念上的 **ROAS 循环**(Research → Orchestrate → Activate → Scale)；所有付费技能平铺在 `paid/` 下。只有 `ad-account-auditor` 计算目标加权 RQS 并跑五个否决项——其余每个技能只操作单一杠杆并交棒。
+
+| 阶段 | 技能 |
+|------|------|
+| **Research 研究** | [campaign-architect](../paid/campaign-architect/SKILL.md), [audience-segment-builder](../paid/audience-segment-builder/SKILL.md) |
+| **Orchestrate 编排** | [ad-creative-builder](../paid/ad-creative-builder/SKILL.md), [ad-test-designer](../paid/ad-test-designer/SKILL.md) |
+| **Activate 激活** | [ad-account-auditor](../paid/ad-account-auditor/SKILL.md), [conversion-signal-qa](../paid/conversion-signal-qa/SKILL.md) |
+| **Scale 放大** | [paid-measurement-loop](../paid/paid-measurement-loop/SKILL.md), [attribution-reconciler](../paid/attribution-reconciler/SKILL.md) |
+
+<details><summary><b>逐技能用途（付费广告）</b></summary>
+
+| 技能 | ROAS 杠杆 | 用途 |
+|------|-----------|------|
+| campaign-architect | A + 结构 | 账户/活动结构、campaign 类型选型、匹配类型、否定词/排除、付费↔自然蚕食；含**搜索词挖掘**模式。 |
+| audience-segment-builder | A | 把自有客户/CRM/GA4 导出转为种子受众、相似种子、排除人群、跨平台漏斗分层地图。 |
+| ad-creative-builder | O | RSA 标题/描述、hook、角度矩阵，并与落地页信息一致。 |
+| ad-test-designer | O(+S) | 设计 A/B/n 与增量实验（假设、变体矩阵、样本量/功效），判读显著性 → promote/kill。 |
+| ad-account-auditor | R+O+A+S(RQS) | auditor-class ROAS 门：算 RQS、跑 R1/R2/O1/O2/A1、产出 SHIP/FIX/BLOCK；含**上线 go/no-go**模式。 |
+| conversion-signal-qa | R | 上线前追踪 QA（事件触发、UTM 规范、去重门控、窗口对齐、iOS-ATT 标记）——R1/R2 的前置（建信号，审计器打分）。 |
+| paid-measurement-loop | R(+S) | 把一次上线的改动相对对照在窗口内回读 → Promote / Keep-testing / Rollback / Unproven。 |
+| attribution-reconciler | R | 针对 GA4/ecommerce 订单ID真值集做常态去重、窗口/币种归一、模型对比、增量。 |
+
+**跨学科复用**（计入阶段，不重复造轮子）：[budget-optimizer](../plan/budget-optimizer/SKILL.md)（花费 + 出价节奏/学习期模式）、[landing-optimizer](../convert/landing-optimizer/SKILL.md)（点击后）、[roi-calculator](../track/roi-calculator/SKILL.md)（回报计算）、[report-generator](../track/report-generator/SKILL.md)、[performance-analyzer](../track/performance-analyzer/SKILL.md)。
+
+</details>
+
+---
+
+## 命令
+
+5 个命令端到端覆盖搜索工作流；红人与付费技能按名称调用或经 `/aaron-marketing:auto` 路由。源文件：[commands/](../commands/)。
+
+| 命令 | 用途 | 参数 |
+|------|------|------|
+| `/aaron-marketing:auto` | 描述任意目标——推断意图并执行最小够用的工作流 | `--deep`（穷尽/压测） |
+| `/aaron-marketing:research` | 关键词需求、SERP 意图、竞品、内容缺口、站点/主题/实体地图 | — |
+| `/aaron-marketing:create` | brief、写作、系列、刷新、CMS 中立发布包 | `--brief` `--series` `--refresh` `--publish` `--meta` `--schema` |
+| `/aaron-marketing:audit` | on-page + CORE-EEAT 质量、技术 SEO、AI 可见性、域权威 | `--full` `--tech` `--visibility` `--authority` |
+| `/aaron-marketing:track` | 排名、告警、绩效报告、项目记忆 | `--alert` `--report` `--remember` |
+
+日常工作通常从 `/aaron-marketing:auto` 开始，它执行你目标隐含的工作流，只在阻塞性决策处停下。其余四个是显式的模式入口。
+
+**改名说明：** 命令使用 `/aaron-marketing:` 前缀。旧 `/seo:*` 与 `/aaron-seo-geo:*` 可经 `auto` 恢复——例如 `/aaron-marketing:auto /aaron-seo-geo:audit https://example.com/blog/post` 返回 `/aaron-marketing:audit https://example.com/blog/post`。
+
+---
+
+## 连接器与层级
+
+技能用 `~~category` 占位符（`~~SEO tool`、`~~web analytics`、`~~ad platform` 等）而非具体厂商命名，且每个类别都有 **keyless 的 Tier-1 路径**。完整配方（含每个类别的免费/第一方端点）见 [CONNECTORS.md](../CONNECTORS.md)。
+
+| 层级 | 需要 | 你获得 |
+|------|------|--------|
+| **Tier 1**（默认） | 无 | 粘贴数据，或从免费/公开来源拉取。分析框架照常运行。 |
+| **Tier 2** | 一个免费第一方 API 或 MCP | 自动取你自己的 GSC / GA4 / Core Web Vitals 数据。 |
+| **Tier 3** | 更完整的 MCP 集 | 全自动多源工作流。 |
+
+- **内置零依赖助手** 位于 `scripts/connectors/`（仅 Python 标准库），在本地拉取公开/自有数据——如 PageSpeed/CrUX、Open PageRank、页面抓取、Wayback CDX、Wikidata SPARQL、Common Crawl、advertools 配方。
+- **免费/keyless 来源** 按类别记录：Google Search Console 与 GA4（自有数据）、PageSpeed/CrUX、Wikidata、Common Crawl、Open PageRank 等。
+- **可选 MCP 服务器**（Ahrefs、Semrush、SE Ranking、SISTRIX、SimilarWeb、自托管免费的 **OpenSEO** 套件、Cloudflare、Vercel、HubSpot、Amplitude、Notion、Webflow、Sanity、Contentful、Slack）在 `.mcp.json` 中作为**仅复制粘贴参考**——不自动注册，所以装插件不会往 `/mcp` 加任何东西。把你想要的条目复制进自己的 MCP 配置即可。
+
+付费广告技能基于你的**自有账户手动导出**（原生广告管理后台 CSV、GA4、电商）评分。带密钥的广告 API（Google Ads SDK、Meta Marketing API）仅是 opt-in Tier-2/3,**绝不**作为 Tier-1 要求。
+
+---
+
+## 记忆与自动化
+
+**记忆**按温度分层，让上下文跨技能与会话留存而不撑爆提示：
+
+| 层 | 位置 | 行为 |
+|----|------|------|
+| **HOT** | `memory/hot-cache.md` | 每次会话自动加载；封顶 **80 行 且 25 KB**（先触发者为准）。 |
+| **WARM** | `memory/<subdir>/` | 各技能工作状态与带门审计工件。 |
+| **COLD** | `memory/archive/` | 降级/较旧记录，留作召回。 |
+
+**Hooks**（`hooks/hooks.json`，runner `hooks/claude-hook.sh`）接入四个 Claude Code 事件：
+
+| 事件 | 匹配 | 作用 |
+|------|------|------|
+| `SessionStart` | `startup\|resume\|clear\|compact` | 注入**净化后**的 hot-cache + 未决事项指针（提示注入行被涂掉；符号链接缓存被拒）。 |
+| `UserPromptSubmit` | （全部） | 轻量逐提示上下文 hook。 |
+| `PostToolUse` | `Write\|Edit` | hot-cache 体积告警 **+ Artifact Gate**：写到 `memory/audits/` 下的任何文件必须带 `class: auditor-output` 与封顶字段，否则写入被拦。 |
+| `Stop` | （全部） | 空操作（静默退出）。 |
+
+Artifact Gate 是**框架无关**的——同一个 hook 校验 CORE-EEAT、CITE、C³、ROAS 工件，无任何针对单框架的代码。
+
+---
+
+## 推荐工作流
+
+**搜索（SEO/GEO）**
+1. **研究** — `keyword-research` → `competitor-analysis` → `content-gap-analysis`
+2. **构建** — `seo-content-writer` → `geo-content-optimizer` → `meta-tags-optimizer` / `schema-markup-generator`
+3. **优化** — `content-quality-auditor` → `on-page-seo-auditor` → `technical-seo-checker`
+4. **监控** — `rank-tracker` → `performance-reporter` → `alert-manager`
+
+**红人（IMPACT）**
+1. **洞察** — `audience-analyzer` → `trend-spotter` → `niche-researcher`
+2. **匹配** — `influencer-discovery` → `fit-scorer`(C³ ACE) → `competitor-tracker`
+3. **规划** — `campaign-planner` → `brief-generator` → `budget-optimizer`
+4. **启动** — `outreach-manager` → `content-reviewer`（ART 门） → `contract-helper`
+5. **转化** — `content-amplifier` → `ugc-repurposer` → `landing-optimizer`
+6. **追踪** — `performance-analyzer` → `roi-calculator` → `report-generator`
+
+**付费广告（ROAS 循环）**
+1. **研究** — `audience-segment-builder` → `campaign-architect`
+2. **编排** — `ad-creative-builder` → `ad-test-designer`(落地页配 `landing-optimizer`)
+3. **激活** — `conversion-signal-qa` → `ad-account-auditor`（RQS 门），在任何预算上线前
+4. **放大** — `paid-measurement-loop` → `attribution-reconciler` → `roi-calculator` → `report-generator`
+
+要做完整信任评审，把 `content-quality-auditor` 与 `domain-authority-auditor` 搭配，得到合计 120 项的评估。开启 `memory-management` 后，交棒与未决事项自动留存在 HOT/WARM/COLD 记忆中。
+
+---
+
+## 仓库结构
+
+```
+research/ build/ optimize/ monitor/ cross-cutting/   # 搜索 — SEO/GEO(26)
+insight/ map/ plan/ activate/ convert/ track/        # 红人 — IMPACT(18)
+paid/                                                 # 付费广告 — ROAS(8,平铺)
+commands/        # 5 个斜杠命令
+references/      # 共享契约、状态模型、四套基准、auditor runbook、平台资料包
+evals/           # 各技能结构化 eval 用例 + structure-manifest.json
+hooks/           # hooks.json + claude-hook.sh(唯一运行逻辑)
+scripts/         # validate-skill.sh + connectors/(标准库) + CI 守卫
+memory/          # HOT/WARM/COLD 脚手架
+docs/            # 本地化 README(zh)+ 规划文档
+.claude-plugin/  # plugin.json + marketplace.json 镜像
+```
+
+---
+
+## 设计哲学
+
+- **技能即内容。** 唯一的代码是 Bash 校验器、Bash hook runner、零依赖的 Python 标准库连接器/检查助手。永不引入第三方 / `pip` 依赖——由依赖蔓延守卫强制。
+- **keyless 优先。** 每个 `~~category` 都有免费/自有数据配方；MCP 与付费工具纯属便利。
+- **外科手术式 & MECE。** 每个技能只担一项职责，边界清晰；重叠的工作做成现有技能的*模式*，而非新堆一个薄技能。
+- **不编数字。** 技能为每个数据标注 Measured / User-provided / Estimated，并内置 AI 腔 / 禁用词检测。
+- **合规是指引，不是法律。** FTC 披露与声明真实性检查标注风险，但不构成法律意见。
+
+---
+
+## 质量守卫
+
+每次变更都跑一组 fail-closed 守卫（均在 `scripts/` 与 `tests/`）：
+
+| 守卫 | 检查 |
+|------|------|
+| `validate-skill.sh` | 全部 52 个技能的 frontmatter、必备章节、版本一致性、插件相对链接。 |
+| `golden-auditor-math.py` | **四套**框架的权重和 + 工作示例算术的确定性校验。 |
+| `check-evals.py` | eval 结构 lint + `structure-manifest.json`（52/52 技能均带 eval 用例）。 |
+| `check-pii.py` | 拦截提交的密钥 / PII（token 级允许名单，fail-closed）。 |
+| `check-stdlib-only.sh` | 依赖蔓延守卫 + 付费广告带密钥 API 红线。 |
+| `tests/test_hook_artifact_gate.sh` | hook 的 Artifact Gate + SessionStart 净化的行为测试。 |
+
+---
+
+## 贡献与文档
+
+- **[CONTRIBUTING.md](../CONTRIBUTING.md)** — 撰写规则、贡献清单、权威的 8 文件追踪列表。
+- **[VERSIONS.md](../VERSIONS.md)** — 各技能版本 + 变更日志（当前包：`11.0.0`）。
+- **[SECURITY.md](../SECURITY.md)** · **[PRIVACY.md](../PRIVACY.md)** · **[CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md)** — 安全、隐私、社区政策。
+- **[CLAUDE.md](../CLAUDE.md)** / **[AGENTS.md](../AGENTS.md)** — 面向 Agent 的本仓库上下文。
+
+---
 
 ## 免责声明
 
-这些技能用于辅助 SEO/GEO 与红人营销工作流，但不保证排名、AI 引用、流量、互动或任何业务结果。红人合规检查（FTC 披露、声明真实性）为指引，非法律意见。在用于重大策略或法律决策之前，请与具备资质的专业人士核实建议。
+这些技能用于辅助 SEO/GEO、红人营销与付费广告工作流，但**不**保证排名、AI 引用、流量、互动、转化、ROAS 或任何业务结果。红人与广告合规检查（FTC 披露、声明真实性、平台政策）为指引，非法律意见。在用于重大策略、财务或法律决策之前，请与具备资质的专业人士核实建议。
 
-## 贡献与许可
+## 许可证
 
-贡献规则见 [CONTRIBUTING.md](../CONTRIBUTING.md)。版本见 [VERSIONS.md](../VERSIONS.md)。许可证：Apache License 2.0。
+Apache License 2.0 — 见 [LICENSE](../LICENSE)。
 
-*最后同步英文 README：v11.0.0*
+*最后同步英文 README:v11.0.0*
 
 ## Star History
 
