@@ -65,7 +65,7 @@ if [ "$1" = "--status" ]; then
 
         printf "%-30s %-12s %-18s " "$skill_name" "${skill_ver:-—}" "${meta_ver:-—}"
         echo -e "$status"
-    done < <(find "$REPO_ROOT" -name "SKILL.md" -not -path "$REPO_ROOT/docs/*" -not -path "$REPO_ROOT/.claude/*" | sort)
+    done < <(find "$REPO_ROOT" -name "SKILL.md" -not -path "$REPO_ROOT/docs/*" -not -path "$REPO_ROOT/.claude/*" -not -path "$REPO_ROOT/reference-oss/*" | sort)
 
     echo ""
     # Regression guard: the bundle version string must never appear glued to a numeric
