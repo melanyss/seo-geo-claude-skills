@@ -29,7 +29,7 @@ For every unit, record the destination claim it echoes. If a unit has no matchin
 | Unit (headline/desc)        | Angle   | Destination claim it echoes            | Match? |
 |-----------------------------|---------|----------------------------------------|--------|
 | "Cut onboarding to 2 days"  | Benefit | Hero: "Onboard in 2 days"              | yes    |
-| "Free for 30 days"          | Offer   | Pricing: "30-day free trial"           | yes    |
+| "Free for 30 days"          | Benefit | Pricing: "30-day free trial"           | yes    |
 | "Rated #1 by G2"            | Proof   | (no such claim on page)                | NO →flag|
 ```
 

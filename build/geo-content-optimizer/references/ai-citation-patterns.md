@@ -14,6 +14,8 @@ Heuristic patterns for AI visibility work, not a sourced live benchmark; validat
 | **Domain trust** | Very high | High | Medium | High |
 | **Factual density** | High | High | Very high | Very high |
 
+> ⚠ The **Claude** column reflects the no-web-search baseline (answers from training data — hence the N/A freshness/citation cells). With web search **on**, Claude retrieves live via **Brave** (see the per-engine table below), and freshness/citations then apply.
+
 ---
 
 ## Per-Engine Source Selection (9 engines)

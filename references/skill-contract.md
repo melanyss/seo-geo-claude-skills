@@ -216,7 +216,7 @@ The 18 influencer-marketing skills span six phases and score on the [C³ framewo
 
 ## Protocol Layer vs Execution Layer
 
-| Behavior | Execution Layer (34 skills) | Protocol Layer (4 skills) |
+| Behavior | Execution Layer (44 skills) | Protocol Layer (4 skills) |
 |----------|---------------------------|--------------------------|
 | Triggering | User invocation or intent match | User + hook auto-trigger + other skill recommendation |
 | Output format | Report or asset + handoff summary | Gate verdict (SHIP/FIX/BLOCK or TRUSTED/CAUTIOUS/UNTRUSTED) + handoff summary |

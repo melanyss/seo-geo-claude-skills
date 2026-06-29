@@ -117,7 +117,7 @@ EOF
 assert_pass "non-auditor file (no class marker) is ignored" "$(gate not_auditor.md)"
 
 echo "Artifact Gate — C3 influencer (content-reviewer) artifacts"
-mkdir -p "$PROJ/memory/audits/influencer" "$PROJ/memory/influencer/content-reviewer"
+mkdir -p "$PROJ/memory/audits/influencer" "$PROJ/memory/audits/paid" "$PROJ/memory/influencer/content-reviewer"
 
 # C3-1. Compliant content-reviewer ART artifact (Approved->DONE) under memory/audits/influencer/ -> PASS
 cat > "$PROJ/memory/audits/influencer/cr_good.md" <<'EOF'
@@ -173,6 +173,28 @@ status: DONE
 EOF
 draft_out="$(printf '{"tool_input":{"file_path":"memory/influencer/content-reviewer/draft.md"},"cwd":"%s"}' "$PROJ" | CLAUDE_PROJECT_DIR="$PROJ" bash "$HOOK" post-tool-use)"
 assert_pass "content-reviewer draft outside memory/audits/ is not gated (fail-open)" "$draft_out"
+
+# C3-5. ROAS ad-account-auditor artifact under memory/audits/paid/ -> PASS (explicit paid-consumer coverage)
+cat > "$PROJ/memory/audits/paid/aa_good.md" <<'EOF'
+---
+class: auditor-output
+---
+
+status: DONE
+objective: "ROAS audit of the search campaign"
+target: "Google Ads acct 123, DR goal"
+key_findings:
+  - title: negative keywords thin
+    severity: medium
+    evidence: "12 broad terms, no negatives"
+evidence_summary: RQS scored R/O/A/S from manual export
+open_loops: none
+recommended_next_skill: paid-measurement-loop
+cap_applied: false
+raw_overall_score: 78
+final_overall_score: 78
+EOF
+assert_pass "ROAS paid/ ad-account-auditor artifact passes the gate" "$(gate paid/aa_good.md)"
 
 echo "SessionStart — sanitization & symlink rejection"
 
