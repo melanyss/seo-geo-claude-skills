@@ -116,6 +116,64 @@ no frontmatter class here
 EOF
 assert_pass "non-auditor file (no class marker) is ignored" "$(gate not_auditor.md)"
 
+echo "Artifact Gate — C3 influencer (content-reviewer) artifacts"
+mkdir -p "$PROJ/memory/audits/influencer" "$PROJ/memory/influencer/content-reviewer"
+
+# C3-1. Compliant content-reviewer ART artifact (Approved->DONE) under memory/audits/influencer/ -> PASS
+cat > "$PROJ/memory/audits/influencer/cr_good.md" <<'EOF'
+---
+class: auditor-output
+---
+
+status: DONE
+objective: "review sponsored Reel for brand + FTC compliance"
+target: "creator @example, IG Reel"
+key_findings:
+  - title: disclosure present
+    severity: low
+    evidence: "#ad in first line"
+evidence_summary: ART reviewed — appeal/relevance/transparency
+open_loops: none
+recommended_next_skill: contract-helper
+cap_applied: false
+raw_overall_score: 86
+final_overall_score: 86
+EOF
+assert_pass "C3 content-reviewer ART artifact (DONE) passes the gate" "$(gate influencer/cr_good.md)"
+
+# C3-2. T1/T2 veto -> Rejected -> status BLOCKED (cap_applied:false + raw_overall_score, no final) -> PASS
+cat > "$PROJ/memory/audits/influencer/cr_veto.md" <<'EOF'
+---
+class: auditor-output
+---
+
+status: BLOCKED
+objective: "review sponsored post"
+target: "creator @example, TikTok"
+key_findings: []
+evidence_summary: "T1 veto — no disclosure on paid post (FTC 16 CFR 255)"
+open_loops: "artifact_gate_failed: ART T1 veto -> Reject"
+recommended_next_skill: content-reviewer
+cap_applied: false
+raw_overall_score: 70
+EOF
+assert_pass "C3 veto Reject (BLOCKED, no final) passes the gate" "$(gate influencer/cr_veto.md)"
+
+# C3-3. Marked influencer artifact missing cap_applied -> BLOCK (gate enforces on the influencer subdir too)
+sed '/^cap_applied:/d' "$PROJ/memory/audits/influencer/cr_good.md" > "$PROJ/memory/audits/influencer/cr_bad.md"
+assert_block "C3 influencer artifact missing cap_applied blocks" "$(gate influencer/cr_bad.md)"
+
+# C3-4. A content-reviewer working draft OUTSIDE memory/audits/ is NOT gated (discipline-local, fail-open)
+cat > "$PROJ/memory/influencer/content-reviewer/draft.md" <<'EOF'
+---
+class: auditor-output
+---
+status: DONE
+(intentionally incomplete working draft, not a gated artifact)
+EOF
+draft_out="$(printf '{"tool_input":{"file_path":"memory/influencer/content-reviewer/draft.md"},"cwd":"%s"}' "$PROJ" | CLAUDE_PROJECT_DIR="$PROJ" bash "$HOOK" post-tool-use)"
+assert_pass "content-reviewer draft outside memory/audits/ is not gated (fail-open)" "$draft_out"
+
 echo "SessionStart — sanitization & symlink rejection"
 
 # 6. Injection-like lines in hot-cache are redacted, normal lines survive

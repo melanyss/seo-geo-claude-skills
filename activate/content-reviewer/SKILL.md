@@ -34,13 +34,14 @@ Check if this TikTok post meets our brand guidelines for [campaign], then give m
 
 ## Skill Contract
 
-- **Reads**: the content submission (link, description, caption, media notes), the campaign brief and key messages, brand guidelines, disclosure/FTC requirements, platform technical specs, and any prior review notes in `memory/influencer/content-reviewer/`.
-- **Writes**: a review record at `memory/influencer/content-reviewer/YYYY-MM-DD-<topic>.md` containing category scores, the gate decision, and the feedback message.
+- **Reads**: the content submission (link, description, caption, media notes), the campaign brief and key messages, brand guidelines, disclosure/FTC requirements, platform technical specs, prior review artifacts in `memory/audits/influencer/`, and the [auditor-runbook](../../references/auditor-runbook.md) handoff/cap schema (content-reviewer is the C³ **ART gate consumer**).
+- **Writes**: a gated review artifact at `memory/audits/influencer/YYYY-MM-DD-<topic>.md` with `class: auditor-output` and the auditor-runbook handoff schema (status / key_findings / evidence_summary / recommended_next_skill / cap_applied / raw_overall_score / final_overall_score), computed from C³ **ART** scoring — so the PostToolUse Artifact Gate validates the verdict — plus the human-facing feedback message.
 - **Promotes**: durable facts (final approval status, recurring compliance gaps, creator-specific notes) to `memory/hot-cache.md`.
 - **Done when**:
   1. Every must-pass category (brand alignment, message accuracy, compliance, technical specs) has an explicit pass/fail with evidence.
   2. A single decision is recorded — APPROVED, APPROVED WITH MINOR CHANGES, REVISIONS REQUIRED, or REJECTED.
   3. A constructive feedback message for the creator exists (when changes are needed).
+  4. The gated artifact follows the auditor-runbook schema: `raw_overall_score` = the ART score; a **T1/T2 veto → `status: BLOCKED`** (Reject) with `cap_applied: false`, `raw_overall_score` retained, and no `final_overall_score`; a non-veto pass → `status: DONE`/`DONE_WITH_CONCERNS` with `final_overall_score`. Map the decision to the status enum (APPROVED→DONE, MINOR→DONE_WITH_CONCERNS, REVISIONS→NEEDS_INPUT, REJECTED→BLOCKED).
 - **Primary next skill**: [contract-helper](../../activate/contract-helper/SKILL.md)
 
 ### Handoff Summary

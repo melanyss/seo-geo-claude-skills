@@ -89,6 +89,7 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 | Page Speed | `~~page speed tool` | search | GTmetrix, WebPageTest | PSI / CrUX / Lighthouse | PSI (keyless) |
 | Schema Validator | `~~schema validator` | search | — | validator.schema.org / Rich Results Test | Rich Results Test |
 | Knowledge Graph | `~~knowledge graph` | both | Google KG API, CrunchBase | Wikidata SPARQL | Wikidata SPARQL |
+| Local Listings | `~~local listings` | search | Google Business Profile, Yext, BrightLocal, Whitespark | GBP dashboard (own data, manual export) + manual NAP/citation check | GBP own data (keyless) |
 | Brand Monitor | `~~brand monitor` | both | Brand24, Mention, Brandwatch | Google Alerts / F5Bot | Google Alerts |
 | CRM / Marketing | `~~CRM` | all | HubSpot, Salesforce, Marketo | — | manual CSV |
 | Content / CMS | `~~content platform` / `~~CMS` | all | WordPress, Webflow, Contentful, Sanity, Notion | — | existing CMS |

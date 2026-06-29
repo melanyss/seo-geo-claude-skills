@@ -76,6 +76,13 @@ Non-auditor skill handoffs follow [skill-contract.md §Handoff Summary Format](s
 as-is. Cap-related fields do not apply; non-auditors never emit `cap_applied` /
 `raw_overall_score` / `final_overall_score`, and MUST NOT use the `class: auditor-output` marker.
 
+**Auditor-class consumers are the exception**: `content-quality-auditor` (CORE-EEAT),
+`domain-authority-auditor` (CITE), and `content-reviewer` (C³ ART) DO emit `class: auditor-output`
+plus the full cap schema for their gated artifacts under `memory/audits/<role>/`
+(`content-reviewer` → `memory/audits/influencer/`). content-reviewer maps its C³ ART verdict to
+the status enum (Approved→DONE, Minor→DONE_WITH_CONCERNS, Revisions→NEEDS_INPUT, Rejected→BLOCKED);
+a T1/T2 veto forces `status: BLOCKED` per §2.
+
 ---
 
 ## §2 · Critical Fail Cap — method (worked examples live in each auditor body)

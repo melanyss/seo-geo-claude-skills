@@ -45,7 +45,10 @@ REQUIRED_CASE_KEYS = [
 MANIFEST_ALLOWED_KEYS = {"skills", "count", "required_case_keys", "note"}
 SCORE_WORD = re.compile(r"score|rating|cvi|rqs|pass[_-]?rate|metric|baseline_score", re.I)
 
-CASE_OBJ = re.compile(r"\{[^{}]*\}", re.S)  # flow-style case objects (no nested braces in this corpus)
+# Each case is a single-line flow object (optionally a `- ` list item). Line-based
+# extraction (first `{` to last `}` on the line) so inner braces like /blog/{slug}
+# inside a case do not confuse detection.
+CASE_LINE = re.compile(r"^\s*-?\s*(\{.*\})\s*$")
 
 fails = []
 def fail(msg):
@@ -72,7 +75,8 @@ def lint_cases(slug):
     if not os.path.isfile(path):
         return False
     text = open(path, encoding="utf-8").read()
-    objs = CASE_OBJ.findall(text)
+    objs = [m.group(1) for line in text.splitlines()
+            for m in (CASE_LINE.match(line),) if m]
     if not objs:
         fail("%s/cases.md has no parseable case objects" % slug)
         return True
