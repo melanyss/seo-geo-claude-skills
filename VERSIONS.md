@@ -77,7 +77,7 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 - CI validates all skills (was 20) and runs new hook-gate + connector unit tests (connector tests 3 → 11).
 - `CONNECTORS.md` recipes for the 18 influencer `~~` categories; unified 8-file tracking list (authoritative in `CONTRIBUTING.md`); eval seed cases for all 18 influencer skills (evals now cover every skill — 52/52 after the expansion below); `bug-report.yml` issue template; `memory/{research,content,monitoring,archive}/` scaffolding; validator eval-presence advisory.
 
-**Added — OSS-borrow expansion + Paid Ads (3rd discipline), the 7-wave roadmap from `docs/planning/UNIFIED_OPTIMIZATION_PLAN.md`**
+**Added — OSS-borrow expansion + Paid Ads (3rd discipline), the 7-wave roadmap**
 - **Platform de-SEO**: `auditor-runbook` admits C³ (and now ROAS) as framework veto-sets with a documented cap reconciliation; `memory-management`/`state-model`/`measurement-protocol` de-SEO'd to cross-discipline; `CONNECTORS.md` gains a Discipline column + Agent-default; connector UA renamed.
 - **New guards**: `golden-auditor-math.py` now guards all **4 frameworks** (CORE-EEAT/CITE/C³/ROAS); `check-evals.py` (eval structural-lint, not a runner) + `evals/structure-manifest.json`; `check-pii.py`; `check-stdlib-only.sh` (dependency-creep + Paid-Ads keyed-API red-line). All wired into CI.
 - **Capability borrows (Markdown/keyless)**: `humanizer-slop.md`, `llms-txt-okf.md`, 6 platform playbooks (`references/platforms/`), conversion/visual scoring rubrics, `expert-panel.md`, AI-citation factors (4→9 engines), JS-injected-JSON-LD caveat, Impact×Confidence keyword scoring, trend-scout, atom-extraction, cold-copy rules, creator-dossier, recursive auditor loop.
