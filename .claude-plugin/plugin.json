@@ -2,7 +2,7 @@
   "id": "aaron-marketing",
   "name": "aaron-marketing",
   "version": "11.0.0",
-  "description": "52 marketing skills and 7 commands on one shared contract across three disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing on the IMPACT framework (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), and paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), plus a shared protocol layer (CORE-EEAT/CITE quality & authority gates, entity truth, project memory) serving all three. Frameworks: CORE-EEAT, CITE, C3, ROAS.",
+  "description": "54 marketing skills and 7 commands on one shared contract across three disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing on the IMPACT framework (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), and paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), plus a shared protocol layer (CORE-EEAT/CITE quality & authority gates, entity/creator/offer-claim truth registries, project memory) serving all three. Frameworks: CORE-EEAT, CITE, C3, ROAS.",
   "author": {
     "name": "Aaron He Zhu",
     "email": "hello@zhuhe.io",
@@ -57,6 +57,8 @@
     "./protocol/domain-authority-auditor",
     "./protocol/entity-optimizer",
     "./protocol/memory-management",
+    "./protocol/creator-registry",
+    "./protocol/offer-claims-registry",
     "./insight/audience-analyzer",
     "./insight/niche-researcher",
     "./insight/trend-spotter",

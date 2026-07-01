@@ -1,6 +1,6 @@
 # Aaron Marketing Skills — Versions
 
-Current versions for the plugin and all 52 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
+Current versions for the plugin and all 54 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
 **Current release**: `11.0.0` (2026-06-29). Skill `version`, `metadata.version`, plugin manifests, marketplace files, and badges are aligned to the same public version.
 
@@ -28,6 +28,8 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 | domain-authority-auditor | protocol | 11.0.0 | 2026-06-28 |
 | entity-optimizer | protocol | 11.0.0 | 2026-06-28 |
 | memory-management | protocol | 11.0.0 | 2026-06-28 |
+| creator-registry | protocol | 11.0.0 | 2026-06-30 |
+| offer-claims-registry | protocol | 11.0.0 | 2026-06-30 |
 | audience-analyzer | insight | 11.0.0 | 2026-06-28 |
 | niche-researcher | insight | 11.0.0 | 2026-06-28 |
 | trend-spotter | insight | 11.0.0 | 2026-06-28 |
@@ -75,7 +77,7 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 
 **Added**
 - CI validates all skills (was 20) and runs new hook-gate + connector unit tests (connector tests 3 → 11).
-- `CONNECTORS.md` recipes for the 18 influencer `~~` categories; unified 8-file tracking list (authoritative in `CONTRIBUTING.md`); eval seed cases for all 18 influencer skills (evals now cover every skill — 52/52 after the expansion below); `bug-report.yml` issue template; `memory/{research,content,monitoring,archive}/` scaffolding; validator eval-presence advisory.
+- `CONNECTORS.md` recipes for the 18 influencer `~~` categories; unified 8-file tracking list (authoritative in `CONTRIBUTING.md`); eval seed cases for all 18 influencer skills (evals now cover every skill — 54/54 after the expansions below); `bug-report.yml` issue template; `memory/{research,content,monitoring,archive}/` scaffolding; validator eval-presence advisory.
 
 **Added — OSS-borrow expansion + Paid Ads (3rd discipline), the 7-wave roadmap**
 - **Platform de-SEO**: `auditor-runbook` admits C³ (and now ROAS) as framework veto-sets with a documented cap reconciliation; `memory-management`/`state-model`/`measurement-protocol` de-SEO'd to cross-discipline; `CONNECTORS.md` gains a Discipline column + Agent-default; connector UA renamed.
@@ -83,9 +85,10 @@ Current versions for the plugin and all 52 skills. Agents can fetch this file fr
 - **Capability borrows (Markdown/keyless)**: `humanizer-slop.md`, `llms-txt-okf.md`, 6 platform playbooks (`references/platforms/`), conversion/visual scoring rubrics, `expert-panel.md`, AI-citation factors (4→9 engines), JS-injected-JSON-LD caveat, Impact×Confidence keyword scoring, trend-scout, atom-extraction, cold-copy rules, creator-dossier, recursive auditor loop.
 - **6 new SEO/GEO skills**: programmatic-seo, parasite-seo, comparison-page-builder, local-seo, site-architecture, ai-traffic.
 - **Paid Ads discipline (8 skills + ROAS framework)** across the 4-phase ROAS loop — Research: campaign-architect, audience-segment-builder; Orchestrate: ad-creative-builder, ad-test-designer; Activate: ad-account-auditor (auditor-class gate → `memory/audits/paid/`), conversion-signal-qa; Scale: paid-measurement-loop, attribution-reconciler. `roas-benchmark.md` (R/O/A/S, RQS arithmetic rollup, vetoes R1/R2/O1/O2/A1). content-reviewer promoted to the C³ ART gate consumer (`memory/audits/influencer/`). Per the Balanced anti-bloat design, search-term mining and bid-pacing/learning-phase ship as **modes** of campaign-architect and budget-optimizer (not standalone skills); budget-optimizer/landing-optimizer/roi-calculator/report-generator/performance-analyzer are reused cross-discipline.
-- **Deferred by design**: `disciplines.md` registry, `/aaron-marketing:paid` + `/impact` commands (routing seeds added), creator-entity, eval runner, standalone bid/search-term/policy skills (shipped as modes) — per the roadmap's over-engineering guard.
+- **Systematization + protocol truth-SSOTs**: unified `discipline`/`phase` frontmatter on every skill; influencer skills trimmed to baseline density (templates → per-skill `references/`); `/impact` + `/paid` commands (5 → 7); paid phase directories (`paid/<phase>/`); **creator-registry** (influencer roster/dossier SSOT) + **offer-claims-registry** (offer & claim-substantiation SSOT) added to the protocol layer (4 → 6) — the earlier `creator-entity` deferral is superseded by creator-registry.
+- **Deferred by design**: `disciplines.md` registry, eval runner, standalone bid/search-term/policy skills (shipped as modes) — per the roadmap's over-engineering guard.
 
-**Versions**: all **52** skills (22 SEO/GEO + 18 influencer + 8 paid + 4 protocol), plugin manifests, and marketplace mirrors unified at `11.0.0`.
+**Versions**: all **54** skills (22 SEO/GEO + 18 influencer + 8 paid + 6 protocol), plugin manifests, and marketplace mirrors unified at `11.0.0`.
 
 ### v10.0.0 — Marketing umbrella: SEO/GEO + influencer-marketing merge + rename (2026-06-28)
 

@@ -4,7 +4,7 @@ Guidelines for AI agents working in this repository. For full runtime context, s
 
 ## Repository Overview
 
-- **Name**: aaron-marketing-skills — 52 skills (22 SEO/GEO + 18 influencer + 8 paid ads + 4 protocol), 3 disciplines + a protocol layer, 7 commands, shared references
+- **Name**: aaron-marketing-skills — 54 skills (22 SEO/GEO + 18 influencer + 8 paid ads + 6 protocol), 3 disciplines + a protocol layer, 7 commands, shared references
 - **Repository**: https://github.com/aaron-he-zhu/aaron-marketing-skills
 - **Author**: Aaron He Zhu | **License**: Apache 2.0
 - **Specs**: [Agent Skills](https://agentskills.io/specification.md)
@@ -51,7 +51,7 @@ Fourteen skills added across the 38 → 52 expansion (six SEO/GEO + four paid in
 | `compatibility` | Platform list |
 | `allowed-tools` | Pre-approved tools (e.g., `WebFetch`) |
 | `metadata.author/version/geo-relevance/tags/triggers` | Discovery and categorization. `metadata.version` must match top-level `version`. |
-| `metadata.discipline` + `metadata.phase` | On every skill (52/52): `discipline` = seo-geo/influencer/paid/protocol; `phase` = lifecycle phase. Uniform routing/clustering tags. |
+| `metadata.discipline` + `metadata.phase` | On every skill (54/54): `discipline` = seo-geo/influencer/paid/protocol; `phase` = lifecycle phase. Uniform routing/clustering tags. |
 | `when_to_use` | Trigger scenarios for auto-invocation (underscores, not hyphens) |
 | `argument-hint` | Argument format hint in command picker |
 

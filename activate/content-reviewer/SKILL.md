@@ -97,6 +97,8 @@ A submission with strong visuals (Brand 9/10, Quality 9/10) but no visible #ad d
 - [state-model.md](../../references/state-model.md) — memory tiers and save-path conventions.
 - [CONNECTORS.md](../../CONNECTORS.md) — keyless data recipes for the `~~` connector placeholders.
 - C³ scoring: [c3-benchmark.md](../../references/c3-benchmark.md) and [c3/art-content-benchmark.md](../../references/c3/art-content-benchmark.md) — the ART Content rubric this review gates on, incl. the T1 (FTC disclosure) and T2 (claim integrity) veto items.
+- [offer-claims-registry](../../protocol/offer-claims-registry/SKILL.md) — the claim-substantiation record consulted for the T2 check.
+- [creator-registry](../../protocol/creator-registry/SKILL.md) — the creator's disclosure/compliance history; log dated verdicts back to it.
 - [brief-generator](../../plan/brief-generator/SKILL.md) — the brief whose criteria this review checks against.
 - [contract-helper](../../activate/contract-helper/SKILL.md) — bake content guidelines and approval terms into the agreement.
 - [content-amplifier](../../convert/content-amplifier/SKILL.md) — amplify content once approved.

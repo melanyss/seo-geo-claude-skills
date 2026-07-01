@@ -123,6 +123,33 @@ Store:
 
 Only `entity-optimizer` should write canonical records here. Other skills should keep raw entity leads in their own category notes until canonicalization is needed.
 
+### `memory/creators/`
+
+Store (one file per creator, `<handle-slug>.md`, slug = canonical primary-platform handle):
+
+- verified cross-platform handles with confirmed/unconfirmed status
+- audience stats with as-of dates and Measured/User-provided/Estimated provenance
+- rate card and negotiation history
+- past-campaign performance baselines
+- dated disclosure/FTC compliance events citing content-reviewer verdict IDs
+- exclusivity windows, contract status, and the confirmed contact path
+
+Only `creator-registry` writes canonical records here. Other skills submit updates to `memory/creators/candidates.md` only.
+
+**Lifecycle exemption**: canonical creator records are roster state, not dated run artifacts — no `YYYY-MM-DD` filename, and they are exempt from the 90-day WARM demotion (like `memory/entities/`). Demotion happens only when the user drops a creator from the roster, and `memory-management` remains the sole executor of that archival.
+
+### `memory/claims/`
+
+Store (standing ledger files, not per-run artifacts):
+
+- `claims-ledger.md` — one row per marketing claim: claim text → substantiation evidence (source, date, provenance label) → approved wording + required disclosures → where used (ads / landing pages / briefs) → review/expiry date
+- `offers.md` — live offers: terms, promo codes, dates, landing URLs
+- `candidates.md` — intake from other skills (mirror of the entity/creator pattern)
+
+Only `offer-claims-registry` writes canonical records here. Other skills submit updates to `memory/claims/candidates.md` only.
+
+**Lifecycle exemption**: ledger files are standing state, not dated run artifacts — exempt from the 90-day WARM demotion (like `memory/entities/` and `memory/creators/`); rows retire via their review/expiry date, and `memory-management` remains the sole executor of archival.
+
 ### `memory/research/`
 
 Common subfolders:
@@ -232,6 +259,8 @@ When a skill describes state updates, it should:
 - `memory-management` is the sole executor of WARM → COLD archival operations
 - `entity-optimizer` is the sole writer of canonical records in `memory/entities/<name>.md`
 - Other skills write entity candidates to `memory/entities/candidates.md` only
+- `creator-registry` is the sole writer of canonical records in `memory/creators/<handle-slug>.md`; other skills write to `memory/creators/candidates.md` only
+- `offer-claims-registry` is the sole writer of canonical records in `memory/claims/`; other skills write to `memory/claims/candidates.md` only
 - `content-quality-auditor` owns publish-readiness state in `memory/audits/content/`
 - `domain-authority-auditor` owns citation-trust state in `memory/audits/domain/`
 - `content-reviewer` owns the C³ ART gate state in `memory/audits/influencer/`

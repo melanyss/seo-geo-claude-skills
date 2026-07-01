@@ -167,6 +167,7 @@ Write the artifact to `memory/audits/paid/YYYY-MM-DD-<topic>.md` with `class: au
 - [ROAS Benchmark](../../../references/roas-benchmark.md) — the four dimensions, goal-weight columns, veto definitions, data contract, and golden-math worked examples
 - [Auditor Runbook](../../../references/auditor-runbook.md) — framework-agnostic §1 handoff schema, §2 cap method, §4 Artifact Gate, §5 translation, security boundary
 - [CONNECTORS.md](../../../CONNECTORS.md) — `~~ad platform`, `~~web analytics`, `~~ecommerce` own-data export recipes
+- [offer-claims-registry](../../../protocol/offer-claims-registry/SKILL.md) — the canonical claim-substantiation record the O1 veto is judged against
 - [SECURITY.md](../../../SECURITY.md) — untrusted-data boundary for exported reports
 
 ## Next Best Skill

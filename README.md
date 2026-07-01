@@ -1,6 +1,6 @@
 # Aaron Marketing Skills
 
-**52 skills. 7 commands. SEO/GEO, influencer, and paid ads marketing on one shared contract.**
+**54 skills. 7 commands. SEO/GEO, influencer, and paid ads marketing on one shared contract.**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
@@ -15,7 +15,7 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 - **SEO/GEO** — **22 skills**: keyword research, content creation, programmatic/parasite/local/comparison builds, on-page & technical audits, schema, site architecture, and rank/backlink/AI-traffic monitoring.
 - **Influencer marketing (IMPACT)** — **18 skills**: audience insight, creator discovery & fit scoring, campaign planning, briefs, outreach, content review, amplification, UGC repurposing, and ROI tracking.
 - **Paid ads (ROAS)** — **8 skills**: account structure, audience segments, ad creative, experiment design, the account-audit gate, conversion-signal QA, the measurement loop, and attribution reconciliation.
-- **Protocol layer** — **4 skills**: shared-machinery (gates + SSOT + memory) that sits outside the discipline phase-flows — 1 cross-discipline (`memory-management`) + 3 SEO/GEO quality & trust gates (`content-quality-auditor`, `domain-authority-auditor`, `entity-optimizer`). The genuinely horizontal layer is the `references/` protocols, not skills.
+- **Protocol layer** — **6 skills**: shared-machinery (gates + truth SSOTs + memory) outside the discipline phase-flows — 2 SEO/GEO quality & trust gates (`content-quality-auditor`, `domain-authority-auditor`), 3 discipline-anchored truth registries (`entity-optimizer` → SEO/GEO, `creator-registry` → influencer, `offer-claims-registry` → paid), plus the cross-discipline `memory-management`.
 
 Everything is **plain Markdown** (the only code is a Bash hook runner, a Bash validator, and zero-dependency Python-stdlib data helpers — no `pip`, no build step). **Every skill runs at Tier 1 with nothing but data you paste in**; optional connectors only automate retrieval. Four scoring frameworks ship inside and back the publish/trust/quality gates: [CORE-EEAT](references/core-eeat-benchmark.md), [CITE](references/cite-domain-rating.md), [C³](references/c3-benchmark.md), and [ROAS](references/roas-benchmark.md).
 
@@ -32,7 +32,7 @@ Everything is **plain Markdown** (the only code is a Bash hook runner, a Bash va
 - [Quality frameworks](#quality-frameworks)
 - [Skill catalog](#skill-catalog)
   - [SEO/GEO (22)](#seogeo-22)
-  - [Protocol layer (4)](#protocol-layer-4)
+  - [Protocol layer (6)](#protocol-layer-6)
   - [Influencer — IMPACT (18)](#influencer--impact-18)
   - [Paid Ads — ROAS (8)](#paid-ads--roas-8)
 - [Commands](#commands)
@@ -54,7 +54,7 @@ Everything is **plain Markdown** (the only code is a Bash hook runner, a Bash va
 |-----------|---------------------------|
 | **Keyless by default** | Every skill works at **Tier 1** with data you paste or pull from free/first-party sources. Paid tools and MCP servers are an opt-in convenience, never a precondition. Paid-ads skills score from your **own-account manual export** — keyed ad APIs are never required. |
 | **Markdown, not a framework** | Skills are content. The only executable code is `hooks/claude-hook.sh` (Bash), `scripts/validate-skill.sh` (Bash), and `scripts/connectors/*.py` (Python **standard library only**). Nothing to install, audit, or keep up to date. |
-| **One shared contract** | All 52 skills expose the same seven sections, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
+| **One shared contract** | All 54 skills expose the same seven sections, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
 | **Gated quality** | Four benchmarks ([CORE-EEAT](references/core-eeat-benchmark.md), [CITE](references/cite-domain-rating.md), [C³](references/c3-benchmark.md), [ROAS](references/roas-benchmark.md)) drive four auditor-class gates that emit structured, machine-checkable verdicts — not vibes. |
 | **Memory across turns** | A HOT/WARM/COLD memory model carries findings, scores, and open loops between skills and sessions, sanitized on the way in. |
 | **Plain voice** | Skills ship an AI-slop detector and a banned-phrase list so output reads like a human wrote it. |
@@ -117,15 +117,17 @@ This is documented once in [skill-contract.md](references/skill-contract.md); th
 
 ### The protocol layer
 
-Two things here are easy to conflate, so they are named apart — neither sums to "6".
+Two things here are easy to conflate, so they are named apart — the directory count and the gate role never add together.
 
-**Structure — the `protocol/` directory (4 skills).** Shared-machinery skills (gates + SSOT + memory) that sit outside the discipline phase-flows. Only `memory-management` is genuinely cross-discipline; the other three are SEO/GEO quality/trust skills grouped here because they are gate/SSOT-class.
+**Structure — the `protocol/` directory (6 skills).** Shared-machinery skills (gates + truth SSOTs + memory) that sit outside the discipline phase-flows: two SEO/GEO quality & trust gates, three discipline-anchored truth registries (entity → SEO/GEO, creator → influencer, offer/claims → paid), and the cross-discipline memory loop.
 
 | `protocol/` skill | Role | Framework | Reach |
 |-------------------|------|-----------|-------|
 | `content-quality-auditor` | Publish-readiness gate | CORE-EEAT | SEO/GEO |
 | `domain-authority-auditor` | Citation-trust gate | CITE | SEO/GEO |
 | `entity-optimizer` | Canonical entity profile | — | SEO/GEO |
+| `creator-registry` | Canonical creator roster / dossier SSOT | — | influencer |
+| `offer-claims-registry` | Offer & claim-substantiation SSOT | — | paid |
 | `memory-management` | HOT/WARM/COLD memory loop | — | all disciplines |
 
 **Role — the auditor-class gate (4 skills, no separate count).** A runtime *role*, not a directory: a skill that writes a **gated artifact** (`class: auditor-output`) validated by the PostToolUse hook and scored against one framework. Two live in `protocol/`; two are discipline-resident and **counted under their home discipline**, not here:
@@ -135,7 +137,7 @@ Two things here are easy to conflate, so they are named apart — neither sums t
 | `content-quality-auditor` | CORE-EEAT | `protocol/` | protocol (4) |
 | `domain-authority-auditor` | CITE | `protocol/` | protocol (4) |
 | `content-reviewer` | C³ ART | `activate/` | influencer (18) |
-| `ad-account-auditor` | ROAS RQS | `paid/` | paid (8) |
+| `ad-account-auditor` | ROAS RQS | `paid/activate/` | paid (8) |
 
 All four `Read` the framework-agnostic gate SSOT — [auditor-runbook.md](references/auditor-runbook.md) (handoff schema, cap arithmetic, artifact-gate checklist).
 
@@ -200,13 +202,13 @@ Skill links open each `SKILL.md`. Expand the **Details** under each discipline f
 
 </details>
 
-### Protocol layer (4)
+### Protocol layer (6)
 
-Shared-machinery skills (gates + SSOT + memory) that sit outside the discipline phase-flows. Only `memory-management` is genuinely cross-discipline; the other three are SEO/GEO-bound quality/trust gates. They live under `protocol/`, counted separately, not inside SEO/GEO.
+Shared-machinery skills (gates + truth SSOTs + memory) that sit outside the discipline phase-flows: two SEO/GEO gates, three discipline-anchored truth registries (SEO/GEO / influencer / paid), and the cross-discipline memory loop. They live under `protocol/`, counted separately.
 
 | Group | Skills |
 |-------|--------|
-| **Protocol** | [content-quality-auditor](protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](protocol/entity-optimizer/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
+| **Protocol** | [content-quality-auditor](protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](protocol/entity-optimizer/SKILL.md), [creator-registry](protocol/creator-registry/SKILL.md), [offer-claims-registry](protocol/offer-claims-registry/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
 
 <details><summary><b>Per-skill purpose (Protocol)</b></summary>
 
@@ -215,6 +217,8 @@ Shared-machinery skills (gates + SSOT + memory) that sit outside the discipline 
 | content-quality-auditor | 80-item CORE-EEAT publish-readiness gate. |
 | domain-authority-auditor | 40-item CITE domain-trust gate. |
 | entity-optimizer | Canonical entity profile for Knowledge Graph, Wikidata, AI disambiguation. |
+| creator-registry | Canonical creator roster/dossier — deduped handles, provenance-labeled audience stats, rates, compliance history. |
+| offer-claims-registry | Canonical offer & claim-substantiation ledger — the record the O1/T2 claim checks are judged against. |
 | memory-management | Review, promote, demote, and archive HOT/WARM/COLD project memory. |
 
 </details>
@@ -376,7 +380,7 @@ For a full trust review, pair `content-quality-auditor` with `domain-authority-a
 
 ```
 research/ build/ optimize/ monitor/                  # SEO/GEO (22)
-protocol/                                            # Protocol layer (4) — shared gates, entity, memory
+protocol/                                            # Protocol layer (6) — gates + truth registries + memory
 insight/ map/ plan/ activate/ convert/ track/        # Influencer — IMPACT (18)
 paid/research|orchestrate|activate|scale/             # Paid Ads — ROAS (8)
 commands/        # 5 slash commands
@@ -407,9 +411,9 @@ Every change runs against a set of fail-closed guards (all in `scripts/` and `te
 
 | Guard | Checks |
 |-------|--------|
-| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 52 skills. |
+| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 54 skills. |
 | `golden-auditor-math.py` | Deterministic weight-sum + worked-example arithmetic for **all four** frameworks. |
-| `check-evals.py` | Eval structural lint + `structure-manifest.json` (52/52 skills carry eval cases). |
+| `check-evals.py` | Eval structural lint + `structure-manifest.json` (54/54 skills carry eval cases). |
 | `check-pii.py` | Blocks committed secrets / PII (token-level allowlist, fail-closed). |
 | `check-stdlib-only.sh` | Dependency-creep guard + the Paid-Ads keyed-API red line. |
 | `tests/test_hook_artifact_gate.sh` | Behavior tests for the hook's Artifact Gate + SessionStart sanitization. |

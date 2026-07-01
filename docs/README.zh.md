@@ -1,6 +1,6 @@
 # Aaron 营销技能库
 
-**52 个技能。7 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
+**54 个技能。7 个命令。SEO/GEO、红人营销与付费广告，共享同一套契约。**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
 [![Version](https://img.shields.io/badge/version-11.0.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
@@ -15,7 +15,7 @@
 - **SEO/GEO** — **22 个技能**：关键词研究、内容创作、程序化/寄生/本地/对比页构建、on-page 与技术审计、结构化数据、站点架构、排名/外链/AI 流量监控。
 - **红人营销（IMPACT）** — **18 个技能**：受众洞察、红人发现与适配打分、活动规划、brief、外联、内容审核、放大、UGC 二次利用、ROI 追踪。
 - **付费广告（ROAS）** — **8 个技能**：账户结构、受众分群、广告创意、实验设计、账户审计门、转化信号 QA、衡量回读循环、归因对账。
-- **协议层** — **4 个技能**：位于学科 phase 流程之外的共享机件（门 + SSOT + 记忆）——1 个真跨学科（`memory-management`）+ 3 个 SEO/GEO 质量与信任门。真正横向的是 `references/` 协议，而非技能。
+- **协议层** — **6 个技能**：位于学科 phase 流程之外的共享机件（门 + 真相 SSOT + 记忆）——2 个 SEO/GEO 质量与信任门（`content-quality-auditor`、`domain-authority-auditor`）+ 3 个学科锚定的真相注册表（`entity-optimizer`→SEO/GEO、`creator-registry`→红人、`offer-claims-registry`→付费）+ 1 个跨学科记忆（`memory-management`）。
 
 全部为**纯 Markdown**（唯一的代码是一个 Bash hook runner、一个 Bash 校验器、以及零依赖的 Python 标准库数据助手——无 `pip`、无构建步骤）。**每个技能都能在 Tier 1 仅凭你粘贴的数据运行**；可选连接器只是自动化取数。内置四套评分框架并支撑发布/信任/质量门：[CORE-EEAT](../references/core-eeat-benchmark.md)、[CITE](../references/cite-domain-rating.md)、[C³](../references/c3-benchmark.md)、[ROAS](../references/roas-benchmark.md)。
 
@@ -32,7 +32,7 @@
 - [质量框架](#质量框架)
 - [技能目录](#技能目录)
   - [SEO/GEO(22)](#seogeo22)
-  - [协议层（4）](#协议层4)
+  - [协议层（6）](#协议层6)
   - [红人 — IMPACT(18)](#红人--impact18)
   - [付费广告 — ROAS(8)](#付费广告--roas8)
 - [命令](#命令)
@@ -54,7 +54,7 @@
 |------|----------|
 | **默认 keyless** | 每个技能都能在 **Tier 1** 仅凭粘贴的数据、或从免费/第一方来源拉取的数据运行。付费工具与 MCP 服务器是可选项，绝非前提。付费广告技能基于**自有账户手动导出**评分——带密钥的广告 API 永不必需。 |
 | **是 Markdown，不是框架** | 技能即内容。唯一可执行代码是 `hooks/claude-hook.sh`(Bash)、`scripts/validate-skill.sh`(Bash)、`scripts/connectors/*.py`（**仅标准库**）。无需安装、审计或维护。 |
-| **一套共享契约** | 52 个技能暴露同样的七段结构，整个库像一套操作系统：每个技能都知道自己的输入、输出，以及下一个该交棒的技能。 |
+| **一套共享契约** | 54 个技能暴露同样的七段结构，整个库像一套操作系统：每个技能都知道自己的输入、输出，以及下一个该交棒的技能。 |
 | **带门的质量** | 四套基准（[CORE-EEAT](../references/core-eeat-benchmark.md)、[CITE](../references/cite-domain-rating.md)、[C³](../references/c3-benchmark.md)、[ROAS](../references/roas-benchmark.md)）驱动四个 auditor-class 门，产出结构化、可机器校验的判定——不是凭感觉。 |
 | **跨轮记忆** | HOT/WARM/COLD 记忆模型在技能与会话之间携带发现、分数与未决事项，并在写入时净化。 |
 | **人话** | 技能内置 AI 腔检测器与禁用词表，让输出读起来像人写的。 |
@@ -117,15 +117,17 @@
 
 ### 协议层
 
-这里有两个容易混淆的概念，分开命名，避免再加出 6：
+这里有两个容易混淆的概念，分开命名——目录计数与门角色永不相加：
 
-**结构 —— `protocol/` 目录（4 个技能）。** 位于学科 phase 流程之外的共享机件（门 + SSOT + 记忆）。其中只有 `memory-management` 真正跨学科；另外三个是 SEO/GEO 的质量/信任技能，因属“门/SSOT 类”才归在此处。
+**结构 —— `protocol/` 目录（6 个技能）。** 位于学科 phase 流程之外的共享机件（门 + 真相 SSOT + 记忆）：2 个 SEO/GEO 质量与信任门、3 个学科锚定的真相注册表（实体→SEO/GEO、创作者→红人、offer/声明→付费）、1 个跨学科记忆循环。
 
 | `protocol/` 技能 | 角色 | 框架 | 覆盖 |
 |----------|------|------|------|
 | `content-quality-auditor` | 发布就绪门 | CORE-EEAT | SEO/GEO |
 | `domain-authority-auditor` | 引用信任门 | CITE | SEO/GEO |
 | `entity-optimizer` | 规范实体档案 | — | SEO/GEO |
+| `creator-registry` | 规范创作者名册/档案 SSOT | — | 红人 |
+| `offer-claims-registry` | offer 与声明实证 SSOT | — | 付费 |
 | `memory-management` | HOT/WARM/COLD 记忆循环 | — | 全部学科 |
 
 **角色 —— auditor-class 门（4 个，不单独计数）。** 这是运行期*角色*而非目录：写出受 PostToolUse hook 校验的**带门工件**（`class: auditor-output`）、按单一框架打分的技能。其中 2 个在 `protocol/`，另 2 个驻留学科目录、**计入各自学科**，不在此处重复计数：
@@ -135,7 +137,7 @@
 | `content-quality-auditor` | CORE-EEAT | `protocol/` | protocol (4) |
 | `domain-authority-auditor` | CITE | `protocol/` | protocol (4) |
 | `content-reviewer` | C³ ART | `activate/` | influencer (18) |
-| `ad-account-auditor` | ROAS RQS | `paid/` | paid (8) |
+| `ad-account-auditor` | ROAS RQS | `paid/activate/` | paid (8) |
 
 四者都 `Read` 框架无关的门 SSOT —— [auditor-runbook.md](../references/auditor-runbook.md)（handoff schema、封顶算术、工件门清单）。
 
@@ -200,13 +202,13 @@
 
 </details>
 
-### 协议层（4）
+### 协议层（6）
 
-位于学科 phase 流程之外的共享机件（门 + SSOT + 记忆）。其中只有 `memory-management` 真正跨学科；另外三个是 SEO/GEO 的质量/信任门。它们位于 `protocol/`，单独计数，不算进 SEO/GEO。
+位于学科 phase 流程之外的共享机件（门 + 真相 SSOT + 记忆）：2 个 SEO/GEO 门、3 个学科锚定的真相注册表（SEO/GEO / 红人 / 付费）、1 个跨学科记忆循环。它们位于 `protocol/`，单独计数。
 
 | 组 | 技能 |
 |------|------|
-| **协议层** | [content-quality-auditor](../protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](../protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](../protocol/entity-optimizer/SKILL.md), [memory-management](../protocol/memory-management/SKILL.md) |
+| **协议层** | [content-quality-auditor](../protocol/content-quality-auditor/SKILL.md), [domain-authority-auditor](../protocol/domain-authority-auditor/SKILL.md), [entity-optimizer](../protocol/entity-optimizer/SKILL.md), [creator-registry](../protocol/creator-registry/SKILL.md), [offer-claims-registry](../protocol/offer-claims-registry/SKILL.md), [memory-management](../protocol/memory-management/SKILL.md) |
 
 <details><summary><b>逐技能用途（协议层）</b></summary>
 
@@ -215,6 +217,8 @@
 | content-quality-auditor | 80 项 CORE-EEAT 发布就绪门。 |
 | domain-authority-auditor | 40 项 CITE 域名信任门。 |
 | entity-optimizer | 面向知识图谱、Wikidata、AI 消歧的规范实体档案。 |
+| creator-registry | 规范创作者名册/档案——去重 handle、带溯源标签的受众数据、费率与合规历史。 |
+| offer-claims-registry | 规范 offer 与声明实证台账——O1/T2 声明检查所对照评判的那份记录。 |
 | memory-management | 审阅、提升、降级、归档 HOT/WARM/COLD 项目记忆。 |
 
 </details>
@@ -376,7 +380,7 @@ Artifact Gate 是**框架无关**的——同一个 hook 校验 CORE-EEAT、CITE
 
 ```
 research/ build/ optimize/ monitor/                  # SEO/GEO(22)
-protocol/                                            # 协议层(4) — 跨学科门/实体/记忆
+protocol/                                            # 协议层(6) — 门 + 真相注册表 + 记忆
 insight/ map/ plan/ activate/ convert/ track/        # 红人 — IMPACT(18)
 paid/research|orchestrate|activate|scale/             # 付费广告 — ROAS(8)
 commands/        # 7 个斜杠命令
@@ -407,9 +411,9 @@ docs/            # 本地化 README(zh)+ 规划文档
 
 | 守卫 | 检查 |
 |------|------|
-| `validate-skill.sh` | 全部 52 个技能的 frontmatter、必备章节、版本一致性、插件相对链接。 |
+| `validate-skill.sh` | 全部 54 个技能的 frontmatter、必备章节、版本一致性、插件相对链接。 |
 | `golden-auditor-math.py` | **四套**框架的权重和 + 工作示例算术的确定性校验。 |
-| `check-evals.py` | eval 结构 lint + `structure-manifest.json`（52/52 技能均带 eval 用例）。 |
+| `check-evals.py` | eval 结构 lint + `structure-manifest.json`（54/54 技能均带 eval 用例）。 |
 | `check-pii.py` | 拦截提交的密钥 / PII（token 级允许名单，fail-closed）。 |
 | `check-stdlib-only.sh` | 依赖蔓延守卫 + 付费广告带密钥 API 红线。 |
 | `tests/test_hook_artifact_gate.sh` | hook 的 Artifact Gate + SessionStart 净化的行为测试。 |

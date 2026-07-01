@@ -1,6 +1,6 @@
 # Skill Contract
 
-This repository uses one contract across all 52 skills — 22 SEO/GEO, 18 influencer-marketing (IMPACT), 8 paid-ads, and 4 protocol-layer skills. The contract keeps each skill specialized while making the full library feel like one operating system. The SEO/GEO skills score on [CORE-EEAT](core-eeat-benchmark.md) and [CITE](cite-domain-rating.md); the influencer skills on [C³](c3-benchmark.md); the paid-ads skills on [ROAS](roas-benchmark.md).
+This repository uses one contract across all 54 skills — 22 SEO/GEO, 18 influencer-marketing (IMPACT), 8 paid-ads, and 6 protocol-layer skills. The contract keeps each skill specialized while making the full library feel like one operating system. The SEO/GEO skills score on [CORE-EEAT](core-eeat-benchmark.md) and [CITE](cite-domain-rating.md); the influencer skills on [C³](c3-benchmark.md); the paid-ads skills on [ROAS](roas-benchmark.md).
 
 ## Skill Authoring Discipline
 
@@ -201,7 +201,7 @@ Auditor skills (`content-quality-auditor`, `domain-authority-auditor`) MUST igno
 
 ### Protocol layer
 
-The 4 shared-machinery skills under `protocol/` (gates + SSOT + memory). The auditor-class **gate role** additionally spans `content-reviewer` and `ad-account-auditor`, which live in and are counted under their home disciplines (influencer, paid) — not here.
+The 6 shared-machinery skills under `protocol/` (2 quality/trust gates + 3 truth registries + memory). The auditor-class **gate role** additionally spans `content-reviewer` and `ad-account-auditor`, which live in and are counted under their home disciplines (influencer, paid) — not here.
 
 - Reads: outputs from every other category
 - Writes: gates, truth records, and memory structure
@@ -220,7 +220,7 @@ The 18 influencer-marketing skills span six phases and score on the [C³ framewo
 
 ## Protocol Layer vs Execution Layer
 
-| Behavior | Execution Layer (48 skills) | Protocol Layer (4 skills) |
+| Behavior | Execution Layer (48 skills) | Protocol Layer (6 skills) |
 |----------|---------------------------|--------------------------|
 | Triggering | User invocation or intent match | User + hook auto-trigger + other skill recommendation |
 | Output format | Report or asset + handoff summary | Gate verdict (SHIP/FIX/BLOCK or TRUSTED/CAUTIOUS/UNTRUSTED) + handoff summary |
@@ -324,7 +324,7 @@ These norms apply to all skills when their output incorporates data from multipl
 | Build (8 skills) | `memory/content/` | content briefs, meta tag decisions, schema annotations, publish status |
 | Optimize (5 skills) | `memory/audits/<skill>/` | per-skill audit summaries, veto items, fix priorities |
 | Monitor (5 skills) | `memory/monitoring/` | rank deltas, alert history, backlink changes |
-| Protocol layer (4 skills) | per-role paths | see protocol-layer definitions |
+| Protocol layer (6 skills) | per-role paths | see protocol-layer definitions |
 | Influencer / IMPACT (18 skills) | `memory/influencer/<skill>/` (working state) + `memory/audits/influencer/` (content-reviewer's gated C³ ART verdicts) | audience profiles, creator fit scores, campaign plans, briefs, outreach, content reviews, ROI/CVI calculations, reports |
 | Paid Ads / ROAS (8 skills) | `memory/paid-ads/<skill>/` (working state) + `memory/audits/paid/` (ad-account-auditor's gated RQS verdicts) | account/campaign structures, audience segments, ad-creative scores, experiment designs, account-audit gates, conversion-signal QA, measurement-loop results, attribution reconciliations |
 | **Protocol gate aggregate (v7.1.0+)** | `memory/audits/YYYY-MM.md` | **owned by `memory-management`**; monthly archive of `content-quality-auditor` and `domain-authority-auditor` handoffs in the structured format defined in [memory-management SKILL.md §Writes](../protocol/memory-management/SKILL.md); consumed by the Runbook §5 cross-version rule |

@@ -19,7 +19,7 @@ Run the marketing pack-local Aaron workflow (SEO/GEO + influencer/IMPACT) implie
 
 ## Route
 
-- resolver across all 52 skills (22 SEO/GEO + 18 influencer + 8 paid + 4 protocol): SEO/GEO runs through the four mode commands (research, create, audit, track), influencer through `/aaron-marketing:impact`, paid through `/aaron-marketing:paid`; or describe any goal here and it routes to the right skill
+- resolver across all 54 skills (22 SEO/GEO + 18 influencer + 8 paid + 6 protocol): SEO/GEO runs through the four mode commands (research, create, audit, track), influencer through `/aaron-marketing:impact`, paid through `/aaron-marketing:paid`; or describe any goal here and it routes to the right skill
 
 ## Rules
 

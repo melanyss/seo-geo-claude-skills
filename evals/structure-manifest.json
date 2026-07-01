@@ -23,6 +23,7 @@
     "content-reviewer",
     "contract-helper",
     "conversion-signal-qa",
+    "creator-registry",
     "domain-authority-auditor",
     "entity-optimizer",
     "fit-scorer",
@@ -35,6 +36,7 @@
     "memory-management",
     "meta-tags-optimizer",
     "niche-researcher",
+    "offer-claims-registry",
     "on-page-seo-auditor",
     "outreach-manager",
     "paid-measurement-loop",
@@ -53,7 +55,7 @@
     "trend-spotter",
     "ugc-repurposer"
   ],
-  "count": 52,
+  "count": 54,
   "required_case_keys": [
     "id",
     "type",
