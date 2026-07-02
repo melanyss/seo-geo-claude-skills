@@ -40,7 +40,7 @@ WARM file last_updated > 90 days      → WARM demotes to COLD (archive with YYY
 
 ### Dual Truncation Rule
 
-HOT tier is limited to 80 lines AND 25KB (whichever triggers first). Truncation occurs at newline boundaries — no mid-line cuts. If exceeded after Claude Write/Edit, the PostToolUse hook warns the user.
+HOT tier is limited to 80 lines AND 25KB (whichever triggers first). A cache within both limits is injected in full; the SessionStart hook applies the 80-line cap at a newline boundary and the 25KB cap at the byte limit, so an over-limit cache may be cut mid-line. If exceeded after Claude Write/Edit, the PostToolUse hook warns the user.
 
 ### Staleness Protocol
 
@@ -188,8 +188,7 @@ Common subfolders:
 
 - `content/` (content-quality-auditor — CORE-EEAT)
 - `domain/` (domain-authority-auditor — CITE)
-- `technical/`
-- `internal-linking/`
+- `<skill>/` (other Optimize skills, per-skill — e.g. `technical-seo-checker/`, `internal-linking-optimizer/`)
 - `influencer/` (content-reviewer — C³ ART gate artifacts)
 - `paid/` (ad-account-auditor — ROAS gate artifacts)
 

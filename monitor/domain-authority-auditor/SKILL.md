@@ -368,7 +368,7 @@ Calculate scores and generate the final report:
 
 ### Findings by Severity Tier
 
-Render BEFORE "Top 5 Priority Improvements". Group every `key_findings` entry by `severity` per [Runbook §5 Severity tier routing](../../references/auditor-runbook.md): `veto` → **Critical issues (must fix)**, `high` → **Should-fix**, `medium`/`low` → **Nice-to-have**. Within each tier sort by `weight × points lost` (highest first). Apply the §5 Never say → Always say translation — no `P0/P1/P2` or `severity:` literals in user output. Omit empty-tier headers.
+Render BEFORE "Top 5 Priority Improvements". Group, sort, and translate every `key_findings` entry per [Runbook §5 Severity tier routing + shared translation rows](../../references/auditor-runbook.md) — no `P0/P1/P2` or `severity:` literals in user output; omit empty-tier headers.
 
 ```markdown
 **Critical issues (must fix)**

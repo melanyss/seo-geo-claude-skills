@@ -3,11 +3,11 @@ name: content-quality-auditor
 description: 'Use when auditing content quality, E-E-A-T, or publish readiness; runs 80-item CORE-EEAT scoring with veto checks and a fix plan. Not for structural on-page tags/headers — use on-page-seo-auditor; not for domain/citation trust — use domain-authority-auditor. 内容质量/EEAT评分'
 version: "11.0.0"
 license: Apache-2.0
-allowed-tools: WebFetch
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when auditing content quality before publishing. Runs CORE-EEAT 80-item scoring with veto checks. Also when the user asks for E-E-A-T analysis or publish readiness."
 argument-hint: "<URL or paste content> [keyword]"
+allowed-tools: WebFetch
 class: auditor
 metadata:
   author: aaron-he-zhu
@@ -373,7 +373,7 @@ When an item cannot be evaluated (e.g., A01 Backlink Profile requires site-level
 
 ### Findings by Severity Tier
 
-Render BEFORE "Top 5 Priority Improvements". Group every `key_findings` entry by `severity` per [Runbook §5 Severity tier routing](../../references/auditor-runbook.md): `veto` → **Critical issues (must fix)**, `high` → **Should-fix**, `medium`/`low` → **Nice-to-have**. Within each tier sort by `weight × points lost` (highest first). Apply the §5 Never say → Always say translation — no `P0/P1/P2` or `severity:` literals in user output. Omit empty-tier headers.
+Render BEFORE "Top 5 Priority Improvements". Group, sort, and translate every `key_findings` entry per [Runbook §5 Severity tier routing + shared translation rows](../../references/auditor-runbook.md) — no `P0/P1/P2` or `severity:` literals in user output; omit empty-tier headers.
 
 ```markdown
 **Critical issues (must fix)**
