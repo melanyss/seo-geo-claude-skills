@@ -1,16 +1,6 @@
 ---
-name: seo-geo
 description: "SEO/GEO end-to-end from one entrypoint: research demand and competitors, create content, audit quality/tech/visibility/authority, and track rankings/reports/memory (--mode research|create|audit|track). Not sure? Use /aaron-marketing:auto."
 argument-hint: "<goal-url-topic-or-domain> [--mode research|create|audit|track] [mode flags]"
-parameters:
-  - name: target
-    type: string
-    required: true
-    description: "Topic, keyword cluster, brief, draft, URL, domain, campaign, or memory request"
-  - name: mode
-    type: string
-    required: false
-    description: "research, create, audit, or track (default: inferred from the goal; ambiguous → ask one blocking question)"
 ---
 
 # SEO/GEO Command
@@ -20,9 +10,9 @@ The single SEO/GEO entrypoint (peer of `/aaron-marketing:impact` and `/aaron-mar
 ## Route
 
 - **research** — keyword-research, serp-analysis, content-gap-analysis, competitor-analysis, backlink-analyzer, entity-optimizer, internal-linking-optimizer
-- **create** — keyword-research, serp-analysis, content-gap-analysis, seo-content-writer, geo-content-optimizer, content-refresher, meta-tags-optimizer, schema-markup-generator, internal-linking-optimizer, content-quality-auditor
-- **audit** — on-page-seo-auditor, content-quality-auditor, technical-seo-checker, geo-content-optimizer, entity-optimizer, domain-authority-auditor, backlink-analyzer
-- **track** — rank-tracker, alert-manager, performance-reporter, memory-management, entity-optimizer
+- **create** — keyword-research, serp-analysis, content-gap-analysis, seo-content-writer, geo-content-optimizer, content-refresher, meta-tags-optimizer, schema-markup-generator, internal-linking-optimizer, content-quality-auditor; by page intent: programmatic-seo (bulk/template pages), parasite-seo (third-party-platform placement), comparison-page-builder ("X vs Y" / alternatives pages), local-seo (local/GMB)
+- **audit** — on-page-seo-auditor, content-quality-auditor, technical-seo-checker, site-architecture (with --full or --tech), geo-content-optimizer, entity-optimizer, domain-authority-auditor, backlink-analyzer
+- **track** — rank-tracker, alert-manager, performance-reporter, ai-traffic (AI-channel visibility traffic), memory-management, entity-optimizer
 
 ## Rules
 
@@ -59,7 +49,7 @@ The single SEO/GEO entrypoint (peer of `/aaron-marketing:impact` and `/aaron-mar
 - Default: monitor rankings and SERP-position movement via rank-tracker; persist ranking history to project memory only when the user explicitly permits memory writes.
 - `--alert`: design thresholds and notifications via alert-manager; require metric source, threshold owner, and notification channel before setup; do not enable external alerts without explicit approval.
 - `--report`: require exactly one scope (domain, campaign, project, or period); report traffic, rankings, AI citations/readiness, authority, technical health, content progress, and open loops; keep source/date freshness visible and separate observed data from estimates. `--period <range>` sets the reporting period.
-- `--remember`: memory-management owns the HOT/WARM/COLD lifecycle — capture, promote, demote, archive, query, restore-from-archive — plus cleanup, purge, and protocol aggregation; canonical entity profiles route to entity-optimizer. Restore looks up a matching `memory/archive/YYYY-MM-DD-*` file. Purge/GDPR/CCPA requests require scoped targets and delete or anonymize matching canonical and archived memory surfaces. Only content-quality-auditor and domain-authority-auditor may append one veto marker to `memory/hot-cache.md` without extra confirmation.
+- `--remember`: memory-management owns the HOT/WARM/COLD lifecycle — capture, promote, demote, archive, query, restore-from-archive — plus cleanup, purge, and protocol aggregation; canonical entity profiles route to entity-optimizer. Restore looks up a matching `memory/archive/YYYY-MM-DD-*` file. Purge/GDPR/CCPA requests require scoped targets and delete or anonymize matching canonical and archived memory surfaces. Within SEO/GEO, only content-quality-auditor and domain-authority-auditor may append one veto marker to `memory/hot-cache.md` without extra confirmation — the same auto-append power the other auditor-class gates (content-reviewer, ad-account-auditor) hold in their own disciplines.
 
 ## Output
 

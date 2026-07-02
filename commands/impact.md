@@ -1,16 +1,6 @@
 ---
-name: impact
 description: "Run an influencer (IMPACT) workflow: audience insight, creator discovery & fit, campaign planning, briefs, outreach, amplification, and ROI. Not sure? Use /aaron-marketing:auto."
 argument-hint: "<goal-or-brand> [--phase insight|map|plan|activate|convert|track]"
-parameters:
-  - name: target
-    type: string
-    required: true
-    description: "Campaign goal, brand, product, or audience to run influencer marketing for"
-  - name: phase
-    type: string
-    required: false
-    description: "Force an IMPACT phase: insight | map | plan | activate | convert | track"
 ---
 
 # Impact Command
@@ -22,9 +12,9 @@ Run the influencer-marketing (IMPACT) lifecycle: understand the audience, find a
 Infer the IMPACT phase from the goal (or honor `--phase`) and route to the matching skill:
 
 - **Insight** — audience-analyzer, niche-researcher, trend-spotter
-- **Map** — influencer-discovery, fit-scorer (C³ ACE), competitor-tracker
+- **Map** — influencer-discovery, fit-scorer (C³ ACE), competitor-tracker, creator-registry (dedupe against the roster; reconcile accumulated candidate updates)
 - **Plan** — campaign-planner, brief-generator, budget-optimizer
-- **Activate** — outreach-manager, content-reviewer (C³ ART gate), contract-helper
+- **Activate** — outreach-manager, content-reviewer (C³ ART gate), contract-helper — consult creator-registry's dossier (`memory/creators/<handle-slug>.md`: contact path, last agreed rate, exclusivity, compliance history) before outreach or contracting
 - **Convert** — content-amplifier, ugc-repurposer, landing-optimizer
 - **Track** — performance-analyzer, roi-calculator (CVI), report-generator
 
@@ -32,6 +22,7 @@ Infer the IMPACT phase from the goal (or honor `--phase`) and route to the match
 
 - Start where the goal sits in the funnel; do not force the full six-phase chain when the user only needs one stage.
 - `content-reviewer` is the pre-publish gate: any creator content goes through its C³ **ART** check (FTC disclosure T1, claim integrity T2) before it ships.
+- `creator-registry` is the roster SSOT: only it writes canonical records under `memory/creators/`; other skills submit updates to `memory/creators/candidates.md`, and it should be run when 3+ candidate updates accumulate for one creator or a campaign cycle closes.
 - Score creators/content/campaigns on C³ (ACE/ART/ROI → CVI); label every metric Measured / User-provided / Estimated; never fabricate reach or rates.
 - Tier 1 by default — works from user-provided data; connectors only automate retrieval. Compliance checks are guidance, not legal advice.
 - Follow each skill's Next Best Skill handoff; stop at the documented termination rules rather than auto-chaining the whole discipline.
