@@ -20,6 +20,8 @@ import tavily  # noqa: E402
 import doh  # noqa: E402
 import pageviews  # noqa: E402
 import gdelt  # noqa: E402
+import youtube  # noqa: E402
+import indexpush  # noqa: E402
 import datetime as _dt  # noqa: E402
 
 
@@ -367,6 +369,59 @@ class GdeltTests(unittest.TestCase):
             {"timeline": [{"data": [{"date": "20260701", "value": 2}]}]},
             "timelinevol")
         self.assertEqual(tl["timeline"], [{"date": "20260701", "value": 2}])
+
+
+class YoutubeSpecTests(unittest.TestCase):
+    def test_parse_channel_ref_forms(self):
+        self.assertEqual(youtube.parse_channel_ref("@mkbhd"), ("handle", "@mkbhd"))
+        self.assertEqual(youtube.parse_channel_ref("mkbhd"), ("handle", "@mkbhd"))
+        self.assertEqual(youtube.parse_channel_ref("UCBJycsmduvYEL83R_U4JriQ"),
+                         ("id", "UCBJycsmduvYEL83R_U4JriQ"))
+        self.assertEqual(
+            youtube.parse_channel_ref(
+                "https://www.youtube.com/channel/UCBJycsmduvYEL83R_U4JriQ"),
+            ("id", "UCBJycsmduvYEL83R_U4JriQ"))
+        self.assertEqual(youtube.parse_channel_ref("https://youtube.com/@mkbhd"),
+                         ("handle", "@mkbhd"))
+
+    def test_uploads_playlist_swap(self):
+        self.assertEqual(youtube.uploads_playlist("UCabc123def456"), "UUabc123def456")
+        self.assertIsNone(youtube.uploads_playlist("HCxyz"))
+
+
+class IndexpushSpecTests(unittest.TestCase):
+    def test_indexnow_requires_single_host_and_key(self):
+        mixed = indexpush.build_spec("indexnow",
+                                     ["https://a.com/1", "https://b.com/2"], key="k")
+        self.assertEqual(mixed["error"], "mixed_or_missing_hosts")
+        nokey = indexpush.build_spec("indexnow", ["https://a.com/1"])
+        self.assertEqual(nokey["error"], "missing_key")
+
+    def test_indexnow_body_shape(self):
+        spec = indexpush.build_spec(
+            "indexnow", ["https://a.com/1", "https://a.com/2"],
+            key="abc123", key_location="https://a.com/abc123.txt")
+        body = spec["request"]["body"]
+        self.assertEqual(body["host"], "a.com")
+        self.assertEqual(body["urlList"], ["https://a.com/1", "https://a.com/2"])
+        self.assertEqual(body["keyLocation"], "https://a.com/abc123.txt")
+        over = indexpush.build_spec(
+            "indexnow", ["https://a.com/%d" % i for i in range(10_001)], key="k")
+        self.assertEqual(over["error"], "too_many_urls")
+
+    def test_baidu_spec(self):
+        self.assertEqual(indexpush.build_spec("baidu", ["https://a.com/1"],
+                                              key="t")["error"], "missing_site")
+        spec = indexpush.build_spec("baidu", ["https://a.com/1"],
+                                    key="tok", site="www.a.com")
+        self.assertIn("site=www.a.com", spec["request"]["url"])
+        self.assertIn("token=tok", spec["request"]["url"])
+        self.assertEqual(spec["request"]["content_type"], "text/plain")
+        self.assertEqual(spec["request"]["body"], ["https://a.com/1"])
+
+    def test_collect_urls_dedupes_preserving_order(self):
+        self.assertEqual(indexpush.collect_urls(["a", "b", "a", "c"], None),
+                         ["a", "b", "c"])
 
 
 if __name__ == "__main__":

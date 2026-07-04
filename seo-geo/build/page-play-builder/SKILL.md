@@ -1,7 +1,7 @@
 ---
 name: page-play-builder
 description: 'Use when the user asks to "build programmatic SEO pages", "generate pages at scale", "rank on a high-authority third-party site", "borrow domain authority", "build a vs / alternative page", "do local SEO", "optimize a Google Business Profile", or "fix NAP" — one page-build router with four modes: programmatic (template × dataset systems), parasite (barnacle publishing on Medium/Reddit/LinkedIn/GitHub), comparison (vs / alternative pages in four formats), and local (GBP + NAP + citations + location pages), each with its own thin/duplicate, honesty, or reputation-abuse guardrail. Not for finding what to target — use keyword-research or content-gap-analysis; not for drafting one standalone article — use content-writer; not for scoring a page for publish — use content-quality-auditor. 程序化SEO/批量页面/寄生SEO/借势权重/对比页/vs页/替代页/本地SEO/谷歌商家档案/NAP一致性'
-version: "12.1.0"
+version: "12.6.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when the user wants to build SEO pages that are NOT a single h
 argument-hint: "<mode: programmatic|parasite|comparison|local> <primary input> [dataset / competitor / platforms / location]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.6.0"
   discipline: seo-geo
   phase: build
   geo-relevance: "high"
@@ -69,6 +69,8 @@ Every mode runs Tier-1 with keyless/own data; keyed APIs are opt-in Tier-2/3 onl
 |------|------------------------|--------------------------|
 | programmatic | The dataset itself + a sample of live URLs | `~~SEO tool` (demand/SERP), `~~web crawler` (audit duplicate tails) |
 | parasite | Public platform pages + the user's own accounts | `~~SEO tool` (platform DA, SERP), `~~link database` (existing placements) |
+
+**Batch index push for programmatic/local pages (write channel, gated)**: a programmatic build ships hundreds of URLs at once — `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/indexpush.py" indexnow --file new-urls.txt --key $INDEXNOW_KEY` submits up to 10,000 URLs per call (one host per submission; Bing/DuckDuckGo/Yandex/Seznam/Naver), with `indexpush.py baidu --file … --site … --token …` as the CN counterpart. Dry-run by default (`--live` to submit) — and push **only after the thin/duplicate guardrail passes**: index-pushing thin pages just accelerates the wrong outcome.
 | comparison | User-provided positioning + pasted competitor facts/reviews | `~~SEO tool` (competitive volume), `~~competitive intel` (feature/pricing/review data) |
 | local | The user's own GBP dashboard export + a manual NAP/citation check | `~~local listings`, `~~search console` |
 

@@ -2,7 +2,7 @@
 
 Current versions for the plugin and all 69 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `12.5.0` (2026-07-04). Keyless public-API wave — three new stdlib connectors (`doh.py` email-auth DNS records over DNS-over-HTTPS · `pageviews.py` Wikipedia attention series · `gdelt.py` global news mentions) plus recipe-level rows for crt.sh, the W3C Nu validator, oEmbed post metadata, HN Algolia, Nominatim, RSSHub/SearXNG, and Jina Reader. Skills keep their last-changed version: 9 at `12.5.0`, 2 at `12.4.0`, 6 at `12.3.0`, 6 at `12.2.0`, 46 at `12.1.0`. (**69 skills**.)
+**Current release**: `12.6.0` (2026-07-04). Coverage-audit wave — two new connectors closing the audit's hardest gaps (`youtube.py` real creator metrics for the influencer discipline · `indexpush.py` IndexNow + Baidu index push, the second mutation-class helper) plus ad-transparency-library recipes for paid competitive intel, the official Google Ads MCP, the Gmail Postmaster Tools API row, and the SNDS-migration warning. Skills keep their last-changed version: 10 at `12.6.0`, 4 at `12.5.0`, 2 at `12.4.0`, 6 at `12.3.0`, 6 at `12.2.0`, 41 at `12.1.0`. (**69 skills**.)
 
 ## Skills
 
@@ -12,39 +12,39 @@ Current versions for the plugin and all 69 skills. Agents can fetch this file fr
 | content-gap-analysis | research | 12.3.0 | 2026-07-04 |
 | keyword-research | research | 12.5.0 | 2026-07-04 |
 | serp-analysis | research | 12.4.0 | 2026-07-04 |
-| content-writer | build | 12.1.0 | 2026-07-03 |
+| content-writer | build | 12.6.0 | 2026-07-04 |
 | geo-content-optimizer | build | 12.4.0 | 2026-07-04 |
-| page-play-builder | build | 12.1.0 | 2026-07-03 |
+| page-play-builder | build | 12.6.0 | 2026-07-04 |
 | serp-markup-builder | build | 12.1.0 | 2026-07-03 |
 | content-quality-auditor | optimize | 12.3.0 | 2026-07-04 |
 | on-page-seo-auditor | optimize | 12.3.0 | 2026-07-04 |
 | site-structure-optimizer | optimize | 12.1.0 | 2026-07-03 |
-| technical-seo-checker | optimize | 12.5.0 | 2026-07-04 |
+| technical-seo-checker | optimize | 12.6.0 | 2026-07-04 |
 | domain-authority-auditor | monitor | 12.1.0 | 2026-07-03 |
-| offsite-signal-analyzer | monitor | 12.5.0 | 2026-07-04 |
+| offsite-signal-analyzer | monitor | 12.6.0 | 2026-07-04 |
 | performance-monitor | monitor | 12.1.0 | 2026-07-03 |
 | rank-tracker | monitor | 12.1.0 | 2026-07-03 |
 | audience-mapper | discover | 12.1.0 | 2026-07-03 |
-| fit-scorer | discover | 12.1.0 | 2026-07-03 |
-| influencer-discovery | discover | 12.5.0 | 2026-07-04 |
+| fit-scorer | discover | 12.6.0 | 2026-07-04 |
+| influencer-discovery | discover | 12.6.0 | 2026-07-04 |
 | trend-spotter | discover | 12.5.0 | 2026-07-04 |
 | brief-generator | plan | 12.1.0 | 2026-07-03 |
 | budget-optimizer | plan | 12.1.0 | 2026-07-03 |
 | campaign-planner | plan | 12.1.0 | 2026-07-03 |
-| competitor-tracker | plan | 12.5.0 | 2026-07-04 |
+| competitor-tracker | plan | 12.6.0 | 2026-07-04 |
 | content-amplifier | activate | 12.1.0 | 2026-07-03 |
 | content-reviewer | activate | 12.1.0 | 2026-07-03 |
 | contract-helper | activate | 12.1.0 | 2026-07-03 |
 | outreach-manager | activate | 12.1.0 | 2026-07-03 |
 | landing-optimizer | measure | 12.1.0 | 2026-07-03 |
-| performance-analyzer | measure | 12.1.0 | 2026-07-03 |
+| performance-analyzer | measure | 12.6.0 | 2026-07-04 |
 | report-generator | measure | 12.1.0 | 2026-07-03 |
 | roi-calculator | measure | 12.1.0 | 2026-07-03 |
 | audience-segment-builder | paid | 12.1.0 | 2026-07-03 |
-| campaign-architect | paid | 12.1.0 | 2026-07-03 |
+| campaign-architect | paid | 12.6.0 | 2026-07-04 |
 | product-feed-optimizer | paid | 12.1.0 | 2026-07-03 |
 | search-term-miner | paid | 12.1.0 | 2026-07-03 |
-| ad-creative-builder | paid | 12.1.0 | 2026-07-03 |
+| ad-creative-builder | paid | 12.6.0 | 2026-07-04 |
 | ad-test-designer | paid | 12.1.0 | 2026-07-03 |
 | bid-strategy-planner | paid | 12.1.0 | 2026-07-03 |
 | landing-experience-checker | paid | 12.3.0 | 2026-07-04 |
@@ -79,6 +79,17 @@ Current versions for the plugin and all 69 skills. Agents can fetch this file fr
 | offer-claims-registry | protocol | 12.1.0 | 2026-07-03 |
 
 ## Changelog
+
+### v12.6.0 — Coverage-audit wave: creator metrics, index push, ad transparency (2026-07-04)
+
+Feature minor release closing the gaps a four-discipline coverage audit found (all vendor facts verified against official docs 2026-07).
+
+- **New connector `youtube.py`** — YouTube Data API v3 (free key, 10,000 units/day; `channel` ≈ 1 unit, `videos` ≈ 3): real displayed subscriber counts, total views, and per-video views/likes/comments — the influencer discipline's first official free metrics API, replacing the stale "no public metrics API" claim. **ToS scope stated everywhere: named-shortlist vetting and own-campaign measurement, never bulk harvesting** (quota extensions refuse it). Keyless companion: every channel's RSS feed (`/feeds/videos.xml?channel_id=…`) for cadence tracking via `rss_monitor.py`.
+- **New connector `indexpush.py`** — the second **mutation-class** helper (dry-run default, `--live`, `retries=1`): `indexnow` (one call notifies Bing/DuckDuckGo/Yandex/Seznam/Naver, ≤10,000 URLs/host, self-minted hosted key = inherent ownership proof) · `baidu` (百度普通收录 site-token push). The bundle's first white-hat *write* channel for SEO; Google has no open equivalent (its Indexing API is job-posting/broadcast-only — noted inline).
+- **10 skills wired** (→ `12.6.0`): `influencer-discovery` + `fit-scorer` (Measured YouTube candidate metrics / engagement-authenticity inputs), `competitor-tracker` (rival-partner channel stats + keyless RSS cadence watch), `performance-analyzer` (Measured campaign-video performance), `technical-seo-checker` (index-push after fixes), `content-writer` (publish-time push), `page-play-builder` (batch push gated on the thin/duplicate guardrail), `ad-creative-builder` + `campaign-architect` (ad-transparency-library competitive research + official Google Ads MCP pointer), `offsite-signal-analyzer` (Cloudflare Radar AI-crawler industry benchmark).
+- **Paid competitive-intel recipes**: Meta Ad Library (web UI = all commercial ads, keyless; API tier = political/EU only, ~200 calls/hr) · Google Ads Transparency Center (web, no API) · TikTok Commercial Content API (application-gated, EU data) — plus the **official self-hosted [Google Ads MCP](https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server)** (read-only GAQL, 2026) documented as the sanctioned `~~ad platform` Tier-2/3 path.
+- **Email fixes from the audit**: the official **Gmail Postmaster Tools API** row (`gmailpostmastertools.googleapis.com`, OAuth own-domain — spam-rate/reputation programmatically, ledger-ready) and a **Microsoft SNDS migration warning** (legacy automated-access URLs deprecated 2026-06-22 → `postmaster.live.com/snds`, 30-day expiring links).
+- Also recorded: IG Graph **Business Discovery** (other Business/Creator accounts' public counts via your own app), **Google Trends API** = official but application-gated alpha, Cloudflare Radar AI Insights benchmark row. Evaluated and **not** adopted: X/Twitter API (free tier gone), TikTok Research API (academic gate), Twitch (deferred), community Meta-ads MCPs (no official server).
 
 ### v12.5.0 — Keyless public-API wave: email-auth DNS, attention series, news mentions (2026-07-04)
 

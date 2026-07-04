@@ -82,6 +82,19 @@ else
   skip "resend.py domains" "RESEND_API_KEY not set"
 fi
 
+if [ -n "${YOUTUBE_API_KEY:-}" ]; then
+  check "youtube.py channel" \
+    'import json,sys; d=json.load(sys.stdin); assert d.get("found") and d.get("subscribers_displayed")' \
+    python3 youtube.py channel @youtube
+else
+  skip "youtube.py channel" "YOUTUBE_API_KEY not set"
+fi
+
+# indexpush is mutation-class: smoke only its dry-run (no network, no submission).
+check "indexpush.py (dry-run)" \
+  'import json,sys; d=json.load(sys.stdin); assert d["dry_run"] and d["request"]["body"]["host"]=="example.com"' \
+  python3 indexpush.py indexnow https://example.com/a --key smoketestkey0
+
 if [ -n "${OPENPAGERANK_API_KEY:-}" ]; then
   check "openpagerank.py" \
     'import json,sys; d=json.load(sys.stdin); assert d["results"]' \

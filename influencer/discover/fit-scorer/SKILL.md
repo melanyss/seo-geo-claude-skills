@@ -1,7 +1,7 @@
 ---
 name: fit-scorer
 description: 'Use when the user asks to "score this influencer", "rank these creators for our campaign", or "tell me which influencer is the best fit"; produces weighted fit scores across audience match, content quality, brand alignment, engagement authenticity, and partnership potential, plus a ranked comparison and a go/pass verdict. Not for finding new influencers — use influencer-discovery; not for sending outreach — use outreach-manager.'
-version: "12.1.0"
+version: "12.6.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when a user has a shortlist of influencers and needs an object
 argument-hint: "<brand or campaign> <influencer handle(s)> [campaign goal: awareness|engagement|conversion]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.6.0"
   discipline: influencer
   phase: discover
   family: influencer-marketing
@@ -57,6 +57,8 @@ This family needs no live integrations (Tier 1). Fit Scorer works end to end by 
 - `~~social platform analytics` — engagement rate, comment quality samples, posting cadence, growth trend.
 - `~~audience intelligence` — real-vs-bot follower estimates and audience overlap with your target.
 - **Roster record (keyless Tier 1)** — prior contact, response reputation, and delivery history come from `memory/creators/<handle-slug>.md` when the creator is rostered ([creator-registry](../../../protocol/creator-registry/SKILL.md) curates it); `~~CRM` is an optional Tier-2 sharpener for the same history when no roster record exists.
+
+**Measured YouTube inputs (free key)**: for YouTube candidates, `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/youtube.py" videos @handle --limit 10` supplies the engagement-authenticity inputs directly — per-video views/likes/comments against the displayed subscriber base (views-to-subs consistency, comment rate, cadence) — so those sub-scores come from **Measured** numbers instead of screenshots. Free `YOUTUBE_API_KEY`; shortlist vetting only (ToS refuses bulk-harvesting quota). See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
 
 With zero integrations, ask the user to supply each value the scoring tables request; the framework and weighting still produce a defensible ranking. See [CONNECTORS.md](../../../CONNECTORS.md) for the free/keyless recipe per category.
 

@@ -28,6 +28,8 @@ For the bundle-able categories the repo ships small **Python-3-stdlib** helpers 
 | Entity/topic attention series (Wikipedia pageviews) | `pageviews.py "<Article>" --months 12` | — |
 | Global news mentions + volume trend (GDELT) | `gdelt.py '"<brand>"' --days 30` (⚠️ ≥5s between calls) | — |
 | Brand / mention RSS | `rss_monitor.py <feed-url>` | — |
+| YouTube creator metrics — real subs/views/video stats for shortlist vetting | `youtube.py channel @handle` · `youtube.py videos @handle --limit 10` | free key |
+| Index push — tell Bing/DuckDuckGo/Yandex (IndexNow) and Baidu your URLs changed | `indexpush.py indexnow <urls…> --key …` · `indexpush.py baidu … --site … --token …` (dry-run by default, `--live` to submit) | self-minted key / site token |
 | Email ESP automation — domain-auth status / seed-test send / suppression sync / broadcasts (Resend) | `resend.py domains` · `resend.py seed …` (mutating commands dry-run by default, `--live` to execute) | free key |
 | Before/after deltas (measurement loop) | `… \| ledger.py record <target> --source <name>` → `ledger.py diff <target> --source <name>` | — |
 
@@ -48,6 +50,7 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 | Keywords + rankings on Bing | [Bing Webmaster Tools API](https://learn.microsoft.com/en-us/bingwebmaster/getting-access) | REST API; key from BWT → Settings → API Access | `apikey` query param **or** [OAuth Bearer](https://learn.microsoft.com/en-us/bingwebmaster/oauth2) (token `https://www.bing.com/webmasters/oauth/token`) | free account |
 | Traffic & behavior (`~~analytics`) | [Google Analytics Data API (GA4)](https://developers.google.com/analytics/devguides/reporting/data/v1) | `POST https://analyticsdata.googleapis.com/v1beta/{property=properties/*}:runReport` (`v1beta` is the current documented surface) | OAuth 2.0, scope `https://www.googleapis.com/auth/analytics.readonly` | 200,000 tokens/property/day |
 | Backlinks to your site (`~~link database`) | [GSC Links report](https://support.google.com/webmasters/answer/9049606) | Search Console UI → Links → Export top linking sites | GSC login | free |
+| Gmail spam-rate & sender reputation (`~~email platform` reputation) | [Gmail Postmaster Tools API](https://developers.google.com/workspace/gmail/postmaster) | `GET https://gmailpostmastertools.googleapis.com/v1/domains/{domain}/trafficStats/{date}` (spam-rate, domain/IP reputation, auth success, delivery errors) | OAuth 2.0, own verified domain | free |
 
 ### Public / keyless — any site
 
@@ -63,6 +66,11 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 | HTML validity (`~~web crawler` aux) | [W3C Nu validator](https://github.com/validator/validator/wiki/Service-%C2%BB-HTTP-interface) | `GET https://validator.w3.org/nu/?doc=URL&out=json` | none | be gentle |
 | Post/video metadata (`~~social platform analytics` partial) | [oEmbed](https://oembed.com) — YouTube · [TikTok](https://developers.tiktok.com/doc/embed-videos) · X | `https://www.youtube.com/oembed?url=…` · `https://www.tiktok.com/oembed?url=…` · `https://publish.twitter.com/oembed?url=…` | none | metadata only (title/author/thumbnail) — no follower/engagement metrics; Instagram oEmbed requires a token |
 | Tech/forum heat (`~~trend database`) | [Hacker News Algolia](https://hn.algolia.com/api) | `GET https://hn.algolia.com/api/v1/search?query=…` | none | generous |
+| Creator channel metrics (`~~social platform analytics`, `~~influencer database` for YouTube) | [YouTube Data API v3](https://developers.google.com/youtube/v3/docs) | `GET https://www.googleapis.com/youtube/v3/channels?part=statistics&forHandle=@…` — bundled as `youtube.py` | free API key | 10,000 units/day (channel check ≈ 1–3 units); **quota extensions refuse bulk competitive harvesting — shortlist vetting only** |
+| Creator upload cadence, keyless (`~~competitor tracking`) | YouTube channel RSS | `GET https://www.youtube.com/feeds/videos.xml?channel_id=UC…` — pipe into `rss_monitor.py` | none | be gentle |
+| Instant indexing push (`~~search console` adjacent — write channel) | [IndexNow](https://www.indexnow.org/documentation) ([Bing guide](https://www.bing.com/indexnow/getstarted)) · [百度普通收录](https://ziyuan.baidu.com/college/courseinfo?id=267&page=2) | `POST https://api.indexnow.org/indexnow` (JSON, ≤10,000 URLs/host) · `POST http://data.zz.baidu.com/urls?site=…&token=…` — bundled as `indexpush.py` (dry-run default) | self-minted hosted key / site-bound token | free; Baidu quota shown in response `remain` |
+| Competitor ads (`~~ad platform` competitive intel) | [Meta Ad Library](https://www.facebook.com/ads/library/) · [Google Ads Transparency Center](https://adstransparency.google.com) · [TikTok Commercial Content API](https://developers.tiktok.com/products/commercial-content-api) | web UIs for all commercial ads (keyless, manual); Meta's API tier is political/EU-scoped (~200 calls/hr), TikTok's is application-gated (EU data) | none (web) / app review (APIs) | manual reads; label eyeballed volumes Estimated |
+| AI-crawler traffic benchmark (`~~AI monitor` context) | [Cloudflare Radar AI Insights](https://radar.cloudflare.com/ai-insights) | network-wide AI-crawler shares + crawl-to-refer ratios, public dashboard (API with free CF token) | none (dashboard) | industry benchmark, not your-site data |
 | Domain authority signal (`~~link database`) | [Open PageRank](https://www.domcop.com/openpagerank/documentation) | `GET https://openpagerank.com/api/v1.0/getPageRank?domains[]=example.com` | free key in header `API-OPR: KEY` | 10,000 calls/hr, ≤100 domains/call (domain-rank scores, not raw link lists) |
 | Inbound links / web graph (`~~link database`, `~~web crawler`) | [Common Crawl CDX index](https://commoncrawl.org/get-started) | `https://index.commoncrawl.org/CC-MAIN-YYYY-WW-index?url=URL&output=json` — crawl list at `https://index.commoncrawl.org/collinfo.json` | none | shared server, keep < 10 req/s (expect `503 SlowDown`) |
 | Historical pages / change tracking (`~~competitive intel`) | [Wayback Machine CDX API](https://github.com/internetarchive/wayback/blob/master/wayback-cdx-server/README.md) | `http://web.archive.org/cdx/search/cdx?url=URL&output=json` (matchType `exact`/`prefix`/`host`/`domain`) | none | be gentle |
@@ -123,13 +131,13 @@ The influencer-marketing skills use these additional placeholders (plus `~~CRM`,
 
 | Category | Placeholder | Discipline | Example paid tools | Free / own-data path | Agent default |
 |----------|-------------|------------|--------------------|----------------------|---------------|
-| Influencer Database | `~~influencer database` | influencer | Modash, HypeAuditor, Upfluence, GRIN | manual creator CSV (handles + public metrics) | manual CSV (no public API) |
-| Social Platform Analytics | `~~social platform analytics` | influencer | IG/TikTok/YouTube creator APIs, Dash Hudson | native creator dashboards (manual export of own/partner data) + keyless oEmbed post metadata (YouTube/TikTok/X — title/author/thumbnail only) | manual export (no public metrics API) |
+| Influencer Database | `~~influencer database` | influencer | Modash, HypeAuditor, Upfluence, GRIN | manual creator CSV (handles + public metrics); **YouTube: `youtube.py` real channel stats (free key, shortlist-vetting scope)** | manual CSV + `youtube.py` for YouTube candidates |
+| Social Platform Analytics | `~~social platform analytics` | influencer | IG/TikTok/YouTube creator APIs, Dash Hudson | native creator dashboards (manual export of own/partner data) + keyless oEmbed post metadata (YouTube/TikTok/X) + **`youtube.py` per-video stats** + [IG Graph Business Discovery](https://developers.facebook.com/docs/instagram-platform/instagram-api-with-facebook-login/business-discovery/) (other Business/Creator accounts' follower + media counts via your own IG business account + FB app) | manual export; YouTube → `youtube.py` (free key) |
 | Social Listening | `~~social listening` | both | Brandwatch, Sprout Social, Talkwalker | Google Alerts / F5Bot / platform search | Google Alerts |
 | Audience Intelligence | `~~audience intelligence` | influencer | HypeAuditor, Audiense, SparkToro | platform audience demographics (own/manual) | platform native (own) |
 | Audience Overlap | `~~audience overlap` | influencer | Audiense, SparkToro | manual follower-sample comparison | manual sample |
 | Trend Database | `~~trend database` | both | Exploding Topics, TrendTok | Google Trends / platform trending pages / Tavily news search / Wikipedia pageviews / HN Algolia | Google Trends RSS (`rss_monitor.py`) + `tavily.py search --topic news` + `pageviews.py` |
-| Ad Platform | `~~ad platform` | both (influencer + paid) | Meta Ads, TikTok Ads, Google Ads | native ad manager (own data, manual export) | manual export (own); keyed API = opt-in MCP |
+| Ad Platform | `~~ad platform` | both (influencer + paid) | Meta Ads, TikTok Ads, Google Ads | native ad manager (own data, manual export); competitor creative via the **ad-transparency libraries** (Meta Ad Library / Google Ads Transparency Center / TikTok CCL — web, keyless) | manual export (own); Tier-2/3 = official self-hosted [Google Ads MCP](https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server) (read-only GAQL) |
 | Web Analytics | `~~web analytics` | both | GA4, Adobe Analytics, Plausible | GA4 Data API (own data) | GA4 own-data |
 | E-commerce / Sales | `~~ecommerce` (bare alias covering both `~~ecommerce / sales platform` and `~~ecommerce / analytics`) | both | Shopify, WooCommerce, Stripe | platform order export (own data) | order CSV (own) |
 | A/B Testing | `~~A/B testing platform` | both | Optimizely, VWO | server-side split / manual variant test | manual variant |
@@ -137,7 +145,7 @@ The influencer-marketing skills use these additional placeholders (plus `~~CRM`,
 | DAM / Asset Library | `~~DAM / asset library` | influencer | Bynder, Brandfolder | shared Drive / Dropbox folder | shared folder |
 | Email / DM | `~~email/DM tool` | influencer | Klaviyo, Mailchimp, native DMs | native DM + manual email | manual DM |
 | Compliance Reference | `~~compliance reference` | both | platform policy portals | [FTC 16 CFR §255](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-B/part-255) / [Part 465](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-D/part-465) (public) | FTC public rule |
-| Competitor Tracking | `~~competitor tracking` | influencer | Social Blade, BuzzSumo | manual competitor profile review | manual review |
+| Competitor Tracking | `~~competitor tracking` | influencer | Social Blade, BuzzSumo | manual competitor profile review + `youtube.py channel` (partner stats) + keyless YouTube channel RSS (cadence via `rss_monitor.py`) + `gdelt.py` (rival news) | manual review + YouTube RSS (keyless) |
 | Customer Survey | `~~customer survey data` | influencer | Typeform, SurveyMonkey, Qualtrics | Google Forms | Google Forms |
 | E-signature | `~~e-signature` | influencer | DocuSign, Dropbox Sign, PandaDoc | PDF + manual signature | manual PDF sign |
 
@@ -164,7 +172,7 @@ The email-marketing skills add one placeholder, `~~email platform` (the ESP), an
 |----------|-------------|------------|--------------------|----------------------|---------------|
 | Email Platform (ESP) | `~~email platform` | email | Klaviyo, Mailchimp, HubSpot, Customer.io, Braze | native ESP campaign/flow + deliverability export (own data) · **Resend free tier via `resend.py`** | manual export (own) or `resend.py` (free key); other keyed APIs = opt-in MCP |
 | Email Authentication | `~~email platform` (auth signals) | email | Valimail, EasyDMARC, dmarcian | `doh.py auth <domain>` (keyless SPF/DMARC/BIMI/MX + DKIM-selector probes) + the **DMARC aggregate (RUA) report** (own, free) | `doh.py auth` + RUA report |
-| Sender Reputation | `~~email platform` (reputation) | email | Postmark, SendForensics | [Google Postmaster Tools](https://postmaster.google.com) ([docs](https://support.google.com/mail/answer/9981691)) / [Microsoft SNDS](https://sendersupport.olc.protection.outlook.com/snds/) (own data) | Postmaster/SNDS (own) |
+| Sender Reputation | `~~email platform` (reputation) | email | Postmark, SendForensics | [Google Postmaster Tools](https://postmaster.google.com) — dashboard **plus the official [Postmaster Tools API](https://developers.google.com/workspace/gmail/postmaster)** (`gmailpostmastertools.googleapis.com`, OAuth, own domain: spam-rate, domain/IP reputation, delivery errors — pipe into `ledger.py` for the reputation trend) / [Microsoft SNDS](https://sendersupport.olc.protection.outlook.com/snds/) (own data — **⚠️ migrating**: legacy automated-access URLs are deprecated as of 2026-06-22; the portal + new REST API move to `postmaster.live.com/snds`, with access links that now expire after 30 days) | Postmaster API + SNDS (own) |
 | Inbox Placement | `~~email platform` (seed test) | email | GlockApps, Mailtrap, Litmus | manual seed-list send across own inbox providers | manual seed test |
 
 ## How placeholders work
@@ -202,6 +210,7 @@ A skill might say: *"Pull keyword rankings from `~~SEO tool` and cross-reference
 
 - **Google Analytics** — official ([github.com/googleanalytics/google-analytics-mcp](https://github.com/googleanalytics/google-analytics-mcp)): `pipx run analytics-mcp`, stdio, ADC scope `analytics.readonly`; tools `run_report`, `run_realtime_report`, `get_account_summaries`.
 - **Google Search Console** — community ([github.com/AminForou/mcp-gsc](https://github.com/AminForou/mcp-gsc), MIT): `uvx mcp-search-console`, stdio, OAuth or service account; tools `get_search_analytics`, `inspect_url_enhanced`, `list_properties`.
+- **Google Ads** — official ([github.com/googleads/google-ads-mcp](https://github.com/googleads/google-ads-mcp), shipped by the Ads API team 2026; [docs](https://developers.google.com/google-ads/api/docs/developer-toolkit/mcp-server)): self-hosted stdio/Cloud Run, **read-only** (three tools — `list_accessible_customers`, GAQL `search`, `get_resource_metadata`); needs a developer token + OAuth on your own account. The sanctioned Tier-2/3 path for `~~ad platform` own-account automation — no Meta equivalent exists (community Meta MCPs are deliberately not catalogued).
 
 **Infra / CMS / CRM / comms** (listed in `docs/mcp-catalog.json` as opt-in references, official remote endpoints, OAuth on first use): Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack. See each vendor's MCP docs for its current tool list.
 
@@ -228,7 +237,8 @@ Every skill works at Tier 1. Connecting tools only automates data retrieval.
 ## Environment variables
 
 Soft dependencies — everything works without them. These are the only env vars the **bundled
-stdlib connectors** actually read (both optional; the connectors fall back to keyless/lower-quota mode):
+stdlib connectors** actually read (all optional; keyless-capable connectors fall back to
+keyless/lower-quota mode, and the rest degrade to a clear where-to-get-a-key message):
 
 | Variable | Read by | Purpose |
 |----------|---------|---------|
@@ -237,6 +247,9 @@ stdlib connectors** actually read (both optional; the connectors fall back to ke
 | `RESEND_API_KEY` | `scripts/connectors/resend.py` | Resend ESP automation (free-tier key; mutating subcommands additionally require `--live`) |
 | `FIRECRAWL_API_KEY` | `scripts/connectors/firecrawl.py` | Optional — `scrape`/`search` work keyless (~1,000 credits/mo); a key raises limits and covers `map`/`crawl` |
 | `TAVILY_API_KEY` | `scripts/connectors/tavily.py` | Optional — `search`/`extract` work keyless (rate-limited); a free key (1,000 credits/mo) lifts the limit |
+| `YOUTUBE_API_KEY` | `scripts/connectors/youtube.py` | YouTube Data API v3 (free key, 10,000 units/day; shortlist vetting, not bulk harvesting) |
+| `INDEXNOW_KEY` | `scripts/connectors/indexpush.py` | Self-minted IndexNow key (host it at `https://<host>/<key>.txt`; submissions additionally require `--live`) |
+| `BAIDU_PUSH_TOKEN` | `scripts/connectors/indexpush.py` | 百度普通收录 site-bound push token (from ziyuan.baidu.com; submissions additionally require `--live`) |
 
 The opt-in MCP servers do not use env vars here: most (Semrush, SE Ranking, SISTRIX, SimilarWeb, Cloudflare, Vercel, Webflow, Sanity, Contentful) use **OAuth** at first use; Ahrefs uses an in-client MCP key. The free Google APIs use OAuth (GSC/GA4) or a key (PSI/CrUX/Knowledge Graph) you supply at call time.
 
@@ -249,3 +262,6 @@ The opt-in MCP servers do not use env vars here: most (Semrush, SE Ranking, SIST
 - **AI-citation visibility** has no free API from any engine — the realistic free method is manual prompt-testing recorded over time (plus the Tavily answer probe as a single-engine proxy).
 - **SISTRIX MCP** dropped its API-key requirement in 2026 — auth is now an OAuth login for any SISTRIX account; older setup guides mentioning `X-API-Key` are stale.
 - **CrUX History API** returns weekly windows updated Mondays (~04:00 UTC, data through the prior Saturday) — align `ledger.py` comparisons to the same weekday to avoid phantom deltas.
+- **Microsoft SNDS** is mid-migration: legacy automated-access URLs (`sendersupport.olc.protection.outlook.com/snds/…`) are deprecated as of 2026-06-22; the portal + new REST API live at `postmaster.live.com/snds`, and access links now expire after 30 days.
+- **Google Trends API** is official but **alpha and application-gated** ([apply here](https://developers.google.com/search/apis/trends) — 5 years of consistently scaled interest data). Until access lands, the keyless trend stack stays Google Trends RSS + `pageviews.py` + `tavily.py --topic news`.
+- **Meta Ad Library API** covers only political/social-issue ads (EU-scoped, ~200 calls/hr); **all commercial ads are web-UI only**. TikTok's Commercial Content API is application-gated and EU-data-only for now. Evaluated and not adopted: X/Twitter API (free tier effectively gone), TikTok Research API (academic gate), Twitch API (deferred — vertical).

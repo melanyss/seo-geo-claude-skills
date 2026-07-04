@@ -3,7 +3,7 @@
 **69 skills. 5 commands. Four marketing disciplines — SEO/GEO, influencer, paid ads, email — on one operating contract.**
 
 [![GitHub Stars](https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat)](https://github.com/aaron-he-zhu/aaron-marketing-skills)
-[![Version](https://img.shields.io/badge/version-12.5.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
+[![Version](https://img.shields.io/badge/version-12.6.0-orange)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills)](https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-purple)](https://claude.ai/download)
@@ -397,7 +397,7 @@ Skills name tools with `~~category` placeholders (`~~SEO tool`, `~~web analytics
 | **Tier 3** | A fuller MCP set | Fully automated multi-source workflows. |
 
 - **Bundled zero-dependency helpers** under `scripts/connectors/` (Python stdlib only) pull public/own data locally — e.g. PageSpeed/CrUX, Open PageRank, page crawl, Wayback CDX, Wikidata SPARQL, Common Crawl, advertools recipes — plus **`resend.py`**, direct Resend ESP automation for the email skills (free-tier key: domain-auth status, seed-test sends, suppression sync, broadcast scheduling; mutating subcommands dry-run by default and require `--live`), and **`firecrawl.py`** + **`tavily.py`**, keyless hosted-fetcher automation for the research skills (Firecrawl: live web SERP + JS-rendered page markdown + site maps; Tavily: scored search + an AI answer engine's cited-sources probe for GEO + URL extract — both free with no key at all, both with a local robots.txt pre-flight built in).
-- **Free/keyless sources** documented per category: Google Search Console & GA4 (own data), PageSpeed/CrUX, Wikidata, Common Crawl, Open PageRank, Firecrawl keyless SERP/scrape, Tavily keyless AI-search, DNS-over-HTTPS email-auth records (`doh.py`), Wikipedia attention series (`pageviews.py`), GDELT news mentions (`gdelt.py`), and recipe rows for crt.sh, the W3C validator, oEmbed, and HN Algolia.
+- **Free/keyless sources** documented per category: Google Search Console & GA4 (own data), PageSpeed/CrUX, Wikidata, Common Crawl, Open PageRank, Firecrawl keyless SERP/scrape, Tavily keyless AI-search, DNS-over-HTTPS email-auth records (`doh.py`), Wikipedia attention series (`pageviews.py`), GDELT news mentions (`gdelt.py`), YouTube creator metrics on a free key (`youtube.py`), IndexNow + Baidu index push (`indexpush.py`, dry-run gated), the ad-transparency libraries (Meta/Google/TikTok), and recipe rows for crt.sh, the W3C validator, oEmbed, and HN Algolia.
 - **Opt-in MCP servers** (Ahrefs, Semrush, SE Ranking, SISTRIX, SimilarWeb, the self-hosted free **OpenSEO** suite, Cloudflare, Vercel, HubSpot, Amplitude, Notion, Webflow, Sanity, Contentful, Slack, Resend, the keyless Firecrawl and Tavily) are catalogued in [`docs/mcp-catalog.json`](docs/mcp-catalog.json) as a **copy-paste reference only** — the catalog sits outside the auto-registered plugin-root `.mcp.json` path, so nothing is registered for you. Copy the entries you want into your own MCP config.
 
 Paid-ads skills score from your **own-account manual export** (native ad-manager CSV, GA4, ecommerce). Keyed ad-platform APIs (Google Ads SDK, Meta Marketing API) are opt-in Tier-2/3 only and **never** a Tier-1 requirement. Email skills score the same way — from your **own ESP export** — and every deliverability signal is keyless (DNS lookups, a DMARC RUA report, and a seed-list inbox test), so a keyed ESP API is never a Tier-1 requirement either; when Resend is your ESP, the bundled `resend.py` automates the same loop on the free tier.
@@ -486,7 +486,7 @@ Live endpoint drift is covered separately by the **manual** [`scripts/connectors
 ## Contributing & project docs
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — authoring rules, the contribution checklist, and the authoritative 8-file tracking list.
-- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `12.5.0`).
+- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `12.6.0`).
 - **[SECURITY.md](SECURITY.md)** · **[PRIVACY.md](PRIVACY.md)** · **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — security, privacy, and community policy.
 - **[CLAUDE.md](CLAUDE.md)** / **[AGENTS.md](AGENTS.md)** — agent-facing context for this repo.
 
