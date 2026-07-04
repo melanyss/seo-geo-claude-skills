@@ -1,5 +1,5 @@
 ---
-description: "Run the marketing (SEO/GEO + influencer/IMPACT + ad/ROAS) pack-local Aaron workflow implied by a natural-language goal, at the smallest safe depth. Add --deep for exhaustive, maximum-rigor, or stress-test runs."
+description: "Run the marketing (SEO/GEO + influencer/IMPACT + ad/ROAS + email/SEND) pack-local Aaron workflow implied by a natural-language goal, at the smallest safe depth. Add --deep for exhaustive, maximum-rigor, or stress-test runs."
 argument-hint: "<natural-language-goal> [--deep]"
 ---
 

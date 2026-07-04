@@ -19,7 +19,7 @@ metadata:
 
 Works one lever of site structure at two altitudes. **Architecture mode** designs the whole-site information architecture — page hierarchy, navigation, URL taxonomy, hub/spoke topic clusters, link topology — and renders Mermaid site maps that make orphans and link islands visible. **Linking mode** optimizes the links inside an existing structure — link graph, authority flow, anchor text, orphan disposition — and delivers a prioritized source/target/anchor plan. Both emit a **structure score /100** and a handoff summary.
 
-**Scope guard**: this skill does not compute the CORE-EEAT score or run vetoes (T04, C01, R10) — that is the `content-quality-auditor` gate. It does not analyze external backlinks (`backlink-analyzer`) or diagnose XML sitemaps / indexation (`technical-seo-checker`). It works the structure lever and hands off.
+**Scope guard**: this skill does not compute the CORE-EEAT score or run vetoes (T04, C01, R10) — that is the `content-quality-auditor` gate. It does not analyze external backlinks (`offsite-signal-analyzer`) or diagnose XML sitemaps / indexation (`technical-seo-checker`). It works the structure lever and hands off.
 
 ## Mode Selector
 
