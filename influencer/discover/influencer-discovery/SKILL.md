@@ -1,7 +1,7 @@
 ---
 name: influencer-discovery
 description: 'Use when the user asks to "find influencers", "build an influencer list", or "discover creators in [niche]"; produces a multi-platform candidate pool, per-influencer profiles with audience and engagement metrics, authenticity red-flag screening, and a tiered shortlist with fit scores. Not for scoring or ranking a known shortlist — use fit-scorer.'
-version: "12.1.0"
+version: "12.5.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Activate when building an influencer roster from scratch, expandin
 argument-hint: "<brand or niche> [platform] [follower-range]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.5.0"
   discipline: influencer
   phase: discover
   family: influencer-marketing
@@ -56,6 +56,8 @@ Where a tool *could* sharpen results, use `~~` connector placeholders:
 - `~~social platform analytics` — native creator-marketplace data, trending sounds, related accounts.
 - `~~CRM` — import the shortlist and dedupe against existing partners.
 - `~~audience overlap` — estimate creator-audience vs. brand-audience match.
+
+**Keyless candidate-card metadata (oEmbed)**: YouTube (`https://www.youtube.com/oembed?url=<video-url>&format=json`), TikTok (`https://www.tiktok.com/oembed?url=<post-url>`), and X (`https://publish.twitter.com/oembed?url=<post-url>`) return a post's title, author name/handle, and thumbnail with **no key** — enough to auto-fill a candidate's profile row from pasted links instead of hand-copying. Metadata only: no follower or engagement metrics, so those stay `~~influencer database` or manual export.
 
 See [CONNECTORS.md](../../../CONNECTORS.md) for the free/keyless recipe per category and the opt-in MCP layer. None are required — every step degrades to user-supplied inputs.
 

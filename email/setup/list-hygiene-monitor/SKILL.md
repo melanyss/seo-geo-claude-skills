@@ -1,7 +1,7 @@
 ---
 name: list-hygiene-monitor
 description: 'Use when the user asks to "watch my list health over time", "flag decaying / unengaged subscribers on a schedule", "why is my open rate drifting down / bounces creeping up", or "build me a re-permission and prune worklist"; runs the scheduled SEND list-decay + suppression-drift watch — an engagement-recency cohort read (30/90/180/365-day), hard-bounce and spam-complaint trend vs benchmark, suppression-list growth/leakage check, and a segmented re-permission / sunset / prune worklist tied to SEND S (list hygiene) and E (engagement-decay) sub-items. Not for the one-time pre-send authentication pre-flight — use deliverability-qa; not for the consent/suppression record itself — use consent-registry; not for computing the EQS or enforcing vetoes — use email-quality-auditor. 邮件列表健康度监控/退订漂移/沉睡用户清理'
-version: "12.1.0"
+version: "12.2.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use as the recurring hygiene watch between sends — not the pre-f
 argument-hint: "<program / list> [ESP engagement + bounce/complaint export] [prior baseline] [watch cadence]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.2.0"
   discipline: email
   phase: setup
   geo-relevance: "low"
@@ -50,6 +50,8 @@ Run the scheduled hygiene check: engagement-recency cohorts, suppression-list gr
 ## Data Sources
 
 Use `~~email platform` (ESP own-data manual export — the per-subscriber or cohort last-open/click engagement export and the bounce/complaint report) plus the suppression / opt-out history from [consent-registry](../../../protocol/consent-registry/SKILL.md) (`memory/consent/`) for the drift check. Reuse `~~web analytics` (GA4) only where post-click engagement is needed to distinguish a truly-dormant subscriber from an opener who buys off-email. Keyed ESP APIs (Klaviyo, Mailchimp, HubSpot, Customer.io) are an optional Tier-2/3 MCP convenience for pulling the engagement export automatically, **never required** — every input here is a keyless own-account export or a prior baseline file. Do **not** invent a `~~deliverability` category. See [CONNECTORS.md](../../../CONNECTORS.md).
+
+**Zero-dependency ESP read + measurement loop (when Resend is the ESP)**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/resend.py" contacts --limit 100` pages the live roster (created/unsubscribed flags) for the suppression-drift check, and `resend.py emails` reads recent send events. Pipe each run's KPIs into the ledger — `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/ledger.py" record <list> --source hygiene --data '{"hard_bounce_pct": ..., "complaint_pct": ..., "dormant_count": ...}'`, then `ledger.py diff <list> --source hygiene` — so the trend is a computed delta against the prior baseline, never an eyeballed one. If the user runs the optional Resend **webhook event log** ([CONNECTORS.md §Event-driven bounce/complaint loop](../../../CONNECTORS.md)), read that log as the Measured bounce/complaint feed instead of waiting for a manual export. See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
 
 ## Instructions
 

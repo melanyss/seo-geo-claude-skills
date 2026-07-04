@@ -13,6 +13,14 @@ import robots  # noqa: E402
 import psi  # noqa: E402
 import ledger  # noqa: E402
 import openpagerank  # noqa: E402
+import resend  # noqa: E402
+import firecrawl  # noqa: E402
+import robots as robots_mod  # noqa: E402
+import tavily  # noqa: E402
+import doh  # noqa: E402
+import pageviews  # noqa: E402
+import gdelt  # noqa: E402
+import datetime as _dt  # noqa: E402
 
 
 class OnPageParserTests(unittest.TestCase):
@@ -147,6 +155,218 @@ class OpenPageRankTests(unittest.TestCase):
         self.assertFalse(rows[0]["found"])   # a.com absent from response
         self.assertTrue(rows[1]["found"])    # b.com present with status 200
         self.assertEqual(rows[1]["page_rank_decimal"], 5.1)
+
+
+class ResendSpecTests(unittest.TestCase):
+    def _spec(self, argv):
+        return resend.build_spec(resend.build_parser().parse_args(argv))
+
+    def test_read_commands_are_not_mutating(self):
+        for argv in (["domains"], ["contacts"], ["segments"], ["broadcasts"],
+                     ["emails", "--limit", "5"]):
+            spec = self._spec(argv)
+            self.assertFalse(spec["mutating"], argv)
+            self.assertEqual(spec["request"]["method"], "GET")
+
+    def test_every_send_path_is_flagged_mutating(self):
+        send = ["send", "--from", "me@x.dev", "--to", "a@y.com",
+                "--subject", "s", "--text", "body text"]
+        for argv in (send, ["verify-domain", "d1"], ["suppress", "a@y.com"],
+                     ["cancel-email", "e1"], ["broadcast-send", "b1"]):
+            self.assertTrue(self._spec(argv)["mutating"], argv)
+
+    def test_seed_expands_one_message_per_recipient(self):
+        spec = self._spec(["seed", "--from", "me@x.dev",
+                           "--to", "s1@gmail.com, s2@outlook.com",
+                           "--subject", "seed", "--text", "plain body"])
+        body = spec["request"]["body"]
+        self.assertEqual(spec["request"]["url"], resend.API_BASE + "/emails/batch")
+        self.assertEqual([m["to"] for m in body], [["s1@gmail.com"], ["s2@outlook.com"]])
+
+    def test_send_requires_content_and_recipients(self):
+        base = ["send", "--from", "me@x.dev", "--subject", "s"]
+        self.assertEqual(self._spec(base + ["--to", "a@y.com"])["error"],
+                         "missing_content")
+        self.assertEqual(self._spec(base + ["--to", " ", "--text", "t"])["error"],
+                         "no_recipients")
+
+    def test_suppress_quotes_email_in_path_and_sets_unsubscribed(self):
+        spec = self._spec(["suppress", "jane@example.com"])
+        self.assertEqual(spec["request"]["url"],
+                         resend.API_BASE + "/contacts/jane%40example.com")
+        self.assertEqual(spec["request"]["method"], "PATCH")
+        self.assertEqual(spec["request"]["body"], {"unsubscribed": True})
+
+    def test_sends_carry_idempotency_key_but_non_supporting_calls_do_not(self):
+        send = ["send", "--from", "me@x.dev", "--to", "a@y.com",
+                "--subject", "s", "--text", "t"]
+        seed = ["seed", "--from", "me@x.dev", "--to", "a@y.com",
+                "--subject", "s", "--text", "t"]
+        for argv in (send, seed):
+            hdrs = self._spec(argv)["request"]["headers"]
+            self.assertTrue(hdrs["Idempotency-Key"].startswith("resend-py/"), argv)
+        # No Idempotency-Key on endpoints Resend does not support it for.
+        for argv in (["suppress", "a@y.com"], ["broadcast-send", "b1"],
+                     ["verify-domain", "d1"]):
+            self.assertEqual(self._spec(argv)["request"]["headers"], {}, argv)
+
+    def test_explicit_idempotency_key_is_used_and_capped(self):
+        spec = self._spec(["send", "--from", "me@x.dev", "--to", "a@y.com",
+                           "--subject", "s", "--text", "t",
+                           "--idempotency-key", "welcome/123"])
+        self.assertEqual(spec["request"]["headers"]["Idempotency-Key"], "welcome/123")
+        self.assertEqual(len(resend.idempotency_key("x" * 400)),
+                         resend.IDEMPOTENCY_MAX)
+
+
+class FirecrawlSpecTests(unittest.TestCase):
+    def _spec(self, argv):
+        return firecrawl.build_spec(firecrawl.build_parser().parse_args(argv))
+
+    def test_scrape_body_and_preflight_target(self):
+        spec = self._spec(["scrape", "https://x.dev/p", "--formats",
+                           "markdown, links", "--wait", "1500", "--full-page"])
+        self.assertEqual(spec["target"], "https://x.dev/p")
+        self.assertEqual(spec["request"]["body"], {
+            "url": "https://x.dev/p", "formats": ["markdown", "links"],
+            "onlyMainContent": False, "waitFor": 1500})
+
+    def test_search_has_no_preflight_target_and_splits_domains(self):
+        spec = self._spec(["search", "best crm", "--limit", "5", "--scrape",
+                           "--include-domains", "a.com, b.com"])
+        self.assertIsNone(spec["target"])
+        body = spec["request"]["body"]
+        self.assertEqual(body["includeDomains"], ["a.com", "b.com"])
+        self.assertEqual(body["scrapeOptions"], {"formats": ["markdown"]})
+
+    def test_crawl_job_endpoints(self):
+        start = self._spec(["crawl", "https://x.dev", "--limit", "50"])
+        self.assertEqual(start["request"]["body"]["limit"], 50)
+        self.assertEqual(start["target"], "https://x.dev")
+        status = self._spec(["crawl-status", "job/1"])
+        self.assertEqual(status["request"]["method"], "GET")
+        self.assertEqual(status["request"]["url"],
+                         firecrawl.API_BASE + "/crawl/job%2F1")
+        self.assertIsNone(status["target"])
+
+    def test_preflight_refuses_on_disallow_and_allows_otherwise(self):
+        parsed = robots_mod.RobotsTxt.parse(
+            "User-agent: *\nDisallow: /private\n",
+            "https://x.dev/robots.txt", 200, None)
+        original = firecrawl.robots.fetch
+        firecrawl.robots.fetch = lambda url: parsed
+        try:
+            self.assertFalse(firecrawl.preflight("https://x.dev/private/a")["allowed"])
+            self.assertTrue(firecrawl.preflight("https://x.dev/public")["allowed"])
+        finally:
+            firecrawl.robots.fetch = original
+
+
+class TavilySpecTests(unittest.TestCase):
+    def _spec(self, argv):
+        return tavily.build_spec(tavily.build_parser().parse_args(argv))
+
+    def test_search_body_and_no_preflight_targets(self):
+        spec = self._spec(["search", "topic q", "--limit", "10", "--answer",
+                           "--topic", "news", "--time-range", "w",
+                           "--include-domains", "a.com, b.com"])
+        self.assertEqual(spec["targets"], [])
+        body = spec["request"]["body"]
+        self.assertEqual(body["max_results"], 10)
+        self.assertEqual(body["include_answer"], True)
+        self.assertEqual(body["topic"], "news")
+        self.assertEqual(body["include_domains"], ["a.com", "b.com"])
+
+    def test_answer_level_passthrough(self):
+        body = self._spec(["search", "q", "--answer", "advanced"])["request"]["body"]
+        self.assertEqual(body["include_answer"], "advanced")
+
+    def test_extract_targets_and_url_shape(self):
+        one = self._spec(["extract", "https://x.dev/a"])
+        self.assertEqual(one["request"]["body"]["urls"], "https://x.dev/a")
+        self.assertEqual(one["targets"], ["https://x.dev/a"])
+        many = self._spec(["extract", "https://x.dev/a", "https://y.dev/b"])
+        self.assertEqual(many["request"]["body"]["urls"],
+                         ["https://x.dev/a", "https://y.dev/b"])
+        self.assertEqual(len(many["targets"]), 2)
+
+    def test_extract_preflight_blocks_on_disallow(self):
+        parsed = robots_mod.RobotsTxt.parse(
+            "User-agent: *\nDisallow: /private\n",
+            "https://x.dev/robots.txt", 200, None)
+        original = tavily.robots.fetch
+        tavily.robots.fetch = lambda url: parsed
+        try:
+            self.assertFalse(tavily.preflight("https://x.dev/private/a")["allowed"])
+            self.assertTrue(tavily.preflight("https://x.dev/ok")["allowed"])
+        finally:
+            tavily.robots.fetch = original
+
+
+class DohTests(unittest.TestCase):
+    def test_strip_txt_joins_chunked_quoted_payloads(self):
+        self.assertEqual(doh._strip_txt('"v=DMARC1; p=no" "ne; rua=x"'),
+                         "v=DMARC1; p=none; rua=x")
+        self.assertEqual(doh._strip_txt("plain"), "plain")
+
+    def test_parse_tags(self):
+        tags = doh.parse_tags("v=DMARC1; p=none; rua=mailto:a@b; aspf=s")
+        self.assertEqual(tags["p"], "none")
+        self.assertEqual(tags["aspf"], "s")
+
+    def test_spf_facts_flags(self):
+        ok = doh.spf_facts(["v=spf1 include:_spf.x.com ~all"])
+        self.assertTrue(ok["present"])
+        self.assertEqual(ok["flags"], [])
+        redirect = doh.spf_facts(["v=spf1 redirect=_spf.google.com"])
+        self.assertEqual(redirect["flags"], [])
+        open_ended = doh.spf_facts(["v=spf1 include:_spf.x.com"])
+        self.assertIn("no_all_or_redirect", open_ended["flags"])
+        double = doh.spf_facts(["v=spf1 ~all", "v=spf1 -all"])
+        self.assertIn("multiple_spf_records", double["flags"])
+        absent = doh.spf_facts(["some-verification=abc"])
+        self.assertFalse(absent["present"])
+
+    def test_build_url_per_resolver(self):
+        self.assertIn("dns.google/resolve?", doh.build_url("_dmarc.x.com"))
+        self.assertIn("cloudflare-dns.com", doh.build_url("x.com", "MX", "cloudflare"))
+
+
+class PageviewsTests(unittest.TestCase):
+    def test_build_url_encodes_title(self):
+        url = pageviews.build_url("Claude (language model)/x")
+        self.assertIn("Claude_%28language_model%29%2Fx", url)
+        self.assertIn("/monthly/", url)
+
+    def test_default_range_monthly_uses_full_months(self):
+        start, end = pageviews.default_range(
+            "monthly", months=3, today=_dt.date(2026, 7, 4))
+        self.assertEqual(start, "2026040100")
+        self.assertEqual(end, "2026063000")
+
+    def test_default_range_daily_excludes_today(self):
+        start, end = pageviews.default_range(
+            "daily", days=7, today=_dt.date(2026, 7, 4))
+        self.assertEqual(start, "2026062700")
+        self.assertEqual(end, "2026070300")
+
+
+class GdeltTests(unittest.TestCase):
+    def test_build_url_params(self):
+        url = gdelt.build_url('"acme corp"', "artlist", days=7, maxrecords=999)
+        self.assertIn("timespan=7d", url)
+        self.assertIn("maxrecords=%d" % gdelt.MAX_RECORDS, url)  # capped
+        self.assertNotIn("maxrecords", gdelt.build_url("q", "timelinevol"))
+
+    def test_parse_response_shapes(self):
+        arts = gdelt.parse_response(
+            {"articles": [{"title": "t", "url": "u", "domain": "d"}]}, "artlist")
+        self.assertEqual(arts["count"], 1)
+        self.assertEqual(arts["articles"][0]["domain"], "d")
+        tl = gdelt.parse_response(
+            {"timeline": [{"data": [{"date": "20260701", "value": 2}]}]},
+            "timelinevol")
+        self.assertEqual(tl["timeline"], [{"date": "20260701", "value": 2}])
 
 
 if __name__ == "__main__":

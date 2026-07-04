@@ -59,6 +59,18 @@
     "slack": {
       "type": "http",
       "url": "https://mcp.slack.com/mcp"
+    },
+    "resend": {
+      "type": "http",
+      "url": "https://mcp.resend.com"
+    },
+    "firecrawl": {
+      "type": "http",
+      "url": "https://mcp.firecrawl.dev/v2/mcp"
+    },
+    "tavily": {
+      "type": "http",
+      "url": "https://mcp.tavily.com/mcp/"
     }
   }
 }

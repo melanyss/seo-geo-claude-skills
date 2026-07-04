@@ -1,7 +1,7 @@
 ---
 name: trend-spotter
 description: 'Use when the user asks to "find trending topics", "what trends should my brand jump on", or "time a campaign around a cultural moment"; produces a ranked trend report with brand-fit scores, format calls (rising/peak/declining), a cultural calendar, and go/skip recommendations. Not for finding the creators to run those trends — use influencer-discovery.'
-version: "12.1.0"
+version: "12.5.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when planning campaign timing and themes, deciding whether to 
 argument-hint: "<brand or industry> [platform] [time horizon]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.5.0"
   discipline: influencer
   phase: discover
   family: influencer-marketing
@@ -61,6 +61,10 @@ This skill works with no live integrations (Tier 1): ask the user for the brand,
 No connector is required to produce a useful report. See [CONNECTORS.md](../../../CONNECTORS.md) for the free/keyless recipe per category.
 
 For a keyless way to fill the trending tables with real signal, run the multi-source trend scout — Google Trends RSS + Hacker News + Reddit + YouTube-outlier, scored against the brand's verticals via the bundled stdlib `rss_monitor.py` (no new dependency): [references/trend-scout-recipe.md](references/trend-scout-recipe.md). This is the Tier-1 recipe behind `~~trend database` (Google Trends RSS).
+
+**Keyless news pulse (Tavily)**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/tavily.py" search "<vertical or candidate trend>" --topic news --time-range w --limit 10` adds a recency-filtered news read with per-result relevance scores to the scout mix — a second keyless source to corroborate an RSS spike before calling it a rising trend. Keep single-source signals labeled **Estimated**; two independent sources agreeing upgrades the confidence note, not the label.
+
+**Keyless momentum sharpeners**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/pageviews.py" "<Topic_Article>" --granularity daily --days 30` shows whether a topic's Wikipedia attention is actually climbing — Measured evidence for the rising / peak / declining format call — and the Hacker News Algolia API (`https://hn.algolia.com/api/v1/search?query=<topic>`, keyless) upgrades the HN RSS read with points and comment counts usable as a heat score.
 
 ## Instructions
 

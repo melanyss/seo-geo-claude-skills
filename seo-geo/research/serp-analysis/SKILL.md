@@ -1,7 +1,7 @@
 ---
 name: serp-analysis
 description: 'Use when the user asks to "analyze the SERP" or "SERP分析"; maps SERP features, layout, ranking factors, search intent, AI Overviews, and snippet opportunities for a query. Not for keyword demand discovery — use keyword-research. SERP分析/搜索结果'
-version: "12.1.0"
+version: "12.4.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -10,7 +10,7 @@ argument-hint: "<keyword or query>"
 allowed-tools: WebFetch
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.4.0"
   discipline: seo-geo
   phase: research
   geo-relevance: "high"
@@ -47,6 +47,10 @@ What does it take to rank for [keyword]?
 ## Data Sources
 
 Optional integrations: ~~SEO tool, ~~search console, ~~AI monitor. Before fetching third-party SERP pages, apply [SECURITY.md §Scraping Boundaries](../../../SECURITY.md). Without tools, ask for target keywords, SERP screenshots or top-10 URLs, and search context. See [CONNECTORS.md](../../../CONNECTORS.md).
+
+**Zero-dependency live SERP (keyless)**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/firecrawl.py" search "<keyword>" --limit 10` pulls a live web SERP — title/URL/description per result; add `--scrape` for each result's full markdown, `--country`/`--tbs` for locale and freshness — through Firecrawl's keyless free tier (~1,000 credits/mo; optional `FIRECRAWL_API_KEY` raises limits). Label these results **Measured** from a live SERP. Caveat: this is the organic result list only — feature composition (ads, AI Overviews, packs, PAA) still needs a hand-checked SERP screenshot, so mark feature claims accordingly. See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
+
+**Second keyless engine for corroboration**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/tavily.py" search "<keyword>" --limit 10` returns an independently ranked result set with a per-result relevance score, and `--answer` shows what an AI answer engine synthesizes-and-cites for the query (a direct AI-visibility read for step 5). Where Firecrawl and Tavily disagree sharply on the top results, report the SERP as volatile/ambiguous instead of trusting either single engine's view — that disagreement itself feeds the SERP-stability input of True Difficulty.
 
 ## Instructions
 

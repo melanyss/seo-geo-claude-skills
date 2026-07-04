@@ -1,7 +1,7 @@
 ---
 name: landing-experience-checker
 description: 'Use when the user asks to "pre-launch check the landing page", "run a Quality-Score preflight", or "verify ad-to-page message match before launch"; produces an ad↔page continuity report — message-match gaps, above-the-fold check, page-speed read, form-friction count, mobile-render flags — as a pass/fix punch list. Not for redesigning or rewriting the page — use landing-optimizer; not for scoring the account or the RQS — use ad-account-auditor. 落地页体验预检/广告落地页一致性检查'
-version: "12.1.0"
+version: "12.3.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use before a paid campaign goes live to preflight the destination 
 argument-hint: "<destination URL> [ad copy/headlines] [goal: dr|prospecting]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.3.0"
   discipline: ad
   phase: orchestrate
   geo-relevance: "low"
@@ -50,6 +50,8 @@ Ads point at [URL] but the landing-page-experience rating is "below average" —
 ## Data Sources
 
 Keyless Tier-1 first: read the page copy directly (or from the user's paste) and, when the user can run it, a `~~page speed` read from Google PageSpeed / CrUX field data for the load-speed and mobile checks — see [CONNECTORS.md](../../../CONNECTORS.md). Reuse `~~ad platform` (own-data manual export) only to pull the exact live ad copy to match against; it is never required. Keyed crawlers or synthetic-monitoring APIs are an optional Tier-2/3 MCP convenience, never a Tier-1 precondition. When no speed data is available, mark the speed and mobile checks Estimated (from visible page weight/render) and say so — never present an estimate as a Measured metric.
+
+**Zero-dependency rendered-page read (keyless)**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/firecrawl.py" scrape <landing-url> --mobile` fetches the landing page as **rendered** markdown with mobile emulation — a Measured read of what the visitor actually sees for the message-match, above-the-fold, and form-friction checks, complementing the PSI/CrUX speed read (which stays the speed source). Landing pages are usually the user's own — pass `--own-site` when robots.txt blocks crawlers on a campaign URL you operate. Firecrawl keyless free tier (~1,000 credits/mo). See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
 
 ## Instructions
 

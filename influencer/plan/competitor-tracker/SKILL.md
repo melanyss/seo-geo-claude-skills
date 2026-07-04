@@ -1,7 +1,7 @@
 ---
 name: competitor-tracker
 description: 'Use when the user asks to "track competitor influencer marketing", "see who my rivals partner with", or "benchmark my influencer program"; produces a competitor partnership roster, campaign and content-strategy breakdown, performance estimates, and a gap/opportunity list. Not for finding your own new creators — use influencer-discovery.'
-version: "12.1.0"
+version: "12.5.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when the user wants to understand a competitor's influencer ma
 argument-hint: "<your brand> [competitor names] [platform]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.5.0"
   discipline: influencer
   phase: plan
   family: influencer-marketing
@@ -58,6 +58,8 @@ Where a tool could speed things up, use `~~` connector placeholders:
 - `~~influencer database` — pull a competitor's known partner roster and tier mix.
 - `~~social platform analytics` — estimate reach, engagement rate, and post cadence per creator.
 - `~~CRM` — cross-check whether a former competitor partner has already touched your pipeline.
+
+**Keyless news read on rivals**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/gdelt.py" '"<competitor>"' --days 30` lists a rival's global news coverage with no key — campaign launches, partnership announcements, PR pushes — **Measured** from GDELT's news index (news media only, not social posts; ≥5s between calls). See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
 
 Label every estimate as an estimate. See [CONNECTORS.md](../../../CONNECTORS.md) for the keyless/free recipe per category.
 

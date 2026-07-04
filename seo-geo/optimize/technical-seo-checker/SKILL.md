@@ -1,7 +1,7 @@
 ---
 name: technical-seo-checker
 description: 'Use when the user asks to "check technical SEO"; audits crawlability, indexing, Core Web Vitals, robots.txt, sitemaps, canonicals, redirects, and migrations. Not for on-page tags or content — use on-page-seo-auditor. 技术SEO/网站速度'
-version: "12.1.0"
+version: "12.5.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -10,7 +10,7 @@ argument-hint: "<URL or domain>"
 allowed-tools: WebFetch
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.5.0"
   discipline: seo-geo
   phase: optimize
   geo-relevance: "low"
@@ -98,6 +98,10 @@ See [references/bulk-audit-playbook.md](references/bulk-audit-playbook.md) for t
 Use ~~web crawler, ~~page speed tool, and ~~CDN when connected; otherwise ask for URLs, PageSpeed reports, robots.txt, and sitemap. See [CONNECTORS.md](../../../CONNECTORS.md) and [SECURITY.md §Scraping Boundaries](../../../SECURITY.md).
 
 **Zero-dependency local helpers** (no tool needed, run yourself): `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/robots.py" <url> --check-ai-bots` · `sitemap.py <url>` · `crawl.py <url>` · `onpage.py <url>` · `psi.py <url>` (Core Web Vitals). To prove a fix worked, pipe a run into the ledger and diff it: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/psi.py" <url> | python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/ledger.py" record <url> --source psi`, then the same `ledger.py diff <url> --source psi` shows the LCP/INP/CLS movement since the last run. See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
+
+**JS-rendering fallback (keyless)**: when `crawl.py`/`onpage.py` return an empty or thin body on a client-side-rendered page, `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/firecrawl.py" scrape <url> --formats markdown,links [--wait 3000]` fetches the **rendered** DOM through Firecrawl's keyless free tier — diff rendered vs raw HTML to expose the classic JS-SEO gap (content or links that only exist after hydration). The connector pre-flights robots.txt locally and refuses on Disallow; `--own-site` skips the pre-flight for your own staging hosts.
+
+**Keyless recipe sharpeners**: subdomain inventory from certificate-transparency logs — `curl "https://crt.sh/?q=%25.<domain>&output=json"` (dedupe on `name_value`; slow and occasionally times out) — surfaces forgotten or staging subdomains the crawl never reaches; and the W3C Nu validator (`https://validator.w3.org/nu/?doc=<url>&out=json`, keyless) turns HTML validity into checkable evidence. Both are audit inputs, not verdicts.
 
 ## Instructions
 

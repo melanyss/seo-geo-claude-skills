@@ -1,7 +1,7 @@
 ---
 name: geo-content-optimizer
 description: 'Use when the user asks to "optimize for AI citations"; improves citation readiness for ChatGPT, Perplexity, AI Overviews, Gemini, and Claude. Not for structural on-page SEO — use on-page-seo-auditor; not for net-new drafting — use content-writer. AI引用优化/GEO优化/AI搜索'
-version: "12.1.0"
+version: "12.4.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -9,7 +9,7 @@ when_to_use: "Use when optimizing content for AI engines like ChatGPT, Perplexit
 argument-hint: "<content URL or text> [target AI engine]"
 metadata:
   author: aaron-he-zhu
-  version: "12.1.0"
+  version: "12.4.0"
   discipline: seo-geo
   phase: build
   geo-relevance: "high"
@@ -54,6 +54,8 @@ See [AI Overview Recovery](references/ai-overview-recovery.md) for the 4-phase p
 Use `~~AI monitor` and `~~SEO tool` when connected; otherwise ask for target queries, content, engines, competitor examples, and known AI-citation gaps. See [CONNECTORS.md](../../../CONNECTORS.md).
 
 **Measuring whether GEO work paid off:** the changes this skill makes (extractable, quotable, answer-shaped content) move **citability** — testable in minutes by handing a live-fetch engine the URL and asking the target query. That is a *proxy*. Whether an engine then cites you *unprompted* (surfacing) is gated by its crawl/index refresh — week-scale and confounded, not minute-level. Do not conflate the two or promise fast surfacing. The latency of each signal, and why outcome deltas need a control group, are defined in [references/measurement-protocol.md](../../../references/measurement-protocol.md).
+
+**Keyless AI-citation probe (Tavily)**: `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/connectors/tavily.py" search "<target query>" --answer --limit 10` runs that citability test against a real AI answer engine, no key needed — check whether the synthesized answer cites your URL/domain and where the page ranks among the scored sources. This is **Measured** for Tavily's own layer and an **Estimated proxy** for ChatGPT/Perplexity/Google AI Overviews (different indexes, different retrieval). Re-run after shipping changes for a minutes-scale citability read; unprompted surfacing stays week-scale per the paragraph above. See [scripts/connectors/README.md](../../../scripts/connectors/README.md).
 
 ## Instructions
 

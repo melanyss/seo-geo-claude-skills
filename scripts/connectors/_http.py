@@ -39,8 +39,8 @@ ALLOWED_SCHEMES = frozenset({"http", "https"})
 
 
 def get(url, *, headers=None, timeout=DEFAULT_TIMEOUT, max_bytes=DEFAULT_MAX_BYTES,
-        retries=3, accept=None, data=None):
-    """Polite GET (or POST when `data` is given).
+        retries=3, accept=None, data=None, method=None):
+    """Polite GET (or POST when `data` is given; `method` overrides for PATCH/DELETE).
 
     Returns a dict: {status:int, url:str, headers:dict, body:bytes, error:str|None}.
     Never raises for HTTP/network errors — inspect `status` / `error` instead.
@@ -58,7 +58,7 @@ def get(url, *, headers=None, timeout=DEFAULT_TIMEOUT, max_bytes=DEFAULT_MAX_BYT
     last = ""
     for attempt in range(max(1, retries)):
         try:
-            req = urllib.request.Request(url, headers=hdrs, data=data)
+            req = urllib.request.Request(url, headers=hdrs, data=data, method=method)
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 body = resp.read(max_bytes + 1)[:max_bytes]
                 if (resp.headers.get("Content-Encoding") or "").lower() == "gzip":
