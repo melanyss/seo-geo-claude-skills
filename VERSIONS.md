@@ -2,99 +2,101 @@
 
 Current versions for the plugin and all 69 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `12.7.0` (2026-07-04). Cross-agent compatibility wave — the 69 skills are now verified installable on the 70+ SKILL.md hosts served by `npx skills` (Claude Code, Codex, Cursor, OpenCode, Antigravity, Gemini CLI, Copilot CLI, OpenClaw, Hermes, …), first-class on the skills.sh registry (`skills.sh.json` page groupings), OpenClaw-native (every `metadata` block converted to the single-line JSON object its parser requires, with `metadata.openclaw` + `metadata.hermes` extensions), and ClawHub-publishable (`scripts/publish-clawhub.sh`): frontmatter YAML repair that had made `reactivation-specialist` invisible to spec-compliant parsers, wrong-depth relative-path fixes in three auditor gates + one reference pack, a standalone-install fallback line in all five gates, a per-agent compatibility matrix at `docs/agent-compatibility.md`, and new validator checks plus CI discovery-count and grouping-coverage guards. The metadata conversion touches every skill, so all **69 skills** are at `12.7.0`.
+**Current release**: `13.0.0` (2026-07-04). Cross-agent compatibility wave — the 69 skills are now verified installable on the 70+ SKILL.md hosts served by `npx skills` (Claude Code, Codex, Cursor, OpenCode, Antigravity, Gemini CLI, Copilot CLI, OpenClaw, Hermes, …), first-class on the skills.sh registry (`skills.sh.json` page groupings), OpenClaw-native (every `metadata` block converted to the single-line JSON object its parser requires, with `metadata.openclaw` + `metadata.hermes` extensions), and ClawHub-publishable (`scripts/publish-clawhub.sh`): frontmatter YAML repair that had made `reactivation-specialist` invisible to spec-compliant parsers, wrong-depth relative-path fixes in three auditor gates + one reference pack, a standalone-install fallback line in all five gates, a per-agent compatibility matrix at `docs/agent-compatibility.md`, and new validator checks plus CI discovery-count and grouping-coverage guards. Promoted to a major version to mark the milestone: the whole bundle — all **69 skills** — is at `13.0.0`.
 
 ## Skills
 
 | Skill | Category | Version | Last Updated |
 |-------|----------|---------|--------------|
-| competitor-analysis | research | 12.7.0 | 2026-07-04 |
-| content-gap-analysis | research | 12.7.0 | 2026-07-04 |
-| keyword-research | research | 12.7.0 | 2026-07-04 |
-| serp-analysis | research | 12.7.0 | 2026-07-04 |
-| content-writer | build | 12.7.0 | 2026-07-04 |
-| geo-content-optimizer | build | 12.7.0 | 2026-07-04 |
-| page-play-builder | build | 12.7.0 | 2026-07-04 |
-| serp-markup-builder | build | 12.7.0 | 2026-07-04 |
-| content-quality-auditor | optimize | 12.7.0 | 2026-07-04 |
-| on-page-seo-auditor | optimize | 12.7.0 | 2026-07-04 |
-| site-structure-optimizer | optimize | 12.7.0 | 2026-07-04 |
-| technical-seo-checker | optimize | 12.7.0 | 2026-07-04 |
-| domain-authority-auditor | monitor | 12.7.0 | 2026-07-04 |
-| offsite-signal-analyzer | monitor | 12.7.0 | 2026-07-04 |
-| performance-monitor | monitor | 12.7.0 | 2026-07-04 |
-| rank-tracker | monitor | 12.7.0 | 2026-07-04 |
-| audience-mapper | discover | 12.7.0 | 2026-07-04 |
-| fit-scorer | discover | 12.7.0 | 2026-07-04 |
-| influencer-discovery | discover | 12.7.0 | 2026-07-04 |
-| trend-spotter | discover | 12.7.0 | 2026-07-04 |
-| brief-generator | plan | 12.7.0 | 2026-07-04 |
-| budget-optimizer | plan | 12.7.0 | 2026-07-04 |
-| campaign-planner | plan | 12.7.0 | 2026-07-04 |
-| competitor-tracker | plan | 12.7.0 | 2026-07-04 |
-| content-amplifier | activate | 12.7.0 | 2026-07-04 |
-| content-reviewer | activate | 12.7.0 | 2026-07-04 |
-| contract-helper | activate | 12.7.0 | 2026-07-04 |
-| outreach-manager | activate | 12.7.0 | 2026-07-04 |
-| landing-optimizer | measure | 12.7.0 | 2026-07-04 |
-| performance-analyzer | measure | 12.7.0 | 2026-07-04 |
-| report-generator | measure | 12.7.0 | 2026-07-04 |
-| roi-calculator | measure | 12.7.0 | 2026-07-04 |
-| audience-segment-builder | paid | 12.7.0 | 2026-07-04 |
-| campaign-architect | paid | 12.7.0 | 2026-07-04 |
-| product-feed-optimizer | paid | 12.7.0 | 2026-07-04 |
-| search-term-miner | paid | 12.7.0 | 2026-07-04 |
-| ad-creative-builder | paid | 12.7.0 | 2026-07-04 |
-| ad-test-designer | paid | 12.7.0 | 2026-07-04 |
-| bid-strategy-planner | paid | 12.7.0 | 2026-07-04 |
-| landing-experience-checker | paid | 12.7.0 | 2026-07-04 |
-| ad-account-auditor | paid | 12.7.0 | 2026-07-04 |
-| conversion-signal-qa | paid | 12.7.0 | 2026-07-04 |
-| conversion-value-mapper | paid | 12.7.0 | 2026-07-04 |
-| placement-exclusion-manager | paid | 12.7.0 | 2026-07-04 |
-| attribution-reconciler | paid | 12.7.0 | 2026-07-04 |
-| budget-pacing-monitor | paid | 12.7.0 | 2026-07-04 |
-| fatigue-frequency-manager | paid | 12.7.0 | 2026-07-04 |
-| paid-measurement-loop | paid | 12.7.0 | 2026-07-04 |
-| deliverability-qa | email | 12.7.0 | 2026-07-04 |
-| list-growth-designer | email | 12.7.0 | 2026-07-04 |
-| list-hygiene-monitor | email | 12.7.0 | 2026-07-04 |
-| list-segment-builder | email | 12.7.0 | 2026-07-04 |
-| dynamic-content-personalizer | email | 12.7.0 | 2026-07-04 |
-| email-creative-builder | email | 12.7.0 | 2026-07-04 |
-| email-render-builder | email | 12.7.0 | 2026-07-04 |
-| subject-line-lab | email | 12.7.0 | 2026-07-04 |
-| email-sequence-designer | email | 12.7.0 | 2026-07-04 |
-| newsletter-monetization-planner | email | 12.7.0 | 2026-07-04 |
-| preference-frequency-manager | email | 12.7.0 | 2026-07-04 |
-| reactivation-specialist | email | 12.7.0 | 2026-07-04 |
-| cold-outbound-sequencer | email | 12.7.0 | 2026-07-04 |
-| email-quality-auditor | email | 12.7.0 | 2026-07-04 |
-| inbox-placement-monitor | email | 12.7.0 | 2026-07-04 |
-| send-experiment-designer | email | 12.7.0 | 2026-07-04 |
-| consent-registry | protocol | 12.7.0 | 2026-07-04 |
-| creator-registry | protocol | 12.7.0 | 2026-07-04 |
-| entity-optimizer | protocol | 12.7.0 | 2026-07-04 |
-| memory-management | protocol | 12.7.0 | 2026-07-04 |
-| offer-claims-registry | protocol | 12.7.0 | 2026-07-04 |
+| competitor-analysis | research | 13.0.0 | 2026-07-04 |
+| content-gap-analysis | research | 13.0.0 | 2026-07-04 |
+| keyword-research | research | 13.0.0 | 2026-07-04 |
+| serp-analysis | research | 13.0.0 | 2026-07-04 |
+| content-writer | build | 13.0.0 | 2026-07-04 |
+| geo-content-optimizer | build | 13.0.0 | 2026-07-04 |
+| page-play-builder | build | 13.0.0 | 2026-07-04 |
+| serp-markup-builder | build | 13.0.0 | 2026-07-04 |
+| content-quality-auditor | optimize | 13.0.0 | 2026-07-04 |
+| on-page-seo-auditor | optimize | 13.0.0 | 2026-07-04 |
+| site-structure-optimizer | optimize | 13.0.0 | 2026-07-04 |
+| technical-seo-checker | optimize | 13.0.0 | 2026-07-04 |
+| domain-authority-auditor | monitor | 13.0.0 | 2026-07-04 |
+| offsite-signal-analyzer | monitor | 13.0.0 | 2026-07-04 |
+| performance-monitor | monitor | 13.0.0 | 2026-07-04 |
+| rank-tracker | monitor | 13.0.0 | 2026-07-04 |
+| audience-mapper | discover | 13.0.0 | 2026-07-04 |
+| fit-scorer | discover | 13.0.0 | 2026-07-04 |
+| influencer-discovery | discover | 13.0.0 | 2026-07-04 |
+| trend-spotter | discover | 13.0.0 | 2026-07-04 |
+| brief-generator | plan | 13.0.0 | 2026-07-04 |
+| budget-optimizer | plan | 13.0.0 | 2026-07-04 |
+| campaign-planner | plan | 13.0.0 | 2026-07-04 |
+| competitor-tracker | plan | 13.0.0 | 2026-07-04 |
+| content-amplifier | activate | 13.0.0 | 2026-07-04 |
+| content-reviewer | activate | 13.0.0 | 2026-07-04 |
+| contract-helper | activate | 13.0.0 | 2026-07-04 |
+| outreach-manager | activate | 13.0.0 | 2026-07-04 |
+| landing-optimizer | measure | 13.0.0 | 2026-07-04 |
+| performance-analyzer | measure | 13.0.0 | 2026-07-04 |
+| report-generator | measure | 13.0.0 | 2026-07-04 |
+| roi-calculator | measure | 13.0.0 | 2026-07-04 |
+| audience-segment-builder | paid | 13.0.0 | 2026-07-04 |
+| campaign-architect | paid | 13.0.0 | 2026-07-04 |
+| product-feed-optimizer | paid | 13.0.0 | 2026-07-04 |
+| search-term-miner | paid | 13.0.0 | 2026-07-04 |
+| ad-creative-builder | paid | 13.0.0 | 2026-07-04 |
+| ad-test-designer | paid | 13.0.0 | 2026-07-04 |
+| bid-strategy-planner | paid | 13.0.0 | 2026-07-04 |
+| landing-experience-checker | paid | 13.0.0 | 2026-07-04 |
+| ad-account-auditor | paid | 13.0.0 | 2026-07-04 |
+| conversion-signal-qa | paid | 13.0.0 | 2026-07-04 |
+| conversion-value-mapper | paid | 13.0.0 | 2026-07-04 |
+| placement-exclusion-manager | paid | 13.0.0 | 2026-07-04 |
+| attribution-reconciler | paid | 13.0.0 | 2026-07-04 |
+| budget-pacing-monitor | paid | 13.0.0 | 2026-07-04 |
+| fatigue-frequency-manager | paid | 13.0.0 | 2026-07-04 |
+| paid-measurement-loop | paid | 13.0.0 | 2026-07-04 |
+| deliverability-qa | email | 13.0.0 | 2026-07-04 |
+| list-growth-designer | email | 13.0.0 | 2026-07-04 |
+| list-hygiene-monitor | email | 13.0.0 | 2026-07-04 |
+| list-segment-builder | email | 13.0.0 | 2026-07-04 |
+| dynamic-content-personalizer | email | 13.0.0 | 2026-07-04 |
+| email-creative-builder | email | 13.0.0 | 2026-07-04 |
+| email-render-builder | email | 13.0.0 | 2026-07-04 |
+| subject-line-lab | email | 13.0.0 | 2026-07-04 |
+| email-sequence-designer | email | 13.0.0 | 2026-07-04 |
+| newsletter-monetization-planner | email | 13.0.0 | 2026-07-04 |
+| preference-frequency-manager | email | 13.0.0 | 2026-07-04 |
+| reactivation-specialist | email | 13.0.0 | 2026-07-04 |
+| cold-outbound-sequencer | email | 13.0.0 | 2026-07-04 |
+| email-quality-auditor | email | 13.0.0 | 2026-07-04 |
+| inbox-placement-monitor | email | 13.0.0 | 2026-07-04 |
+| send-experiment-designer | email | 13.0.0 | 2026-07-04 |
+| consent-registry | protocol | 13.0.0 | 2026-07-04 |
+| creator-registry | protocol | 13.0.0 | 2026-07-04 |
+| entity-optimizer | protocol | 13.0.0 | 2026-07-04 |
+| memory-management | protocol | 13.0.0 | 2026-07-04 |
+| offer-claims-registry | protocol | 13.0.0 | 2026-07-04 |
 
 ## Changelog
 
-### v12.7.0 — Cross-agent compatibility wave: 70+ SKILL.md hosts verified (2026-07-04)
+### v13.0.0 — Cross-agent compatibility wave: 70+ SKILL.md hosts verified (2026-07-04)
 
-Compatibility minor release: the bundle is now systematically verified against the [Agent Skills](https://agentskills.io) ecosystem — every host the [`npx skills` installer](https://github.com/vercel-labs/skills) serves (Claude Code, OpenAI Codex, Google Antigravity, OpenCode, Cursor, OpenClaw, Hermes Agent, Gemini CLI, GitHub Copilot CLI, Amp, Goose, Windsurf, Cline, Roo Code, and 50+ more), which reads the skill declarations straight from `.claude-plugin/plugin.json`/`marketplace.json`. End-to-end smoke test: 69/69 skills discovered and installed from both a local clone and the GitHub remote.
+Major release (12.7.0 was version-promoted to 13.0.0 before tagging; no 12.7.0 tag exists): the bundle is now systematically verified against the [Agent Skills](https://agentskills.io) ecosystem — every host the [`npx skills` installer](https://github.com/vercel-labs/skills) serves (Claude Code, OpenAI Codex, Google Antigravity, OpenCode, Cursor, OpenClaw, Hermes Agent, Gemini CLI, GitHub Copilot CLI, Amp, Goose, Windsurf, Cline, Roo Code, and 50+ more), which reads the skill declarations straight from `.claude-plugin/plugin.json`/`marketplace.json`. End-to-end smoke test: 69/69 skills discovered and installed from both a local clone and the GitHub remote.
 
-- **Frontmatter YAML repair** (`reactivation-specialist` → `12.7.0`): the `description` was single-quote-wrapped with two unescaped apostrophes — invalid YAML that made the skill silently invisible to every spec-compliant parser (discovered when the installer found 68/69). Apostrophes now doubled per YAML single-quote escaping.
+- **Frontmatter YAML repair** (`reactivation-specialist` → `13.0.0`): the `description` was single-quote-wrapped with two unescaped apostrophes — invalid YAML that made the skill silently invisible to every spec-compliant parser (discovered when the installer found 68/69). Apostrophes now doubled per YAML single-quote escaping.
 - **Wrong-depth relative paths fixed** (4 links): the `Read …/references/auditor-runbook.md` instruction in `content-quality-auditor`, `domain-authority-auditor`, and `content-reviewer` (runbook + ART benchmark) used `../../` where the 3-level discipline layout needs `../../../`; `geo-content-optimizer`'s `medium-github-surfaces.md` pointed one level short of `protocol/entity-optimizer`. All five gates + the pack now resolve (verified by a full-repo link scan).
-- **Standalone-install fallback in all 5 auditor gates** (`content-quality-auditor`, `domain-authority-auditor`, `content-reviewer`, `ad-account-auditor`, `email-quality-auditor` → `12.7.0`): standalone installs bundle only the skill folder, so the shared `references/` tree is absent — each gate now instructs the agent to fetch the runbook/benchmark from the canonical raw URL (or ask for a repo clone) and to never score without the runbook. Plugin installs are unaffected (relative path still loads first, offline).
+- **Standalone-install fallback in all 5 auditor gates** (`content-quality-auditor`, `domain-authority-auditor`, `content-reviewer`, `ad-account-auditor`, `email-quality-auditor` → `13.0.0`): standalone installs bundle only the skill folder, so the shared `references/` tree is absent — each gate now instructs the agent to fetch the runbook/benchmark from the canonical raw URL (or ask for a repo clone) and to never score without the runbook. Plugin installs are unaffected (relative path still loads first, offline).
 - **New doc `docs/agent-compatibility.md`**: per-agent matrix (skill dirs, frontmatter quirks, what each host reads), the two-tier positioning (Claude Code plugin = full suite with commands/hooks/memory/connectors; standalone skills = any host), and the degradation table for shared resources.
 - **Validator + CI hardening**: `validate-skill.sh` gains a single-quoted-scalar apostrophe check (the exact failure class above) and a relative-link resolution check; CI gains a discovery-count guard asserting the manifest-declared skill count stays installable.
 - **skills.sh registry, first-class**: new repo-root `skills.sh.json` ([official schema](https://skills.sh/schemas/skills.sh.schema.json)) lays out the [registry page](https://skills.sh/aaron-he-zhu/aaron-marketing-skills) as the five discipline sections and sinks the ten undeletable pre-v12 legacy skill names (merged away in the 4×4 refactor) below the current catalog via `notGrouped: "bottom"`; CI asserts the groupings cover exactly the plugin.json skill set.
-- **OpenClaw-native frontmatter** (all 69 skills → `12.7.0`): OpenClaw's frontmatter parser reads **single-line keys only** — a YAML block map under `metadata:` is invisible to it — so every skill's `metadata` is now a single-line strict-JSON object (identical semantics for every other host: strict JSON is valid YAML flow mapping). Each object also gains the two documented host extensions: `metadata.openclaw` (discipline emoji + homepage for the macOS UI) and `metadata.hermes` (`tags: [marketing, <discipline>, <phase>]`, `category: <discipline>` for Hermes browse/filter). `validate-skill.sh` now fails on block-map metadata; `check-versions.sh` reads `metadata."version"` from the JSON line.
+- **OpenClaw-native frontmatter** (all 69 skills → `13.0.0`): OpenClaw's frontmatter parser reads **single-line keys only** — a YAML block map under `metadata:` is invisible to it — so every skill's `metadata` is now a single-line strict-JSON object (identical semantics for every other host: strict JSON is valid YAML flow mapping). Each object also gains the two documented host extensions: `metadata.openclaw` (discipline emoji + homepage for the macOS UI) and `metadata.hermes` (`tags: [marketing, <discipline>, <phase>]`, `category: <discipline>` for Hermes browse/filter). `validate-skill.sh` now fails on block-map metadata; `check-versions.sh` reads `metadata."version"` from the JSON line.
 - **ClawHub publishable**: new `scripts/publish-clawhub.sh` publishes all 69 skills (or `--dry-run` previews) to OpenClaw's [ClawHub registry](https://clawhub.ai) via the `clawhub` CLI, passing each skill's real version — after `clawhub login`. ⚠️ ClawHub relicenses published copies as **MIT-0** (attribution-free) — the script requires an explicit `--i-accept-mit0` acknowledgement.
 - **Hermes Agent, three install routes documented**: `hermes skills install skills-sh/aaron-he-zhu/aaron-marketing-skills/<skill>` (skills.sh source — works today), `--source clawhub` once published, and direct raw-URL single-file installs; Hermes tap limitation recorded (taps assume a single `skills/` root, which this multi-discipline layout deliberately doesn't have).
 - **Registry-submission dossier** (`docs/registry-submissions.md`): 26+ marketplaces/directories/awesome-lists researched and mapped — status matrix, per-platform submission routes (Anthropic official plugin directory form, skillsdirectory.com, askill.sh, Skillstore, Agent Skills Me, Qoder Community PR + drafted entry, AgentUse bilingual PR, awesome-list entry lines), reusable bilingual submission kit, and the one hard gap on record: GitHub's `gh skill` CLI doesn't read plugin manifests (upstream feature-request draft included). SkillsMP found stale (38 pre-v12 skills) — re-crawl needed after push.
 - **SkillHub.cn (中文社区) publishable**: every SKILL.md now carries the SkillHub frontmatter contract alongside the Agent Skills fields — `slug: aaron-<skill-name>` (globally unique, validator-enforced), bilingual `displayName` (e.g. "Keyword Research · 关键词研究"), Chinese `summary` — so the repo folders publish as-is via the new `scripts/publish-skillhub.sh` (`skillhub publish` per manifest-declared skill; local pre-check verified `✓ Dry-run passed` for 69/69). Publishing is owner-run (real-name-verified account + `$SKILLHUB_KEY`), enters platform review, and consumers install with `skillhub install aaron-<skill-name>`.
+
+### v12.6.0 — Coverage-audit wave: creator metrics, index push, ad transparency (2026-07-04)
 
 Feature minor release closing the gaps a four-discipline coverage audit found (all vendor facts verified against official docs 2026-07).
 
