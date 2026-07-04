@@ -475,7 +475,11 @@ docs/            # 本地化 README(zh)
 | `check-evals.py` | eval 结构 lint + `structure-manifest.json`（69/69 技能均带 eval 用例）。 |
 | `check-pii.py` | 拦截提交的密钥 / PII（token 级允许名单，fail-closed）。 |
 | `check-stdlib-only.sh` | 依赖蔓延守卫 + 付费广告带密钥 API 红线。 |
+| `check-versions.sh` | 版本同步守卫：束版本在 plugin.json / 两个 marketplace 镜像 / 双语 README 徽章 / CLAUDE.md / VERSIONS.md 发布行 + changelog 条目间完全一致，且每个 SKILL.md 版本与其 VERSIONS.md 行匹配。 |
+| `tests/test_connectors_local.py` | 全部连接器纯请求构建函数的离线单测（CI 不联网）。 |
 | `tests/test_hook_artifact_gate.sh` | hook 的 Artifact Gate + SessionStart 净化的行为测试。 |
+
+线上端点漂移由**手动**的 [`scripts/connectors/smoke-live.sh`](../scripts/connectors/smoke-live.sh) 单独覆盖——每个托管连接器一次最小真实调用 + 响应形状断言（限速应答记 SKIP）；发版前手动跑，绝不进 CI。
 
 ---
 

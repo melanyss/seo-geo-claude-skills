@@ -81,8 +81,10 @@ def search(query, mode="artlist", days=7, maxrecords=25):
     url = build_url(query, mode, days, maxrecords)
     r = _http.get_text(url, retries=1)  # no auto-retry: respect the 5s ask
     text = (r.get("text") or "").strip()
-    if r.get("status") == 200 and text and not text.startswith("{"):
-        return {"error": "rate_limited", "status": 200,
+    # GDELT throttles two ways: a plain-text notice on HTTP 200, or a real 429.
+    if r.get("status") == 429 or (
+            r.get("status") == 200 and text and not text.startswith("{")):
+        return {"error": "rate_limited", "status": r.get("status"),
                 "detail": text[:200],
                 "hint": "GDELT asks for >=5s between requests; wait and retry."}
     try:

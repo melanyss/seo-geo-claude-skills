@@ -94,6 +94,10 @@ After adding or updating a skill, keep these **8 tracking files** in sync. **Thi
 
 For release bumps, also sync README badges and localized README badges.
 
+**CI enforces this list**: `scripts/check-versions.sh` fails the build when the bundle version drifts across plugin.json / the marketplace mirrors / the README badges / CLAUDE.md / VERSIONS.md, or when any SKILL.md version disagrees with its VERSIONS.md row — so a missed file surfaces in the PR, not in a user's session. Run it locally before pushing: `bash scripts/check-versions.sh`.
+
+**Adding a connector?** Follow [docs/connector-playbook.md](docs/connector-playbook.md) — the end-to-end pipeline (qualify → verify → implement → test → wire → document → track → regress → record) with the safety-class gate table and the connector-vs-recipe decision rule.
+
 ## Improving Existing Skills
 
 Keep changes focused. Bump both top-level `version` and `metadata.version` together. Update `VERSIONS.md`. Put new reference docs in the skill's `references/` subdirectory.

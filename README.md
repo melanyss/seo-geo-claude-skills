@@ -475,7 +475,11 @@ Every change runs against a set of fail-closed guards (all in `scripts/` and `te
 | `check-evals.py` | Eval structural lint + `structure-manifest.json` (69/69 skills carry eval cases). |
 | `check-pii.py` | Blocks committed secrets / PII (token-level allowlist, fail-closed). |
 | `check-stdlib-only.sh` | Dependency-creep guard + the Paid-Ads keyed-API red line. |
+| `check-versions.sh` | Version-sync guard: bundle version identical across plugin.json / both marketplace mirrors / both README badges / CLAUDE.md / VERSIONS.md release line + changelog entry, and every SKILL.md version matches its VERSIONS.md row. |
+| `tests/test_connectors_local.py` | Offline unit tests for every connector's pure request-builders (no network in CI). |
 | `tests/test_hook_artifact_gate.sh` | Behavior tests for the hook's Artifact Gate + SessionStart sanitization. |
+
+Live endpoint drift is covered separately by the **manual** [`scripts/connectors/smoke-live.sh`](scripts/connectors/smoke-live.sh) — one minimal real call per hosted connector with shape assertions (rate-limit answers count as SKIP); run it before a release, never in CI.
 
 ---
 

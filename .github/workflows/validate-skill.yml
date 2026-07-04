@@ -102,6 +102,9 @@ jobs:
       - name: Dependency-creep guard (stdlib-only)
         run: bash scripts/check-stdlib-only.sh
 
+      - name: Version-sync guard (8 tracking files)
+        run: bash scripts/check-versions.sh
+
       - name: Validate JSON / shell manifests
         run: |
           set -euo pipefail
