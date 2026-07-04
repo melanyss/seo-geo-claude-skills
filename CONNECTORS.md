@@ -2,7 +2,7 @@
 
 > Skills use `~~category` placeholders instead of specific tool names. **Every skill runs at Tier 1 with zero external dependencies** — paste data manually, or pull it yourself from the free/public sources below. MCP servers (further down) are an optional Tier 2/3 convenience, never required.
 
-All endpoints below were verified against primary vendor/source docs (2026-05). If a call 404s, re-check the linked doc — vendors move endpoints.
+All endpoints below were verified against primary vendor/source docs (2026-05; re-verified 2026-07 with each product's **official documentation linked inline** — click the source name in any row). If a call 404s, re-check the linked doc — vendors move endpoints.
 
 ## Bundled helpers — run the data fetch locally (zero-dependency)
 
@@ -43,50 +43,52 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 
 | Need (`~~category`) | Source | Endpoint / how | Auth | Free limit |
 |---|---|---|---|---|
-| Keywords + rankings (`~~SEO tool`, `~~search console`) | Google Search Console Search Analytics API | `POST https://www.googleapis.com/webmasters/v3/sites/{siteUrl}/searchAnalytics/query` (URL-encode siteUrl, or use `sc-domain:example.com`) | OAuth 2.0, scope `https://www.googleapis.com/auth/webmasters.readonly` | 1,200 queries/min per site |
-| Keywords + rankings on Bing | Bing Webmaster Tools API | REST API; key from BWT → Settings → API Access | `apikey` query param **or** OAuth Bearer (token `https://www.bing.com/webmasters/oauth/token`) | free account |
-| Traffic & behavior (`~~analytics`) | Google Analytics Data API (GA4) | `POST https://analyticsdata.googleapis.com/v1beta/{property=properties/*}:runReport` | OAuth 2.0, scope `https://www.googleapis.com/auth/analytics.readonly` | 200,000 tokens/property/day |
-| Backlinks to your site (`~~link database`) | GSC Links report | Search Console UI → Links → Export top linking sites | GSC login | free |
+| Keywords + rankings (`~~SEO tool`, `~~search console`) | [Google Search Console Search Analytics API](https://developers.google.com/webmaster-tools/v1/searchanalytics/query) | `POST https://www.googleapis.com/webmasters/v3/sites/{siteUrl}/searchAnalytics/query` (URL-encode siteUrl, or use `sc-domain:example.com`) | OAuth 2.0, scope `https://www.googleapis.com/auth/webmasters.readonly` | 1,200 queries/min per site |
+| Index status per URL (`~~search console`) | [GSC URL Inspection API](https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect) — note the **newer** host, separate from webmasters/v3 | `POST https://searchconsole.googleapis.com/v1/urlInspection/index:inspect` (`inspectionUrl`, `siteUrl`) — verdict, coverage state, last crawl, canonical, mobile/rich-result checks | OAuth 2.0, same scope | 2,000 inspections/day per property |
+| Keywords + rankings on Bing | [Bing Webmaster Tools API](https://learn.microsoft.com/en-us/bingwebmaster/getting-access) | REST API; key from BWT → Settings → API Access | `apikey` query param **or** [OAuth Bearer](https://learn.microsoft.com/en-us/bingwebmaster/oauth2) (token `https://www.bing.com/webmasters/oauth/token`) | free account |
+| Traffic & behavior (`~~analytics`) | [Google Analytics Data API (GA4)](https://developers.google.com/analytics/devguides/reporting/data/v1) | `POST https://analyticsdata.googleapis.com/v1beta/{property=properties/*}:runReport` (`v1beta` is the current documented surface) | OAuth 2.0, scope `https://www.googleapis.com/auth/analytics.readonly` | 200,000 tokens/property/day |
+| Backlinks to your site (`~~link database`) | [GSC Links report](https://support.google.com/webmasters/answer/9049606) | Search Console UI → Links → Export top linking sites | GSC login | free |
 
 ### Public / keyless — any site
 
 | Need (`~~category`) | Source | Endpoint / how | Auth | Limit |
 |---|---|---|---|---|
 | Keyword ideas / autocomplete (`~~SEO tool`) | Google Suggest — **⚠️ unofficial, undocumented** | `https://suggestqueries.google.com/complete/search?client=chrome&q=QUERY&hl=en&gl=US` | none | undocumented; backoff on 429/503, may change without notice |
-| Live web SERP + rendered scrape (`~~SEO tool`, `~~web crawler`) | Firecrawl — keyless since the 2026 launch | `POST https://api.firecrawl.dev/v2/search` / `/v2/scrape` — bundled as `firecrawl.py` (local robots.txt pre-flight built in) | none (optional `FIRECRAWL_API_KEY` raises limits) | ~1,000 free credits/mo |
-| AI answer engine + scored search + extract (`~~AI monitor` proxy, `~~SEO tool`, `~~trend database`) | Tavily — keyless mode | `POST https://api.tavily.com/search` / `/extract` (header `X-Tavily-Access-Mode: keyless`) — bundled as `tavily.py` (robots pre-flight on extract) | none (optional `TAVILY_API_KEY`, 1,000 credits/mo free) | keyless rate-limited; `/crawl`/`/map`/`/research` key-only |
-| Email-auth DNS records (`~~email platform` auth signals) | Google / Cloudflare DNS-over-HTTPS | `GET https://dns.google/resolve?name=…&type=TXT` (Cloudflare fallback) — bundled as `doh.py auth` | none | generous; public resolvers |
-| Entity/topic attention series (`~~trend database`, `~~knowledge graph` adjacent) | Wikimedia Pageviews API | `GET https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/…` — bundled as `pageviews.py` | none — descriptive User-Agent required | ~100 req/s ceiling; data lags ~1 day |
-| Global news mentions (`~~brand monitor`) | GDELT DOC 2.0 | `GET https://api.gdeltproject.org/api/v2/doc/doc?query=…&format=json` — bundled as `gdelt.py` | none | **≥5s between requests**; throttles shared IPs (plain-text notice) |
-| Subdomain discovery via certificate transparency (`~~web crawler` aux) | crt.sh | `GET https://crt.sh/?q=%25.example.com&output=json` — dedupe `name_value` | none | slow, occasionally times out; be gentle |
-| HTML validity (`~~web crawler` aux) | W3C Nu validator | `GET https://validator.w3.org/nu/?doc=URL&out=json` | none | be gentle |
-| Post/video metadata (`~~social platform analytics` partial) | oEmbed — YouTube · TikTok · X | `https://www.youtube.com/oembed?url=…` · `https://www.tiktok.com/oembed?url=…` · `https://publish.twitter.com/oembed?url=…` | none | metadata only (title/author/thumbnail) — no follower/engagement metrics; Instagram oEmbed requires a token |
-| Tech/forum heat (`~~trend database`) | Hacker News Algolia | `GET https://hn.algolia.com/api/v1/search?query=…` | none | generous |
-| Domain authority signal (`~~link database`) | Open PageRank | `GET https://openpagerank.com/api/v1.0/getPageRank?domains[]=example.com` | free key in header `API-OPR: KEY` | 10,000 calls/hr, ≤100 domains/call (domain-rank scores, not raw link lists) |
-| Inbound links / web graph (`~~link database`, `~~web crawler`) | Common Crawl CDX index | `https://index.commoncrawl.org/CC-MAIN-YYYY-WW-index?url=URL&output=json` — crawl list at `https://index.commoncrawl.org/collinfo.json` | none | shared server, keep < 10 req/s (expect `503 SlowDown`) |
-| Historical pages / change tracking (`~~competitive intel`) | Wayback Machine CDX API | `http://web.archive.org/cdx/search/cdx?url=URL&output=json` (matchType `exact`/`prefix`/`host`/`domain`) | none | be gentle |
-| Entity / knowledge-graph facts (`~~knowledge graph`) | Wikidata SPARQL | `https://query.wikidata.org/sparql?query=...&format=json` (GET or POST) | none — **descriptive User-Agent required** | ~60s query CPU per 60s per IP (429 on excess) |
-| Entity lookup via Google (`~~knowledge graph`) | Google Knowledge Graph Search API — **⚠️ soft-migrating to Cloud Enterprise KG** | `GET https://kgsearch.googleapis.com/v1/entities:search?query=...&key=KEY` | API key | 100,000 calls/day (no sunset date announced; prefer Wikidata for durable keyless access) |
+| Live web SERP + rendered scrape (`~~SEO tool`, `~~web crawler`) | [Firecrawl](https://docs.firecrawl.dev) — [keyless since the 2026 launch](https://www.firecrawl.dev/blog/firecrawl-keyless-launch) | `POST https://api.firecrawl.dev/v2/search` / `/v2/scrape` — bundled as `firecrawl.py` (local robots.txt pre-flight built in) | none (optional `FIRECRAWL_API_KEY` raises limits) | ~1,000 free credits/mo |
+| AI answer engine + scored search + extract (`~~AI monitor` proxy, `~~SEO tool`, `~~trend database`) | [Tavily](https://docs.tavily.com/api-reference/endpoint/search) — [keyless mode](https://docs.tavily.com/documentation/keyless) | `POST https://api.tavily.com/search` / `/extract` (header `X-Tavily-Access-Mode: keyless`) — bundled as `tavily.py` (robots pre-flight on extract) | none (optional `TAVILY_API_KEY`, 1,000 credits/mo free) | keyless rate-limited; `/crawl`/`/map`/`/research` key-only |
+| Email-auth DNS records (`~~email platform` auth signals) | [Google](https://developers.google.com/speed/public-dns/docs/doh/json) / [Cloudflare](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/) DNS-over-HTTPS | `GET https://dns.google/resolve?name=…&type=TXT` (Cloudflare fallback) — bundled as `doh.py auth` | none | generous; public resolvers |
+| Entity/topic attention series (`~~trend database`, `~~knowledge graph` adjacent) | [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/#/Pageviews%20data) | `GET https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/…` — bundled as `pageviews.py` | none — descriptive User-Agent required | ~100 req/s ceiling; data lags ~1 day |
+| Global news mentions (`~~brand monitor`) | [GDELT DOC 2.0](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) | `GET https://api.gdeltproject.org/api/v2/doc/doc?query=…&format=json` — bundled as `gdelt.py` | none | **≥5s between requests**; throttles shared IPs (plain-text notice or 429) |
+| Subdomain discovery via certificate transparency (`~~web crawler` aux) | [crt.sh](https://crt.sh) (Sectigo; community-documented) | `GET https://crt.sh/?q=%25.example.com&output=json` — dedupe `name_value` | none | slow, occasionally times out; be gentle |
+| HTML validity (`~~web crawler` aux) | [W3C Nu validator](https://github.com/validator/validator/wiki/Service-%C2%BB-HTTP-interface) | `GET https://validator.w3.org/nu/?doc=URL&out=json` | none | be gentle |
+| Post/video metadata (`~~social platform analytics` partial) | [oEmbed](https://oembed.com) — YouTube · [TikTok](https://developers.tiktok.com/doc/embed-videos) · X | `https://www.youtube.com/oembed?url=…` · `https://www.tiktok.com/oembed?url=…` · `https://publish.twitter.com/oembed?url=…` | none | metadata only (title/author/thumbnail) — no follower/engagement metrics; Instagram oEmbed requires a token |
+| Tech/forum heat (`~~trend database`) | [Hacker News Algolia](https://hn.algolia.com/api) | `GET https://hn.algolia.com/api/v1/search?query=…` | none | generous |
+| Domain authority signal (`~~link database`) | [Open PageRank](https://www.domcop.com/openpagerank/documentation) | `GET https://openpagerank.com/api/v1.0/getPageRank?domains[]=example.com` | free key in header `API-OPR: KEY` | 10,000 calls/hr, ≤100 domains/call (domain-rank scores, not raw link lists) |
+| Inbound links / web graph (`~~link database`, `~~web crawler`) | [Common Crawl CDX index](https://commoncrawl.org/get-started) | `https://index.commoncrawl.org/CC-MAIN-YYYY-WW-index?url=URL&output=json` — crawl list at `https://index.commoncrawl.org/collinfo.json` | none | shared server, keep < 10 req/s (expect `503 SlowDown`) |
+| Historical pages / change tracking (`~~competitive intel`) | [Wayback Machine CDX API](https://github.com/internetarchive/wayback/blob/master/wayback-cdx-server/README.md) | `http://web.archive.org/cdx/search/cdx?url=URL&output=json` (matchType `exact`/`prefix`/`host`/`domain`) | none | be gentle |
+| Entity / knowledge-graph facts (`~~knowledge graph`) | [Wikidata SPARQL](https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual) | `https://query.wikidata.org/sparql?query=...&format=json` (GET or POST) | none — **descriptive User-Agent required** | ~60s query CPU per 60s per IP (429 on excess) |
+| Entity lookup via Google (`~~knowledge graph`) | [Google Knowledge Graph Search API](https://developers.google.com/knowledge-graph) — **⚠️ soft-migrating to [Cloud Enterprise KG](https://docs.cloud.google.com/enterprise-knowledge-graph/docs/search-api)** | `GET https://kgsearch.googleapis.com/v1/entities:search?query=...&key=KEY` | API key | 100,000 calls/day (no sunset date announced; prefer Wikidata for durable keyless access) |
 
 ### Page speed / Core Web Vitals — free (`~~page speed tool`)
 
 | Data | Source | Endpoint | Auth | Limit |
 |---|---|---|---|---|
-| Lab Lighthouse score | PageSpeed Insights API v5 | `GET https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=URL&strategy=mobile` | key optional (recommended for automation) | — |
-| Real-user field CWV | Chrome UX Report (CrUX) API | `POST https://chromeuxreport.googleapis.com/v1/records:queryRecord?key=KEY` | Google Cloud API key (query param) | 150 queries/min (free; no paid increase) |
-| Local lab run | Lighthouse CLI | `npx lighthouse URL --output json --output-path=./lh.json` | none | — |
+| Lab Lighthouse score | [PageSpeed Insights API v5](https://developers.google.com/speed/docs/insights/v5/get-started) | `GET https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=URL&strategy=mobile` | key optional (recommended for automation) | — |
+| Real-user field CWV (latest 28-day window) | [Chrome UX Report (CrUX) API](https://developer.chrome.com/docs/crux/api) | `POST https://chromeuxreport.googleapis.com/v1/records:queryRecord?key=KEY` | Google Cloud API key (query param) | 150 queries/min (free; no paid increase) |
+| Field CWV **time series** — up to 40 weekly points (~6 months) | [CrUX History API](https://developer.chrome.com/docs/crux/history-api) | `POST https://chromeuxreport.googleapis.com/v1/records:queryHistoryRecord?key=KEY` (`collectionPeriodCount` ≤ 40; updates Mondays) — a ready-made baseline series for the `ledger.py` measurement loop | same key | same quota |
+| Local lab run | [Lighthouse CLI](https://github.com/GoogleChrome/lighthouse) | `npx lighthouse URL --output json --output-path=./lh.json` | none | — |
 
 ### Open-source / self-host / DIY
 
 | Need (`~~category`) | Tool | How |
 |---|---|---|
-| Crawl, robots.txt, sitemaps, SERP, logs (`~~web crawler`) | **advertools** (Python, OSS) | `pip install advertools` — site crawl, `sitemap_to_df`, `robotstxt_test`, SERP analysis, log-file parsing |
-| Desktop crawl (`~~web crawler`) | Screaming Frog SEO Spider | free tier ≤ 500 URLs |
-| Privacy analytics you own (`~~analytics`) | **Plausible** / **Matomo** (OSS, self-host) | Plausible Stats API v2: `POST https://plausible.io/api/v2/query` (`Authorization: Bearer KEY`, 600 req/hr); self-host uses the same path on your host |
-| Schema / structured-data check (`~~schema validator`) | validator.schema.org · Google Rich Results Test | **UI only — paste markup; no public API** |
-| Brand / mention monitoring (`~~brand monitor`) | Google Alerts (RSS) · F5Bot | free email/RSS alerts on brand or keyword mentions |
-| Social/platform → RSS bridge (`~~social listening`) | **RSSHub** (OSS, self-host) | turns hundreds of platforms (incl. CN platforms) into RSS feeds `rss_monitor.py` can watch |
-| Metasearch you own (`~~SEO tool` aux) | **SearXNG** (OSS, self-host) | self-hosted metasearch with a JSON API — the self-host alternative to Firecrawl/Tavily search |
+| Crawl, robots.txt, sitemaps, SERP, logs (`~~web crawler`) | [**advertools**](https://advertools.readthedocs.io) (Python, OSS) | `pip install advertools` — site crawl, `sitemap_to_df`, `robotstxt_test`, SERP analysis, log-file parsing |
+| Desktop crawl (`~~web crawler`) | [Screaming Frog SEO Spider](https://www.screamingfrog.co.uk/seo-spider/) | free tier ≤ 500 URLs |
+| Privacy analytics you own (`~~analytics`) | [**Plausible**](https://plausible.io/docs/stats-api) / [**Matomo**](https://developer.matomo.org/api-reference/reporting-api) (OSS, self-host) | Plausible Stats API v2: `POST https://plausible.io/api/v2/query` (`Authorization: Bearer KEY`, 600 req/hr); self-host uses the same path on your host |
+| Schema / structured-data check (`~~schema validator`) | [validator.schema.org](https://validator.schema.org) · [Google Rich Results Test](https://search.google.com/test/rich-results) | **UI only — paste markup; no public API** |
+| Brand / mention monitoring (`~~brand monitor`) | [Google Alerts](https://www.google.com/alerts) (RSS) · [F5Bot](https://f5bot.com) | free email/RSS alerts on brand or keyword mentions |
+| Social/platform → RSS bridge (`~~social listening`) | [**RSSHub**](https://github.com/DIYgod/RSSHub) (OSS, self-host) | turns hundreds of platforms (incl. CN platforms) into RSS feeds `rss_monitor.py` can watch |
+| Metasearch you own (`~~SEO tool` aux) | [**SearXNG**](https://docs.searxng.org) (OSS, self-host) | self-hosted metasearch with a JSON API — the self-host alternative to Firecrawl/Tavily search |
 | AI-answer citation check (`~~AI monitor`) | Manual prompt-testing (ChatGPT / Perplexity / Google AI Overviews) · OSS GEO trackers · Tavily answer probe | **no free API for the big engines** — run target prompts and record which sources each engine cites over time; `tavily.py search --answer` gives a keyless Measured read for Tavily's own answer layer (a proxy for the others, label it Estimated) |
 
 **Zero-tool DIY pattern:** for most technical and content checks you need nothing but `fetch` — pull `robots.txt`, `sitemap.xml`, `llms.txt`, and the page HTML directly, and paste them in.
@@ -108,7 +110,7 @@ The fastest way to keep a skill zero-dependency is to feed it data from a free, 
 | CDN | `~~CDN` | search | Cloudflare, Fastly, Akamai, CloudFront | response-header inspection (`curl -sI URL` → `cf-ray` / `x-served-by` / `x-cache` / `server`) + `dig CNAME host` for edge mapping + CrUX/PSI TTFB as the performance signal | header + DNS inspection (keyless) |
 | Schema Validator | `~~schema validator` | search | — | validator.schema.org / Rich Results Test | Rich Results Test |
 | Knowledge Graph | `~~knowledge graph` | both | Google KG API, CrunchBase | Wikidata SPARQL | Wikidata SPARQL |
-| Local Listings | `~~local listings` | search | Google Business Profile, Yext, BrightLocal, Whitespark | GBP dashboard (own data, manual export) + manual NAP/citation check + Nominatim/OSM geocoding (keyless, 1 req/s + descriptive UA) | GBP own data (keyless) |
+| Local Listings | `~~local listings` | search | Google Business Profile, Yext, BrightLocal, Whitespark | GBP dashboard (own data, manual export) + manual NAP/citation check + [Nominatim/OSM geocoding](https://nominatim.org/release-docs/latest/api/Overview/) (keyless, 1 req/s + descriptive UA) | GBP own data (keyless) |
 | Brand Monitor | `~~brand monitor` | both | Brand24, Mention, Brandwatch | Google Alerts / F5Bot / GDELT DOC API | Google Alerts RSS + `gdelt.py` (keyless) |
 | CRM / Marketing | `~~CRM` | all | HubSpot, Salesforce, Marketo | — | manual CSV |
 | Content / CMS | `~~content platform` / `~~CMS` | all | WordPress, Webflow, Contentful, Sanity, Notion | — | existing CMS |
@@ -134,7 +136,7 @@ The influencer-marketing skills use these additional placeholders (plus `~~CRM`,
 | Landing / Page Builder | `~~CMS / landing page builder` | both | Webflow, Unbounce, Instapage | static HTML / existing CMS | existing CMS |
 | DAM / Asset Library | `~~DAM / asset library` | influencer | Bynder, Brandfolder | shared Drive / Dropbox folder | shared folder |
 | Email / DM | `~~email/DM tool` | influencer | Klaviyo, Mailchimp, native DMs | native DM + manual email | manual DM |
-| Compliance Reference | `~~compliance reference` | both | platform policy portals | FTC 16 CFR §255 / Part 465 (public) | FTC public rule |
+| Compliance Reference | `~~compliance reference` | both | platform policy portals | [FTC 16 CFR §255](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-B/part-255) / [Part 465](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-D/part-465) (public) | FTC public rule |
 | Competitor Tracking | `~~competitor tracking` | influencer | Social Blade, BuzzSumo | manual competitor profile review | manual review |
 | Customer Survey | `~~customer survey data` | influencer | Typeform, SurveyMonkey, Qualtrics | Google Forms | Google Forms |
 | E-signature | `~~e-signature` | influencer | DocuSign, Dropbox Sign, PandaDoc | PDF + manual signature | manual PDF sign |
@@ -162,7 +164,7 @@ The email-marketing skills add one placeholder, `~~email platform` (the ESP), an
 |----------|-------------|------------|--------------------|----------------------|---------------|
 | Email Platform (ESP) | `~~email platform` | email | Klaviyo, Mailchimp, HubSpot, Customer.io, Braze | native ESP campaign/flow + deliverability export (own data) · **Resend free tier via `resend.py`** | manual export (own) or `resend.py` (free key); other keyed APIs = opt-in MCP |
 | Email Authentication | `~~email platform` (auth signals) | email | Valimail, EasyDMARC, dmarcian | `doh.py auth <domain>` (keyless SPF/DMARC/BIMI/MX + DKIM-selector probes) + the **DMARC aggregate (RUA) report** (own, free) | `doh.py auth` + RUA report |
-| Sender Reputation | `~~email platform` (reputation) | email | Postmark, SendForensics | Google Postmaster Tools / Microsoft SNDS (own data) | Postmaster/SNDS (own) |
+| Sender Reputation | `~~email platform` (reputation) | email | Postmark, SendForensics | [Google Postmaster Tools](https://postmaster.google.com) ([docs](https://support.google.com/mail/answer/9981691)) / [Microsoft SNDS](https://sendersupport.olc.protection.outlook.com/snds/) (own data) | Postmaster/SNDS (own) |
 | Inbox Placement | `~~email platform` (seed test) | email | GlockApps, Mailtrap, Litmus | manual seed-list send across own inbox providers | manual seed test |
 
 ## How placeholders work
@@ -173,16 +175,16 @@ A skill might say: *"Pull keyword rankings from `~~SEO tool` and cross-reference
 
 [`docs/mcp-catalog.json`](docs/mcp-catalog.json) is a **copy-paste reference** of official remote HTTP MCP endpoints (plus one self-hosted entry, OpenSEO) — it is **opt-in, not auto-registered**. The catalog is deliberately kept outside the plugin-root `.mcp.json` path that Claude Code auto-discovers (and `plugin.json` carries no `mcpServers` key), so installing the plugin does NOT add 15 servers to your `/mcp` list or trigger any auth prompts. To enable any of these, copy the entries you want into your own host/user MCP config; auth happens interactively on first use. MCP automates retrieval but is never required — the free sources above cover the same data.
 
-**SEO data** (endpoints verified 2026-05):
+**SEO data** (endpoints verified 2026-05; vendor MCP docs linked + re-checked 2026-07):
 
-| Vendor | Endpoint (`docs/mcp-catalog.json`) | Transport | Auth | Cost model | Sample tools |
+| Vendor (→ official MCP docs) | Endpoint (`docs/mcp-catalog.json`) | Transport | Auth | Cost model | Sample tools |
 |--------|------------------------|-----------|------|------------|--------------|
-| Ahrefs | `https://api.ahrefs.com/mcp/mcp` | streamable HTTP | API key (MCP scope; Lite+ plan) | subscription | keyword & backlink data, site audit |
-| Semrush | `https://mcp.semrush.com/v1/mcp` | streamable HTTP | OAuth, or `Authorization: Apikey KEY` | subscription | `organic_research`, `keyword_research`, `backlink_research` |
-| SE Ranking | `https://api.seranking.com/mcp` | streamable HTTP | OAuth or API key (`X-Api-Key`) | subscription | keyword/backlink/domain, AI-search visibility (160+ tools) |
-| SISTRIX | `https://api.sistrix.com/mcp` | HTTP | OAuth / Bearer / `X-API-Key` | subscription | `domain`, `keyword`, `links`, `ai` modules |
-| SimilarWeb | `https://mcp.similarweb.com` | HTTP | OAuth / key | subscription | traffic estimates, competitive intel |
-| OpenSEO (self-hosted) | `https://<your-host>/mcp` (edit your copied entry) | streamable HTTP | none (local Docker) / OAuth (Cloudflare) | **free app + pay-as-you-go data** | `research_keywords`, `get_ranked_keywords`, `get_serp_results`, `find_serp_competitors`, `get_domain_overview`, `get_backlinks_overview`, `get_search_console_performance`, local-SERP/Maps tools |
+| [Ahrefs](https://docs.ahrefs.com/en/mcp/docs/introduction) | `https://api.ahrefs.com/mcp/mcp` | streamable HTTP | API key (MCP scope; Lite+ plan) | subscription | keyword & backlink data, site audit |
+| [Semrush](https://developer.semrush.com/api/introduction/semrush-mcp/) | `https://mcp.semrush.com/v1/mcp` | streamable HTTP | OAuth, or `Authorization: Apikey KEY` | subscription | `organic_research`, `keyword_research`, `backlink_research` |
+| [SE Ranking](https://seranking.com/api/integrations/mcp/) | `https://api.seranking.com/mcp` | streamable HTTP | OAuth or API key (`X-Api-Key`) | subscription | keyword/backlink/domain, AI-search visibility (160+ tools) |
+| [SISTRIX](https://www.sistrix.com/api/connection-to-chatbot-ai/) | `https://api.sistrix.com/mcp` | HTTP | **OAuth login — since the 2026 rollout no API key is needed** ([changelog](https://www.sistrix.com/changelog/sistrix-mcp-servers/)) | subscription | `domain`, `keyword`, `links`, `ai` modules |
+| [SimilarWeb](https://developers.similarweb.com/docs/similarweb-mcp) | `https://mcp.similarweb.com` | HTTP | OAuth / key | subscription | traffic estimates, competitive intel |
+| [OpenSEO](https://github.com/every-app/open-seo) (self-hosted) | `https://<your-host>/mcp` (edit your copied entry) | streamable HTTP | none (local Docker) / OAuth (Cloudflare) | **free app + pay-as-you-go data** | `research_keywords`, `get_ranked_keywords`, `get_serp_results`, `find_serp_competitors`, `get_domain_overview`, `get_backlinks_overview`, `get_search_console_performance`, local-SERP/Maps tools |
 
 **Cost model — read before enabling.** The five vendors above are **subscription** (flat monthly fee for plan-gated API access). OpenSEO is the one **pay-as-you-go** option: the app is free and self-hosted, and it bills only the underlying [DataForSEO](https://dataforseo.com) API calls you actually make — so it fits the free/keyless-first ethos better than a subscription suite while still returning real SERP/keyword/backlink data.
 
@@ -244,4 +246,6 @@ The opt-in MCP servers do not use env vars here: most (Semrush, SE Ranking, SIST
 - **Google Suggest/autocomplete** is unofficial and undocumented — it may change or rate-limit without notice; add exponential backoff.
 - **Common Crawl**'s shared index server has been rate-limited since Nov 2023 — expect `503 SlowDown`; run your own index for heavy use (data is free on AWS S3 `commoncrawl`).
 - **Google Rich Results Test** and **validator.schema.org** expose no public API — paste markup into the UI.
-- **AI-citation visibility** has no free API from any engine — the realistic free method is manual prompt-testing recorded over time.
+- **AI-citation visibility** has no free API from any engine — the realistic free method is manual prompt-testing recorded over time (plus the Tavily answer probe as a single-engine proxy).
+- **SISTRIX MCP** dropped its API-key requirement in 2026 — auth is now an OAuth login for any SISTRIX account; older setup guides mentioning `X-API-Key` are stale.
+- **CrUX History API** returns weekly windows updated Mondays (~04:00 UTC, data through the prior Saturday) — align `ledger.py` comparisons to the same weekday to avoid phantom deltas.
