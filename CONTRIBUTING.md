@@ -82,23 +82,24 @@ CI runs additional guards beyond the per-skill validator:
 
 ### 6. Update tracking files
 
-After adding or updating a skill, keep these **8 tracking files** in sync. **This list is authoritative** — `CLAUDE.md` and `AGENTS.md` point here instead of restating it, so update this list if the set changes.
+After adding or updating a skill, keep these **9 tracking surfaces** in sync. **This list is authoritative** — `CLAUDE.md` and `AGENTS.md` point here instead of restating it, so update this list if the set changes.
 - `VERSIONS.md` — version and date
 - `.claude-plugin/plugin.json` — skills array + version
 - `marketplace.json` (repo root) — must match plugin.json
 - `.claude-plugin/marketplace.json` — **byte-identical mirror** of the root `marketplace.json` (copy it after editing the root)
 - `README.md` — skills table + version badge
 - `CLAUDE.md` — category table + version
-- `AGENTS.md` — name/count line + framework item/dimension counts (CORE-EEAT / CITE / C³ / ROAS / SEND)
+- `AGENTS.md` — name/count line + framework item/dimension counts (CORE-EEAT / CITE / C³ / ROAS / SEND / RAMP)
 - `docs/README.zh.md` — Chinese README: the 86 · 16 / 16 / 16 / 16 / 16 / 6 counts (skills / SEO-GEO / influencer / paid ads / email / launch / protocol) + 6 commands + version badge
+- `.github/repo-about.json` — the GitHub repo **About** SSOT (sidebar description + topics). The About is *not* read by GitHub directly and *not* editable by the CI token, so it silently drifted on the v13/v14 discipline bumps. Edit the count/disciplines/gates here, then project it onto GitHub with `bash scripts/sync-about.sh --live` (owner-run, needs admin auth). `check-versions.sh` asserts its skill count matches the tree; the weekly `about-drift.yml` sentinel fails red if GitHub drifts from it.
 
 For release bumps, also sync README badges and localized README badges.
 
 **Adding or renaming a skill?** Also add its slug to a grouping in the repo-root `skills.sh.json` — the [skills.sh registry page](https://skills.sh/aaron-he-zhu/aaron-marketing-skills) renders those sections, and CI fails when the groupings don't cover exactly the plugin.json skill set (an ungrouped skill would render below the legacy names at the bottom of the page).
 
-**Cutting a release?** Also sync the downstream repo family: `bash scripts/sync-family.sh` (dry-run drift report), then `bash scripts/sync-family.sh --live` to push the live mirrors. Registry, tiers, and banner templates: [docs/repo-family.md](docs/repo-family.md). Between releases, the weekly `family-drift.yml` sentinel fails red if a live mirror drifts.
+**Cutting a release?** Also (a) sync the downstream repo family: `bash scripts/sync-family.sh` (dry-run drift report), then `bash scripts/sync-family.sh --live` to push the live mirrors — registry, tiers, and banner templates in [docs/repo-family.md](docs/repo-family.md); and (b) project the GitHub About: `bash scripts/sync-about.sh` (dry-run), then `bash scripts/sync-about.sh --live`. Both are owner-run (editing external/GitHub metadata needs auth the CI token lacks). Between releases, the weekly `family-drift.yml` and `about-drift.yml` sentinels fail red if either surface drifts.
 
-**CI enforces this list**: `scripts/check-versions.sh` fails the build when the bundle version drifts across plugin.json / the marketplace mirrors / the README badges / CLAUDE.md / VERSIONS.md, or when any SKILL.md version disagrees with its VERSIONS.md row — so a missed file surfaces in the PR, not in a user's session. Run it locally before pushing: `bash scripts/check-versions.sh`.
+**CI enforces this list**: `scripts/check-versions.sh` fails the build when the bundle version drifts across plugin.json / the marketplace mirrors / the README badges / CLAUDE.md / VERSIONS.md, when any SKILL.md version disagrees with its VERSIONS.md row, or when `.github/repo-about.json`'s skill count disagrees with the tree — so a missed file surfaces in the PR, not in a user's session. Run it locally before pushing: `bash scripts/check-versions.sh`.
 
 **Adding a connector?** Follow [docs/connector-playbook.md](docs/connector-playbook.md) — the end-to-end pipeline (qualify → verify → implement → test → wire → document → track → regress → record) with the safety-class gate table and the connector-vs-recipe decision rule.
 

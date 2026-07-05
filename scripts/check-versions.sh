@@ -14,6 +14,10 @@
 #      in the VERSIONS.md table (per-skill last-changed versioning means
 #      rows may differ from the bundle — they must only match their skill).
 #   3. VERSIONS.md has exactly one row per skill directory, none extra.
+#   4. The GitHub About SSOT (.github/repo-about.json) leads with the current
+#      skill count — the About is not a versioned file, so it silently drifted
+#      on the v13/v14 discipline bumps; this keeps its count honest offline, and
+#      scripts/sync-about.sh + about-drift.yml handle projecting/verifying it on GitHub.
 #
 # Bash + grep/sed/awk only (repo dependency policy). Exit 0 clean, 1 on any
 # mismatch, with one FAIL line per finding.
@@ -76,7 +80,25 @@ rows=$(grep -cE '^\| [a-z0-9-]+ \| [a-z-]+ \| [0-9][0-9.]* \| ' VERSIONS.md)
 [ "$rows" -eq "$skill_count" ] || \
   err "VERSIONS.md has $rows skill rows but the tree has $skill_count skills"
 
+# ---- 4. GitHub About SSOT tracks the skill count ----------------------------
+# The repo About (sidebar description + topics) is not a versioned file, so it is
+# invisible to the checks above and drifted on the v13/v14 bumps. Its SSOT is
+# .github/repo-about.json; its description MUST lead with the current skill count.
+# Offline assertion (no network — the live projection/verify is sync-about.sh +
+# about-drift.yml): the leading integer of the description == skill_count.
+ABOUT=".github/repo-about.json"
+if [ ! -f "$ABOUT" ]; then
+  err "$ABOUT missing — the GitHub About SSOT (see scripts/sync-about.sh)"
+else
+  about_n=$(sed -n 's/.*"description":[[:space:]]*"\([0-9][0-9]*\).*/\1/p' "$ABOUT" | head -1)
+  if [ -z "$about_n" ]; then
+    err "$ABOUT: description must lead with the skill count (so this check can read it)"
+  elif [ "$about_n" != "$skill_count" ]; then
+    err "$ABOUT says $about_n skills but the tree has $skill_count — update it, then run: bash scripts/sync-about.sh --live"
+  fi
+fi
+
 if [ $fail -eq 0 ]; then
-  echo "version-sync clean — bundle $BUNDLE, $skill_count skills consistent across the 8 tracking files"
+  echo "version-sync clean — bundle $BUNDLE, $skill_count skills consistent across the 8 tracking files + the About SSOT"
 fi
 exit $fail
