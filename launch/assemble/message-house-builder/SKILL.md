@@ -4,13 +4,13 @@ slug: aaron-message-house-builder
 displayName: "Message House Builder · 消息屋构建"
 summary: "消息屋/PR-FAQ/价值支柱/发布叙事"
 description: 'Use when the user asks to "build a message house", "write a PR-FAQ for our launch", or "define the launch narrative and value pillars"; derives from the positioning canvas a message house — tagline, one-liner, three value pillars, per-persona proof points (each labeled Measured / User-provided / [needs source]) — plus a working-backwards PR-FAQ narrative spine (launch-day tense, empty-chair test, five external + five internal FAQs) and per-channel message angle packs (angles, not finished copy). Not for the positioning canvas itself — use positioning-mapper; not for finished blog posts or pages — use content-writer; not for ad or email units — use each discipline creative builder; not for claim adjudication — use offer-claims-registry. 消息屋/PR-FAQ/价值支柱/发布叙事'
-version: "15.0.0"
+version: "16.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when deriving launch messaging from a completed positioning canvas: a message house (tagline, one-liner, three value pillars, per-persona proof points), a working-backwards PR-FAQ narrative spine in launch-day tense, and per-channel message angle packs. The messaging layer between positioning (positioning-mapper) and asset production (launch-asset-packager)."
 argument-hint: "<product / launch> [personas] [channels] [positioning canvas path]"
-metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "launch", "phase": "assemble", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "assemble"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "16.0.0", "discipline": "launch", "phase": "assemble", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "assemble"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Message House Builder
@@ -37,7 +37,7 @@ Turn our positioning into per-channel message angles for [Product Hunt / press /
 
 **Expected output**: a message house (tagline + one-liner + three value pillars + per-persona proof points, each labeled Measured / User-provided / `[needs source]`), a PR-FAQ narrative spine (launch-day tense, empty-chair test, numbers over adjectives, five external + five internal FAQs), per-channel message angle packs (angles, not finished copy), a `[needs source]` claims list for the ledger, and the standard handoff summary.
 
-- **Reads**: the positioning canvas from [positioning-mapper](../../research/positioning-mapper/SKILL.md) (`memory/launch/positioning-mapper/` or pasted); personas and channel list (User-provided); the launch tier/type when declared; approved claim wording in `memory/claims/claims-ledger.md` (read-only).
+- **Reads**: the positioning canvas from [positioning-mapper](../../research/positioning-mapper/SKILL.md) (`memory/launch/positioning-mapper/` or pasted); personas and channel list (User-provided); the launch tier/type when declared; approved claim wording in `memory/claims/claims-ledger.md` (read-only); when a durable brand narrative canon exists, the message house from [message-system-architect](../../../narrative/architect/message-system-architect/SKILL.md) in `memory/narrative/` — this launch house **derives from** that canon rather than re-inventing the brand message.
 - **Writes**: the message house + PR-FAQ + angle packs to `memory/launch/message-house-builder/`; every unsubstantiated claim to `memory/claims/candidates.md` tagged `[needs source]` — never `memory/claims/claims-ledger.md` directly.
 - **Promotes**: the approved tagline, one-liner, and pillar set as pending-decision items via `memory/open-loops.md` (ask before writing); do not write `decisions.md` directly.
 - **Done when**: the house names a tagline, a one-liner, and three value pillars with per-persona proof points each labeled Measured / User-provided / `[needs source]`; the PR-FAQ passes the launch-day-tense, empty-chair, and numbers-over-adjectives checks with five external + five internal FAQs; and every `[needs source]` claim is submitted to `memory/claims/candidates.md` with the banned-word self-check passed.

@@ -4,14 +4,14 @@ slug: aaron-social-quality-auditor
 displayName: "Social Quality Auditor · 社媒质量门"
 summary: "社媒质量审计/SQS评分/六条红线/发布前放行"
 description: 'Use when the user asks to "audit our social presence", "is this batch safe to publish", or to run the pre-publish go/no-go before queued posts ship; computes the goal-weighted ECHO SQS, enforces the six vetoes E1/C1/C2/H1/H2/O1 against the channel-registry dossiers, the claims ledger, the UGC permission records, and the declared denominators, and emits a gated audit artifact with a SHIP/FIX/BLOCK verdict. Not for judging creator campaign deliverables — use content-reviewer; not for launch-day readiness — use launch-readiness-auditor. 社媒质量审计/SQS评分/六条红线/发布前放行'
-version: "15.0.0"
+version: "16.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when checking whether an organic social presence or a queued publish batch is safe to ship. Runs ECHO SQS scoring with E1/C1/C2/H1/H2/O1 veto checks against the channel-registry dossiers, the claims ledger, the UGC permission records, and the declared denominators. Also when social-calendar-builder reaches its publish step (its hard-required pre-publish mode), when crisis-response-planner wants to un-pause the queue after an incident, or when the user suspects a channel-truth, claim, disclosure, manufactured-engagement, UGC-rights, or measurement problem."
 argument-hint: "<channel set / draft batch + registry slugs> [goal: community|b2c|founder]"
 class: auditor
-metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "social", "phase": "host", "geo-relevance": "low", "hermes": {"tags": ["marketing", "social", "host"], "category": "social"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "16.0.0", "discipline": "social", "phase": "host", "geo-relevance": "low", "hermes": {"tags": ["marketing", "social", "host"], "category": "social"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Social Quality Auditor

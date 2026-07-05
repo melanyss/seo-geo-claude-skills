@@ -4,7 +4,7 @@ slug: aaron-launch-readiness-auditor
 displayName: "Launch Readiness Auditor · 发布就绪审计"
 summary: "发布就绪审计/LQS评分/发布前放行"
 description: 'Use when the user asks to "audit our launch plan", "are we ready to launch", or run a T-1 launch-eve go/no-go before a committed date; runs RAMP LQS scoring with R1/A1/M1/P1 veto checks and a SHIP/FIX/BLOCK gate, and emits a gated audit artifact. Not for recording launch dates or stages — use launch-registry; not for running launch day itself — use launch-day-conductor. 发布就绪审计/LQS评分/发布前放行'
-version: "15.0.0"
+version: "16.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
@@ -12,7 +12,7 @@ when_to_use: "Use when checking whether a product launch is safe to run. Runs RA
 argument-hint: "<launch slug / plan + asset manifest> [goal: b2b|devtool|mobile]"
 allowed-tools: WebFetch
 class: auditor
-metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "launch", "phase": "mobilize", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "mobilize"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "16.0.0", "discipline": "launch", "phase": "mobilize", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "mobilize"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Launch Readiness Auditor
