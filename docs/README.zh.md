@@ -2,7 +2,7 @@
 
 # Aaron 营销技能库
 
-**69 个技能。5 个命令。四个营销学科 —— SEO/GEO、红人、付费广告、邮件营销 —— 共享同一套运行契约。**
+**69 个营销技能 —— SEO/GEO、红人、付费广告、邮件 —— 共享一套契约。**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>

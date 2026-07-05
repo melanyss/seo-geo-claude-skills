@@ -2,7 +2,7 @@
 
 # Aaron Marketing Skills
 
-**69 skills. 5 commands. Four marketing disciplines — SEO/GEO, influencer, paid ads, email — on one operating contract.**
+**69 marketing skills — SEO/GEO, influencer, paid ads, email — on one contract.**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
