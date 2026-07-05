@@ -1,3 +1,4 @@
+import os
 import pathlib
 import sys
 import unittest
@@ -22,6 +23,9 @@ import pageviews  # noqa: E402
 import gdelt  # noqa: E402
 import youtube  # noqa: E402
 import indexpush  # noqa: E402
+import hn  # noqa: E402
+import producthunt  # noqa: E402
+import appstore  # noqa: E402
 import datetime as _dt  # noqa: E402
 
 
@@ -422,6 +426,126 @@ class IndexpushSpecTests(unittest.TestCase):
     def test_collect_urls_dedupes_preserving_order(self):
         self.assertEqual(indexpush.collect_urls(["a", "b", "a", "c"], None),
                          ["a", "b", "c"])
+
+
+class HnTests(unittest.TestCase):
+    def test_numeric_filters_force_search_by_date_index(self):
+        url, endpoint = hn.build_search_url("acme", tags="story")
+        self.assertEqual(endpoint, "search")
+        self.assertIn("/search?", url)
+        self.assertIn("tags=story", url)
+        filters = hn.build_numeric_filters(since_epoch=1750000000, min_points=50)
+        self.assertEqual(filters, ["created_at_i>=1750000000", "points>=50"])
+        url, endpoint = hn.build_search_url("acme", tags="(story,show_hn)",
+                                            numeric_filters=filters)
+        self.assertEqual(endpoint, "search_by_date")
+        self.assertIn("/search_by_date?", url)
+        self.assertIn("numericFilters=created_at_i%3E%3D1750000000%2Cpoints%3E%3D50", url)
+        self.assertIn("tags=%28story%2Cshow_hn%29", url)
+        # hitsPerPage clamped to [1, MAX_HITS]
+        self.assertIn("hitsPerPage=100", hn.build_search_url("q", hits_per_page=500)[0])
+        self.assertIn("hitsPerPage=1", hn.build_search_url("q", hits_per_page=0)[0])
+
+    def test_rank_composes_list_position_and_comments_gt_points_fact(self):
+        responses = {
+            hn.build_firebase_url("showstories"): {"json": [111, 222, 333]},
+            hn.build_firebase_url("item/222"): {"json": {
+                "id": 222, "type": "story", "title": "Show HN: X",
+                "score": 10, "descendants": 25, "by": "alice", "time": 0}},
+        }
+        original = hn._polite_get_json
+        hn._polite_get_json = lambda url: responses[url]
+        try:
+            out = hn.rank(222, "showstories")
+        finally:
+            hn._polite_get_json = original
+        self.assertEqual(out["rank"], 2)          # 1-based position
+        self.assertEqual(out["list_size"], 3)
+        self.assertEqual(out["points"], 10)
+        self.assertEqual(out["descendants"], 25)
+        self.assertTrue(out["comments_gt_points"])
+        self.assertIsNone(hn.find_rank([111, 222, 333], 999))
+
+
+class ProducthuntTests(unittest.TestCase):
+    def test_day_window_defaults_to_last_completed_utc_day(self):
+        today = _dt.date(2026, 7, 5)
+        self.assertEqual(producthunt.day_window(today=today),
+                         ("2026-07-04", "2026-07-04T00:00:00Z",
+                          "2026-07-05T00:00:00Z"))
+        self.assertEqual(producthunt.day_window("2026-06-30", today=today),
+                         ("2026-06-30", "2026-06-30T00:00:00Z",
+                          "2026-07-01T00:00:00Z"))
+        with self.assertRaises(ValueError):
+            producthunt.day_window("2026-07-05", today=today)  # in-progress day
+        with self.assertRaises(ValueError):
+            producthunt.day_window("2026-07-09", today=today)  # future day
+
+    def test_build_query_caps_first_and_shapes_variables(self):
+        q = producthunt.build_query("daily", posted_after="A",
+                                    posted_before="B", first=500)
+        self.assertEqual(q["variables"],
+                         {"first": producthunt.MAX_POSTS, "after": "A",
+                          "before": "B"})
+        self.assertIn("order: VOTES", q["query"])
+        post = producthunt.build_query("post", slug="my-app")
+        self.assertEqual(post["variables"], {"slug": "my-app"})
+        self.assertIn("createdAt", post["query"])
+        topic = producthunt.build_query("topic", topic="ai", first=0)
+        self.assertEqual(topic["variables"], {"topic": "ai", "first": 1})
+        with self.assertRaises(ValueError):
+            producthunt.build_query("nope")
+
+    def test_classify_failure_rate_limit_auth_and_missing_token(self):
+        code, err = producthunt.classify_failure(
+            {"status": 429, "headers": {"X-Rate-Limit-Reset": "600"},
+             "json": None})
+        self.assertEqual((code, err["error"], err["reset_seconds"]),
+                         (3, "rate_limited", "600"))
+        code, err = producthunt.classify_failure(
+            {"status": 401, "headers": {}, "json": None})
+        self.assertEqual((code, err["error"]), (3, "auth_failed"))
+        self.assertIsNone(producthunt.classify_failure(
+            {"status": 200, "headers": {},
+             "json": {"data": {"posts": {"edges": []}}}}))
+        # no --token, no env token, no client_credentials pair -> classified
+        saved = {k: os.environ.pop(k, None) for k in
+                 (producthunt.ENV_TOKEN, producthunt.ENV_CLIENT_ID,
+                  producthunt.ENV_CLIENT_SECRET)}
+        try:
+            self.assertEqual(producthunt.resolve_token(),
+                             ("", "no token configured"))
+        finally:
+            for k, v in saved.items():
+                if v is not None:
+                    os.environ[k] = v
+
+
+class AppstoreTests(unittest.TestCase):
+    def test_lookup_batches_ids_and_flags_bad_ones(self):
+        ids, bad = appstore.parse_ids(["310633997,284882215", "12345", "abc"])
+        self.assertEqual(ids, ["310633997", "284882215", "12345", "abc"])
+        self.assertEqual(bad, ["abc"])
+        url = appstore.build_lookup_url(["310633997", "284882215"], "gb")
+        self.assertIn("/lookup?", url)
+        self.assertIn("id=310633997%2C284882215", url)  # comma-batched ids
+        self.assertIn("country=gb", url)
+
+    def test_charts_url_uses_new_marketingtools_host_and_documented_sizes(self):
+        self.assertEqual(appstore.chart_size_for(10), 10)
+        self.assertEqual(appstore.chart_size_for(11), 25)
+        self.assertEqual(appstore.chart_size_for(999), 50)
+        self.assertEqual(
+            appstore.build_charts_url("us", "top-paid", appstore.chart_size_for(11)),
+            "https://rss.marketingtools.apple.com/api/v2/us/apps/top-paid/25/apps.json")
+
+    def test_search_url_locks_media_to_software_and_caps_limit(self):
+        url = appstore.build_search_url("meditation app", "us", 500)
+        self.assertIn("term=meditation+app", url)
+        self.assertIn("country=us", url)
+        self.assertIn("media=software", url)
+        self.assertIn("limit=200", url)   # SEARCH_MAX cap
+        self.assertIn("limit=1", appstore.build_search_url("x", "us", 0))
 
 
 if __name__ == "__main__":

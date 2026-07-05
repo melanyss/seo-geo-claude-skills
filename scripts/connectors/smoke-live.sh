@@ -64,6 +64,14 @@ check "kg.py reconcile" \
   'import json,sys; d=json.load(sys.stdin); assert d' \
   python3 kg.py reconcile "Anthropic"
 
+check "hn.py search" \
+  'import json,sys; d=json.load(sys.stdin); assert d["error"] is None and d["endpoint"] == "search" and d["hits"]' \
+  python3 hn.py search "google" --tags story --max 3
+
+check "appstore.py charts" \
+  'import json,sys; d=json.load(sys.stdin); assert d and d[0]["rank"] == 1 and d[0]["id"] and d[0]["name"]' \
+  python3 appstore.py charts --country us --max 10
+
 # --- keyless hosted fetchers ---------------------------------------------------
 check "firecrawl.py scrape" \
   'import json,sys; d=json.load(sys.stdin); assert d["status"]==200 and d["data"]["data"]["markdown"]' \
@@ -88,6 +96,14 @@ if [ -n "${YOUTUBE_API_KEY:-}" ]; then
     python3 youtube.py channel @youtube
 else
   skip "youtube.py channel" "YOUTUBE_API_KEY not set"
+fi
+
+if [ -n "${PRODUCTHUNT_DEVELOPER_TOKEN:-}" ]; then
+  check "producthunt.py daily" \
+    'import json,sys; d=json.load(sys.stdin); assert d["date"] and d["count"] and d["posts"][0]["votesCount"] is not None and d["attribution"]' \
+    python3 producthunt.py daily --max 3
+else
+  skip "producthunt.py daily" "PRODUCTHUNT_DEVELOPER_TOKEN not set"
 fi
 
 # indexpush is mutation-class: smoke only its dry-run (no network, no submission).

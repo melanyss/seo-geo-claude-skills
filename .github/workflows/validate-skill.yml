@@ -67,6 +67,7 @@ jobs:
             influencer/discover influencer/plan influencer/activate influencer/measure \
             ad/research ad/orchestrate ad/activate ad/scale \
             email/setup email/engage email/nurture email/deliver \
+            launch/research launch/assemble launch/mobilize launch/prove \
             -mindepth 2 -maxdepth 2 -name SKILL.md \
             -print | sort | while read -r file; do
             bash scripts/validate-skill.sh "$(dirname "$file")"

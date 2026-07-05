@@ -58,6 +58,9 @@ EMAIL_FULL_ALLOW = {
     "s1@gmail.com", "s2@outlook.com", "seed1@gmail.com", "seed2@outlook.com",
     # published public contact of agentskills.me (docs/registry-submissions.md)
     "hi@evergreenai.cn",
+    # Product Hunt's own published API-terms contact (their ToS requires naming
+    # it for business-use requests — quoted in producthunt.py + CONNECTORS.md)
+    "hello@producthunt.com",
 }
 # Placeholder fragments that exonerate a matched SECRET-LIKE TOKEN — applied to the matched token ONLY,
 # never the whole line (whole-line skipping would let a real key on a "placeholder"/"example" line slip).

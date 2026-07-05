@@ -165,6 +165,20 @@ Only `consent-registry` writes canonical records here. Other skills submit updat
 
 **Lifecycle exemption**: consent/suppression records are standing state, not dated run artifacts — exempt from the 90-day WARM demotion (like `memory/creators/` and `memory/claims/`); records retire on consent withdrawal / suppression, and `memory-management` remains the sole executor of archival.
 
+### `memory/launch-registry/`
+
+Store (the launch truth SSOT — one dossier per launch moment, `<product-or-moment-slug>.md`, plus two standing files):
+
+- per-launch dossier: tier (T1/T2/T3), launch type (new-product / feature / relaunch / partnership), lifecycle stage on the one-way machine `draft → concept → alpha → beta → general-availability` (+ `archived`) with dated evidence per transition, authoritative launch date/window, embargo/partner commitments, the channel submission ledger, asset-manifest version pointers, the declared RAMP goal column, and the post-launch outcome snapshot
+- `calendar.md` — every past and planned launch moment (the launch-stacking spacing fact base)
+- `candidates.md` — intake from other skills (mirror of the entity/creator/claims/consent pattern)
+
+Only `launch-registry` writes canonical records here. Other skills submit updates to `memory/launch-registry/candidates.md` only.
+
+**T-0 batch-promote clause**: during the launch window, mobilize-phase skills (`community-launch-runner`, `press-media-relations`, `launch-day-conductor`) append dated submission/status lines to `candidates.md` instead of blocking on the sole writer; `launch-registry` promotes the batch into the dossier's submission ledger at day close (or when explicitly invoked), preserving each row's original timestamp and source. This is an intake-cadence provision, not a second writer — canonical files are still written only by `launch-registry`.
+
+**Lifecycle exemption**: dossiers and `calendar.md` are standing state, not dated run artifacts — exempt from the 90-day WARM demotion (like `memory/entities/`, `memory/creators/`, `memory/claims/`, and `memory/consent/`); a dossier retires after its outcome snapshot lands, and `memory-management` remains the sole executor of archival.
+
 ### `memory/research/`
 
 Common subfolders:
@@ -207,6 +221,7 @@ Common subfolders:
 - `influencer/` (content-reviewer — C³ ART gate artifacts)
 - `ad/` (ad-account-auditor — ROAS gate artifacts)
 - `email/` (email-quality-auditor — SEND gate artifacts)
+- `launch/` (launch-readiness-auditor — RAMP gate artifacts)
 
 Store:
 
@@ -272,6 +287,19 @@ Store:
 
 Same WARM lifecycle (dated files, demoted to `memory/archive/` after 90 days). email-quality-auditor's **gated** EQS verdict is an auditor artifact and lives in `memory/audits/email/`. Consent/suppression facts live in `memory/consent/` (consent-registry's SSOT), not here.
 
+### `memory/launch/`
+
+Per-skill subfolders, one per launch skill: `memory/launch/<skill>/` (e.g. `positioning-mapper/`, `launch-asset-packager/`, `launch-retro-analyzer/`). Scored on the [RAMP framework](ramp-benchmark.md).
+
+Store:
+
+- positioning canvases, tier/type decisions + risk registers, window analyses, early-access program designs (research)
+- message houses / PR-FAQ spines, asset manifests + press kits, pricing/packaging plans, enablement kits (assemble)
+- launch-day runbooks, channel submission kits, media lists + embargo pitch sequences (mobilize)
+- launch-window telemetry snapshots, feedback theme maps, retros, momentum plans (prove)
+
+Same WARM lifecycle (dated files, demoted to `memory/archive/` after 90 days). launch-readiness-auditor's **gated** LQS verdict is an auditor artifact and lives in `memory/audits/launch/`. The canonical launch dossier/calendar lives in `memory/launch-registry/` (launch-registry's SSOT), not here.
+
 ## Writing Guidance
 
 When a skill describes state updates, it should:
@@ -290,10 +318,12 @@ When a skill describes state updates, it should:
 - `creator-registry` is the sole writer of canonical records in `memory/creators/<handle-slug>.md`; other skills write to `memory/creators/candidates.md` only
 - `offer-claims-registry` is the sole writer of canonical records in `memory/claims/`; other skills write to `memory/claims/candidates.md` only
 - `consent-registry` is the sole writer of canonical records in `memory/consent/`; other skills write to `memory/consent/candidates.md` only
+- `launch-registry` is the sole writer of canonical records in `memory/launch-registry/`; other skills write to `memory/launch-registry/candidates.md` only (incl. the T-0 batch-promote appends)
 - `content-quality-auditor` owns publish-readiness state in `memory/audits/content/`
 - `domain-authority-auditor` owns citation-trust state in `memory/audits/domain/`
 - `content-reviewer` owns the C³ ART gate state in `memory/audits/influencer/`
 - `ad-account-auditor` owns the ROAS gate state in `memory/audits/ad/`
 - `email-quality-auditor` owns the SEND gate state in `memory/audits/email/`
+- `launch-readiness-auditor` owns the RAMP gate state in `memory/audits/launch/`
 
 See [skill-contract.md](skill-contract.md) for the full protocol-layer vs execution-layer behavior matrix.

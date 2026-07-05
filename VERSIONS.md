@@ -1,84 +1,114 @@
 # Aaron Marketing Skills — Versions
 
-Current versions for the plugin and all 69 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
+Current versions for the plugin and all 86 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `13.0.0` (2026-07-04). Cross-agent compatibility wave — the 69 skills are now verified installable on the 70+ SKILL.md hosts served by `npx skills` (Claude Code, Codex, Cursor, OpenCode, Antigravity, Gemini CLI, Copilot CLI, OpenClaw, Hermes, …), first-class on the skills.sh registry (`skills.sh.json` page groupings), OpenClaw-native (every `metadata` block converted to the single-line JSON object its parser requires, with `metadata.openclaw` + `metadata.hermes` extensions), and ClawHub-publishable (`scripts/publish-clawhub.sh`): frontmatter YAML repair that had made `reactivation-specialist` invisible to spec-compliant parsers, wrong-depth relative-path fixes in three auditor gates + one reference pack, a standalone-install fallback line in all five gates, a per-agent compatibility matrix at `docs/agent-compatibility.md`, and new validator checks plus CI discovery-count and grouping-coverage guards. Promoted to a major version to mark the milestone: the whole bundle — all **69 skills** — is at `13.0.0`.
+**Current release**: `14.0.0` (2026-07-05). Fifth discipline: **Product Launch (RAMP)** — 16 new skills under `launch/{research,assemble,mobilize,prove}/`, the sixth protocol registry `launch-registry`, the sixth benchmark framework RAMP (`references/ramp-benchmark.md`), the sixth gate `launch-readiness-auditor` (LQS + T-1 go/no-go), the sixth command `/aaron-marketing:launch`, and three new read-only connectors (`hn.py` keyless, `producthunt.py` free-key non-commercial, `appstore.py` keyless documented-endpoints-only). Major version per the discipline-addition convention: the whole bundle — all **86 skills** — is at `14.0.0`.
 
 ## Skills
 
 | Skill | Category | Version | Last Updated |
 |-------|----------|---------|--------------|
-| competitor-analysis | research | 13.0.0 | 2026-07-04 |
-| content-gap-analysis | research | 13.0.0 | 2026-07-04 |
-| keyword-research | research | 13.0.0 | 2026-07-04 |
-| serp-analysis | research | 13.0.0 | 2026-07-04 |
-| content-writer | build | 13.0.0 | 2026-07-04 |
-| geo-content-optimizer | build | 13.0.0 | 2026-07-04 |
-| page-play-builder | build | 13.0.0 | 2026-07-04 |
-| serp-markup-builder | build | 13.0.0 | 2026-07-04 |
-| content-quality-auditor | optimize | 13.0.0 | 2026-07-04 |
-| on-page-seo-auditor | optimize | 13.0.0 | 2026-07-04 |
-| site-structure-optimizer | optimize | 13.0.0 | 2026-07-04 |
-| technical-seo-checker | optimize | 13.0.0 | 2026-07-04 |
-| domain-authority-auditor | monitor | 13.0.0 | 2026-07-04 |
-| offsite-signal-analyzer | monitor | 13.0.0 | 2026-07-04 |
-| performance-monitor | monitor | 13.0.0 | 2026-07-04 |
-| rank-tracker | monitor | 13.0.0 | 2026-07-04 |
-| audience-mapper | discover | 13.0.0 | 2026-07-04 |
-| fit-scorer | discover | 13.0.0 | 2026-07-04 |
-| influencer-discovery | discover | 13.0.0 | 2026-07-04 |
-| trend-spotter | discover | 13.0.0 | 2026-07-04 |
-| brief-generator | plan | 13.0.0 | 2026-07-04 |
-| budget-optimizer | plan | 13.0.0 | 2026-07-04 |
-| campaign-planner | plan | 13.0.0 | 2026-07-04 |
-| competitor-tracker | plan | 13.0.0 | 2026-07-04 |
-| content-amplifier | activate | 13.0.0 | 2026-07-04 |
-| content-reviewer | activate | 13.0.0 | 2026-07-04 |
-| contract-helper | activate | 13.0.0 | 2026-07-04 |
-| outreach-manager | activate | 13.0.0 | 2026-07-04 |
-| landing-optimizer | measure | 13.0.0 | 2026-07-04 |
-| performance-analyzer | measure | 13.0.0 | 2026-07-04 |
-| report-generator | measure | 13.0.0 | 2026-07-04 |
-| roi-calculator | measure | 13.0.0 | 2026-07-04 |
-| audience-segment-builder | paid | 13.0.0 | 2026-07-04 |
-| campaign-architect | paid | 13.0.0 | 2026-07-04 |
-| product-feed-optimizer | paid | 13.0.0 | 2026-07-04 |
-| search-term-miner | paid | 13.0.0 | 2026-07-04 |
-| ad-creative-builder | paid | 13.0.0 | 2026-07-04 |
-| ad-test-designer | paid | 13.0.0 | 2026-07-04 |
-| bid-strategy-planner | paid | 13.0.0 | 2026-07-04 |
-| landing-experience-checker | paid | 13.0.0 | 2026-07-04 |
-| ad-account-auditor | paid | 13.0.0 | 2026-07-04 |
-| conversion-signal-qa | paid | 13.0.0 | 2026-07-04 |
-| conversion-value-mapper | paid | 13.0.0 | 2026-07-04 |
-| placement-exclusion-manager | paid | 13.0.0 | 2026-07-04 |
-| attribution-reconciler | paid | 13.0.0 | 2026-07-04 |
-| budget-pacing-monitor | paid | 13.0.0 | 2026-07-04 |
-| fatigue-frequency-manager | paid | 13.0.0 | 2026-07-04 |
-| paid-measurement-loop | paid | 13.0.0 | 2026-07-04 |
-| deliverability-qa | email | 13.0.0 | 2026-07-04 |
-| list-growth-designer | email | 13.0.0 | 2026-07-04 |
-| list-hygiene-monitor | email | 13.0.0 | 2026-07-04 |
-| list-segment-builder | email | 13.0.0 | 2026-07-04 |
-| dynamic-content-personalizer | email | 13.0.0 | 2026-07-04 |
-| email-creative-builder | email | 13.0.0 | 2026-07-04 |
-| email-render-builder | email | 13.0.0 | 2026-07-04 |
-| subject-line-lab | email | 13.0.0 | 2026-07-04 |
-| email-sequence-designer | email | 13.0.0 | 2026-07-04 |
-| newsletter-monetization-planner | email | 13.0.0 | 2026-07-04 |
-| preference-frequency-manager | email | 13.0.0 | 2026-07-04 |
-| reactivation-specialist | email | 13.0.0 | 2026-07-04 |
-| cold-outbound-sequencer | email | 13.0.0 | 2026-07-04 |
-| email-quality-auditor | email | 13.0.0 | 2026-07-04 |
-| inbox-placement-monitor | email | 13.0.0 | 2026-07-04 |
-| send-experiment-designer | email | 13.0.0 | 2026-07-04 |
-| consent-registry | protocol | 13.0.0 | 2026-07-04 |
-| creator-registry | protocol | 13.0.0 | 2026-07-04 |
-| entity-optimizer | protocol | 13.0.0 | 2026-07-04 |
-| memory-management | protocol | 13.0.0 | 2026-07-04 |
-| offer-claims-registry | protocol | 13.0.0 | 2026-07-04 |
+| keyword-research | research | 14.0.0 | 2026-07-05 |
+| competitor-analysis | research | 14.0.0 | 2026-07-05 |
+| serp-analysis | research | 14.0.0 | 2026-07-05 |
+| content-gap-analysis | research | 14.0.0 | 2026-07-05 |
+| content-writer | build | 14.0.0 | 2026-07-05 |
+| geo-content-optimizer | build | 14.0.0 | 2026-07-05 |
+| serp-markup-builder | build | 14.0.0 | 2026-07-05 |
+| page-play-builder | build | 14.0.0 | 2026-07-05 |
+| content-quality-auditor | optimize | 14.0.0 | 2026-07-05 |
+| technical-seo-checker | optimize | 14.0.0 | 2026-07-05 |
+| on-page-seo-auditor | optimize | 14.0.0 | 2026-07-05 |
+| site-structure-optimizer | optimize | 14.0.0 | 2026-07-05 |
+| domain-authority-auditor | monitor | 14.0.0 | 2026-07-05 |
+| rank-tracker | monitor | 14.0.0 | 2026-07-05 |
+| performance-monitor | monitor | 14.0.0 | 2026-07-05 |
+| offsite-signal-analyzer | monitor | 14.0.0 | 2026-07-05 |
+| audience-mapper | discover | 14.0.0 | 2026-07-05 |
+| trend-spotter | discover | 14.0.0 | 2026-07-05 |
+| influencer-discovery | discover | 14.0.0 | 2026-07-05 |
+| fit-scorer | discover | 14.0.0 | 2026-07-05 |
+| competitor-tracker | plan | 14.0.0 | 2026-07-05 |
+| campaign-planner | plan | 14.0.0 | 2026-07-05 |
+| brief-generator | plan | 14.0.0 | 2026-07-05 |
+| budget-optimizer | plan | 14.0.0 | 2026-07-05 |
+| outreach-manager | activate | 14.0.0 | 2026-07-05 |
+| content-reviewer | activate | 14.0.0 | 2026-07-05 |
+| contract-helper | activate | 14.0.0 | 2026-07-05 |
+| content-amplifier | activate | 14.0.0 | 2026-07-05 |
+| landing-optimizer | measure | 14.0.0 | 2026-07-05 |
+| performance-analyzer | measure | 14.0.0 | 2026-07-05 |
+| roi-calculator | measure | 14.0.0 | 2026-07-05 |
+| report-generator | measure | 14.0.0 | 2026-07-05 |
+| campaign-architect | paid | 14.0.0 | 2026-07-05 |
+| audience-segment-builder | paid | 14.0.0 | 2026-07-05 |
+| search-term-miner | paid | 14.0.0 | 2026-07-05 |
+| product-feed-optimizer | paid | 14.0.0 | 2026-07-05 |
+| ad-creative-builder | paid | 14.0.0 | 2026-07-05 |
+| ad-test-designer | paid | 14.0.0 | 2026-07-05 |
+| bid-strategy-planner | paid | 14.0.0 | 2026-07-05 |
+| landing-experience-checker | paid | 14.0.0 | 2026-07-05 |
+| ad-account-auditor | paid | 14.0.0 | 2026-07-05 |
+| conversion-signal-qa | paid | 14.0.0 | 2026-07-05 |
+| placement-exclusion-manager | paid | 14.0.0 | 2026-07-05 |
+| conversion-value-mapper | paid | 14.0.0 | 2026-07-05 |
+| paid-measurement-loop | paid | 14.0.0 | 2026-07-05 |
+| attribution-reconciler | paid | 14.0.0 | 2026-07-05 |
+| budget-pacing-monitor | paid | 14.0.0 | 2026-07-05 |
+| fatigue-frequency-manager | paid | 14.0.0 | 2026-07-05 |
+| deliverability-qa | email | 14.0.0 | 2026-07-05 |
+| list-segment-builder | email | 14.0.0 | 2026-07-05 |
+| list-growth-designer | email | 14.0.0 | 2026-07-05 |
+| list-hygiene-monitor | email | 14.0.0 | 2026-07-05 |
+| email-creative-builder | email | 14.0.0 | 2026-07-05 |
+| subject-line-lab | email | 14.0.0 | 2026-07-05 |
+| email-render-builder | email | 14.0.0 | 2026-07-05 |
+| dynamic-content-personalizer | email | 14.0.0 | 2026-07-05 |
+| email-sequence-designer | email | 14.0.0 | 2026-07-05 |
+| newsletter-monetization-planner | email | 14.0.0 | 2026-07-05 |
+| preference-frequency-manager | email | 14.0.0 | 2026-07-05 |
+| reactivation-specialist | email | 14.0.0 | 2026-07-05 |
+| email-quality-auditor | email | 14.0.0 | 2026-07-05 |
+| send-experiment-designer | email | 14.0.0 | 2026-07-05 |
+| inbox-placement-monitor | email | 14.0.0 | 2026-07-05 |
+| cold-outbound-sequencer | email | 14.0.0 | 2026-07-05 |
+| positioning-mapper | launch | 14.0.0 | 2026-07-05 |
+| launch-tier-planner | launch | 14.0.0 | 2026-07-05 |
+| launch-window-planner | launch | 14.0.0 | 2026-07-05 |
+| early-access-designer | launch | 14.0.0 | 2026-07-05 |
+| message-house-builder | launch | 14.0.0 | 2026-07-05 |
+| launch-asset-packager | launch | 14.0.0 | 2026-07-05 |
+| pricing-packaging-planner | launch | 14.0.0 | 2026-07-05 |
+| sales-enablement-kit | launch | 14.0.0 | 2026-07-05 |
+| launch-readiness-auditor | launch | 14.0.0 | 2026-07-05 |
+| launch-day-conductor | launch | 14.0.0 | 2026-07-05 |
+| community-launch-runner | launch | 14.0.0 | 2026-07-05 |
+| press-media-relations | launch | 14.0.0 | 2026-07-05 |
+| launch-monitor | launch | 14.0.0 | 2026-07-05 |
+| launch-feedback-synthesizer | launch | 14.0.0 | 2026-07-05 |
+| launch-retro-analyzer | launch | 14.0.0 | 2026-07-05 |
+| momentum-planner | launch | 14.0.0 | 2026-07-05 |
+| entity-optimizer | protocol | 14.0.0 | 2026-07-05 |
+| creator-registry | protocol | 14.0.0 | 2026-07-05 |
+| offer-claims-registry | protocol | 14.0.0 | 2026-07-05 |
+| consent-registry | protocol | 14.0.0 | 2026-07-05 |
+| launch-registry | protocol | 14.0.0 | 2026-07-05 |
+| memory-management | protocol | 14.0.0 | 2026-07-05 |
 
 ## Changelog
+
+### v14.0.0 — Fifth discipline: Product Launch (RAMP) (2026-07-05)
+
+Major release per the discipline-addition convention (email/SEND v12.0.0 precedent): the bundle grows 69 → **86 skills** (16 × 5 disciplines + 6 protocol), 5 → **6 commands**, 5 → **6 frameworks/gates**, and every skill aligns to `14.0.0`. Design inputs: a 100+-repo GitHub survey (launch checklists, GTM frameworks, PH/HN mechanics, press-kit standards, early-access systems) with all platform lore demoted to Estimated-with-source.
+
+- **New discipline `launch/`** — 16 skills on the RAMP loop (Research → Assemble → Mobilize → Prove): `positioning-mapper` (Dunford canvas), `launch-tier-planner` (tier/type + risk register + kill criteria), `launch-window-planner`, `early-access-designer` (waitlist→GA stage ladder); `message-house-builder` (PR-FAQ spine, claims-ledger-aware), `launch-asset-packager` (press kit + dual-store listing specs citing the stores' official docs + technical go-live items), `pricing-packaging-planner`, `sales-enablement-kit`; `launch-readiness-auditor`, `launch-day-conductor` (hour-blocked runbook, requires SHIP), `community-launch-runner` (platform-rule guardrails + regional/中文 channel matrix), `press-media-relations`; `launch-monitor` (spike-vs-sustain, comments>points ratio), `launch-feedback-synthesizer` (status-loop + compliant social proof — no incentivized store reviews), `launch-retro-analyzer` (D1/W1/M1 + 5-Whys), `momentum-planner` (anti second-week cliff, changelog-as-GTM).
+- **New framework RAMP** (`references/ramp-benchmark.md`): R Readiness / A Assets / M Momentum / P Proof, 40 items (4×10, channel-agnostic), LQS = floor(goal-weighted mean) with three use-case columns (B2B SaaS ·30/·35/·15/·20, dev-tool ·20/·20/·35/·25, mobile ·35/·25/·20/·20); vetoes RAMP R1 (stage-truth vs launch-registry, no record = NEEDS_INPUT), A1 (claim integrity vs the claims ledger), M1 (platform manipulation/policy; asking for feedback ≠ votes), P1 (measurement broken; labeled modeled data = Partial); launch-stacking is a guardrail under M, not a veto. Golden-math fixture `R=80 A=75 M=70 P=78` → 76/75/76 locked in `golden-auditor-math.py`. Naming disambiguation: RAMP-R1/A1 collide textually with ROAS-R1/A1 — shared docs qualify with the framework name; auditor-runbook bumped to 2.3.
+- **Sixth gate `launch-readiness-auditor`** (launch/mobilize/, `class: auditor`): sole LQS computer + veto enforcer, SHIP/FIX/BLOCK, T-1 launch-eve go/no-go mode (technical/content/marketing/support blocks), artifacts at `memory/audits/launch/`, standalone-install fallback like the other five gates.
+- **Sixth protocol registry `launch-registry`**: canonical per-launch dossier + calendar at `memory/launch-registry/` — tier/type, one-way stage machine (draft→concept→alpha→beta→GA), authoritative dates + embargo commitments, channel submission ledger, outcome snapshot; sole-writer with a **T-0 batch-promote clause** (state-model) so launch-day skills append candidates without blocking on the registry.
+- **Three new read-only connectors** (all endpoints live-verified 2026-07): `hn.py` — keyless Algolia HN Search (10,000 req/hr/IP official) + official Firebase v0 (no rate limit, MIT), with the measured gotcha that points/num_comments filters must route to `search_by_date`; `producthunt.py` — free developer token, GraphQL v2, 6,250 complexity/15 min, **non-commercial ToS clause surfaced in docstring and CONNECTORS.md** (business use → hello@producthunt.com, attribution required); `appstore.py` — keyless documented endpoints only (iTunes Search/lookup ~20 calls/min official guidance, charts via the migrated `rss.marketingtools.apple.com`); customerreviews RSS live-tested as a zombie (most apps return empty) and demoted to a manual recipe row; X-Apple-Store-Front / amp-api private-header endpoints explicitly rejected (ToS red line).
+- **Reverse edits to existing skills**: `outreach-manager` generalized into the shared outreach-mechanics engine (creator + media/analyst/hunter targets; press-media-relations hands it the list/angle/embargo artifact); `campaign-planner` gains the launch scope edge ("launch with creators" starts there, everything else routes to launch); `content-amplifier` confirmed owner of the repurposing map + paid-amplification calendar (momentum-planner schedules moments only).
+- **Repo family +2** (registry rows first, per policy): `launch-marketing-ramp-benchmark` (published standard, `body` sync of `references/ramp-benchmark.md`) and `product-launch-agent-skills` (signpost, `list` sync of the `launch/` skills); `sync-family.sh` targets extended.
+- **Chassis updates**: CI validate matrix + `check-evals.py` PHASE_DIRS gain the four `launch/` phase dirs; `skills.sh.json` gains the Launch grouping (86 = 86 asserted); evals 86/86 with 5 seed cases per new skill; skill-contract/state-model/CONTRIBUTING/CLAUDE.md/AGENTS.md/README/docs/README.zh.md counts and tables updated; `/aaron-marketing:auto` learns the launch-disambiguation rule (creators → campaign-planner; email "launch campaign" stays SEND; paid "campaign launch" stays ROAS).
 
 ### v13.0.0 — Cross-agent compatibility wave: 70+ SKILL.md hosts verified (2026-07-04)
 

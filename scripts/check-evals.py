@@ -36,6 +36,7 @@ PHASE_DIRS = [
     "influencer/discover", "influencer/plan", "influencer/activate", "influencer/measure",      # influencer (4x4)
     "ad/research", "ad/orchestrate", "ad/activate", "ad/scale",                                                        # paid ads (when present)
     "email/setup", "email/engage", "email/nurture", "email/deliver",                                                          # email marketing
+    "launch/research", "launch/assemble", "launch/mobilize", "launch/prove",                                                  # product launch (RAMP)
 ]
 REQUIRED_CASE_KEYS = [
     "id", "type", "target_skill", "scenario",

@@ -14,8 +14,10 @@ This repository (`aaron-marketing-skills`) is the **single source of truth (SSOT
 | [influencer-marketing-c3-benchmark](https://github.com/aaron-he-zhu/influencer-marketing-c3-benchmark) | published standard | live mirror | `ids` | `references/c3-benchmark.md` |
 | [paid-ads-roas-benchmark](https://github.com/aaron-he-zhu/paid-ads-roas-benchmark) | published standard | live mirror | `body` | `references/roas-benchmark.md` |
 | [email-marketing-send-benchmark](https://github.com/aaron-he-zhu/email-marketing-send-benchmark) | published standard | live mirror | `body` | `references/send-benchmark.md` |
+| [launch-marketing-ramp-benchmark](https://github.com/aaron-he-zhu/launch-marketing-ramp-benchmark) | published standard | live mirror | `body` | `references/ramp-benchmark.md` |
 | [paid-ads-agent-skills](https://github.com/aaron-he-zhu/paid-ads-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`ad/` skills) |
 | [email-marketing-agent-skills](https://github.com/aaron-he-zhu/email-marketing-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`email/` skills) |
+| [product-launch-agent-skills](https://github.com/aaron-he-zhu/product-launch-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`launch/` skills) |
 | [seo-geo-claude-skills](https://github.com/aaron-he-zhu/seo-geo-claude-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`seo-geo/` skills) · final standalone line at tag `v9.9.12` |
 | [influencer-marketing-agent-skills](https://github.com/aaron-he-zhu/influencer-marketing-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`influencer/` skills) · final standalone line at tag `standalone-final` |
 
@@ -24,7 +26,7 @@ Freshness is self-documenting: every `body`/`list` mirror carries its synced umb
 ## Tiers
 
 - **SSOT** — the only place development happens. Downstream repos never receive content that doesn't exist here first.
-- **Published standard** — the five benchmark frameworks' citable public homes (CORE-EEAT, CITE, C³, ROAS, SEND). Content is the product; each carries a provenance note pointing at its working copy in `references/`.
+- **Published standard** — the six benchmark frameworks' citable public homes (CORE-EEAT, CITE, C³, ROAS, SEND, RAMP). Content is the product; each carries a provenance note pointing at its working copy in `references/`.
 - **Signpost** — README-only discovery surfaces, one per discipline. Banner + current skill list + install pointer to the umbrella; **no skill content, no `plugin.json`** — deliberately non-installable so nobody installs a stale snapshot. The two pre-merge standalones (seo-geo, influencer) keep their final full lines under git tags (`v9.9.12` / `standalone-final`), linked from their banners, with old→new mapping tables for returning users; already-installed copies of those lines keep working offline.
 
 ## Sync modes
@@ -42,13 +44,13 @@ Freshness is self-documenting: every `body`/`list` mirror carries its synced umb
 
 Every family repo README opens with the same recognizable block. Three variants — parameterize, don't improvise:
 
-### A. Signpost (paid-ads / email-marketing agent-skills)
+### A. Signpost (paid-ads / email-marketing / product-launch agent-skills)
 
 ```markdown
 > [!IMPORTANT]
 > **This is a signpost repo — the skills live in [aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills).**
-> The 16 <discipline> skills listed below are actively developed there, as one of 4 disciplines in a 69-skill bundle
-> sharing one contract, five benchmark-driven gates, and keyless data connectors. This repo carries no skill content —
+> The 16 <discipline> skills listed below are actively developed there, as one of 5 disciplines in an 86-skill bundle
+> sharing one contract, six benchmark-driven gates, and keyless data connectors. This repo carries no skill content —
 > it exists so you can find the discipline; the bundle is where you install it.
 ```
 

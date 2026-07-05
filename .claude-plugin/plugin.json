@@ -1,8 +1,8 @@
 {
   "id": "aaron-marketing",
   "name": "aaron-marketing",
-  "version": "13.0.0",
-  "description": "69 marketing skills and 5 commands on one shared contract across four disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), and email marketing across the SEND loop (deliverability/consent, list growth, segmentation, creative, lifecycle flows, newsletter monetization, send-testing, email-quality audit), plus a shared protocol layer (entity/creator/offer-claim/consent truth registries, project memory) serving all four. Frameworks: CORE-EEAT, CITE, C3, ROAS, SEND.",
+  "version": "14.0.0",
+  "description": "86 marketing skills and 6 commands on one shared contract across five disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), email marketing across the SEND loop (deliverability/consent, list growth, segmentation, creative, lifecycle flows, newsletter monetization, send-testing, email-quality audit), and product launch across the RAMP loop (positioning, launch tiering + risk register, launch windows, early access, message house, press kits, pricing/packaging, launch-day runbook, community/press launch execution, launch monitoring, retro, momentum), plus a shared protocol layer (entity/creator/offer-claim/consent/launch truth registries, project memory) serving all five. Frameworks: CORE-EEAT, CITE, C3, ROAS, SEND, RAMP.",
   "author": {
     "name": "Aaron He Zhu",
     "email": "hello@zhuhe.io",
@@ -36,7 +36,12 @@
     "email-deliverability",
     "lifecycle-marketing",
     "marketing-automation",
-    "send-framework"
+    "send-framework",
+    "product-launch",
+    "go-to-market",
+    "launch-marketing",
+    "product-hunt",
+    "ramp-framework"
   ],
   "commands": [
     "./commands/"
@@ -106,10 +111,27 @@
     "./email/deliver/send-experiment-designer",
     "./email/deliver/inbox-placement-monitor",
     "./email/deliver/cold-outbound-sequencer",
+    "./launch/research/positioning-mapper",
+    "./launch/research/launch-tier-planner",
+    "./launch/research/launch-window-planner",
+    "./launch/research/early-access-designer",
+    "./launch/assemble/message-house-builder",
+    "./launch/assemble/launch-asset-packager",
+    "./launch/assemble/pricing-packaging-planner",
+    "./launch/assemble/sales-enablement-kit",
+    "./launch/mobilize/launch-readiness-auditor",
+    "./launch/mobilize/launch-day-conductor",
+    "./launch/mobilize/community-launch-runner",
+    "./launch/mobilize/press-media-relations",
+    "./launch/prove/launch-monitor",
+    "./launch/prove/launch-feedback-synthesizer",
+    "./launch/prove/launch-retro-analyzer",
+    "./launch/prove/momentum-planner",
     "./protocol/entity-optimizer",
     "./protocol/creator-registry",
     "./protocol/offer-claims-registry",
     "./protocol/consent-registry",
+    "./protocol/launch-registry",
     "./protocol/memory-management"
   ]
 }

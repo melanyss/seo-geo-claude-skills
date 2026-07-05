@@ -27,6 +27,7 @@ CITE = os.path.join(ROOT, "references", "cite-domain-rating.md")
 C3 = os.path.join(ROOT, "references", "c3-benchmark.md")
 ROAS = os.path.join(ROOT, "references", "roas-benchmark.md")
 SEND = os.path.join(ROOT, "references", "send-benchmark.md")
+RAMP = os.path.join(ROOT, "references", "ramp-benchmark.md")
 CQA = os.path.join(ROOT, "seo-geo", "optimize", "content-quality-auditor", "SKILL.md")
 DAA = os.path.join(ROOT, "seo-geo", "monitor", "domain-authority-auditor", "SKILL.md")
 
@@ -166,6 +167,27 @@ check("S=80 E=75 N=70 D=78" in send_text, "SEND input vector present in send-ben
 check("floor(76.6) = 76" in send_text, "SEND Promotional result 76 present in send-benchmark")
 check("floor(74.95) = 74" in send_text, "SEND Retention result 74 present in send-benchmark")
 check("floor(76.95) = 76" in send_text, "SEND Cold-outbound result 76 present in send-benchmark")
+
+print("== RAMP LQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
+ramp_text = open(RAMP, encoding="utf-8").read()
+rmwe = re.compile(r"R\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*M\s*[×xX*]\s*([\d.]+)\s*\+\s*P\s*[×xX*]\s*([\d.]+)")
+rmrows = rmwe.findall(ramp_text)
+check(len(rmrows) >= 3, "found all three RAMP goal-weight formulas (got %d)" % len(rmrows))
+ramp_vec = {"R": 80, "A": 75, "M": 70, "P": 78}
+if len(rmrows) >= 3:
+    b2b = {k: float(v) for k, v in zip("RAMP", rmrows[0])}
+    devtool = {k: float(v) for k, v in zip("RAMP", rmrows[1])}
+    mobile = {k: float(v) for k, v in zip("RAMP", rmrows[2])}
+    check(abs(sum(b2b.values()) - 1.0) < 1e-9, "RAMP B2B weights sum to 1.0 (got %.2f)" % sum(b2b.values()))
+    check(abs(sum(devtool.values()) - 1.0) < 1e-9, "RAMP Dev-tool weights sum to 1.0 (got %.2f)" % sum(devtool.values()))
+    check(abs(sum(mobile.values()) - 1.0) < 1e-9, "RAMP Mobile weights sum to 1.0 (got %.2f)" % sum(mobile.values()))
+    check(weighted(ramp_vec, b2b) == 76, "RAMP B2B example (R80 A75 M70 P78) == 76 (got %d)" % weighted(ramp_vec, b2b))
+    check(weighted(ramp_vec, devtool) == 75, "RAMP Dev-tool example (same vector) == 75 (got %d)" % weighted(ramp_vec, devtool))
+    check(weighted(ramp_vec, mobile) == 76, "RAMP Mobile example (same vector) == 76 (got %d)" % weighted(ramp_vec, mobile))
+check("R=80 A=75 M=70 P=78" in ramp_text, "RAMP input vector present in ramp-benchmark")
+check("floor(76.35) = 76" in ramp_text, "RAMP B2B/Mobile result 76 present in ramp-benchmark")
+check("floor(75.0) = 75" in ramp_text, "RAMP Dev-tool result 75 present in ramp-benchmark")
+check("min(76, 60) = 60" in ramp_text, "RAMP veto-cap example present in ramp-benchmark")
 
 print()
 if fails:

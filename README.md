@@ -2,11 +2,11 @@
 
 # Aaron Marketing Skills
 
-**69 marketing skills — SEO/GEO, influencer, paid ads, email — on one contract.**
+**86 marketing skills — SEO/GEO, influencer, paid ads, email, launch — on one contract.**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-13.0.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-14.0.0-orange" alt="Version"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
 </p>
@@ -20,7 +20,7 @@
 
 </div>
 
-A library of Claude Skills and slash commands that turns a chat agent into a marketing operator. Four disciplines and a shared protocol layer, at a glance:
+A library of Claude Skills and slash commands that turns a chat agent into a marketing operator. Five disciplines and a shared protocol layer, at a glance:
 
 | Layer | Skills | Lifecycle (phase directories) | Framework → gate | Entrypoint |
 |-------|--------|-------------------------------|------------------|------------|
@@ -28,7 +28,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 | **Influencer** | 16 | discover → plan → activate → measure | [C³](references/c3-benchmark.md) → `content-reviewer` (ART); `fit-scorer` scores ACE | `/aaron-marketing:influencer` |
 | **Paid ads** | 16 | research → orchestrate → activate → scale | [ROAS](references/roas-benchmark.md) → `ad-account-auditor` (RQS) | `/aaron-marketing:ad` |
 | **Email** | 16 | setup → engage → nurture → deliver | [SEND](references/send-benchmark.md) → `email-quality-auditor` (EQS) | `/aaron-marketing:email` |
-| **Protocol layer** | 5 | — (shared machinery, outside the phase flows) | 4 truth registries (entity · creator · offer/claims · consent) + HOT/WARM/COLD memory | — |
+| **Launch** | 16 | research → assemble → mobilize → prove | [RAMP](references/ramp-benchmark.md) → `launch-readiness-auditor` (LQS) | `/aaron-marketing:launch` |
+| **Protocol layer** | 6 | — (shared machinery, outside the phase flows) | 5 truth registries (entity · creator · offer/claims · consent · launch) + HOT/WARM/COLD memory | — |
 
 `/aaron-marketing:auto` routes any natural-language goal across all of it. Everything is **plain Markdown** — the only code is a Bash hook runner, a Bash validator, and zero-dependency Python-stdlib data helpers (no `pip`, no build step). **Every skill runs at Tier 1 with nothing but data you paste in**; connectors only automate retrieval.
 
@@ -43,8 +44,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 - [First run](#first-run)
 - [Architecture](#architecture)
   - [The shared skill contract](#the-shared-skill-contract)
-  - [One lifecycle, four dialects](#one-lifecycle-four-dialects)
-  - [Quality system: five frameworks, five gates](#quality-system-five-frameworks-five-gates)
+  - [One lifecycle, five dialects](#one-lifecycle-five-dialects)
+  - [Quality system: six frameworks, six gates](#quality-system-six-frameworks-six-gates)
   - [The protocol layer](#the-protocol-layer)
   - [Memory & automation hooks](#memory--automation-hooks)
 - [Skill catalog](#skill-catalog)
@@ -52,7 +53,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
   - [Influencer (16)](#influencer-16)
   - [Paid Ads — ROAS (16)](#paid-ads--roas-16)
   - [Email — SEND (16)](#email--send-16)
-  - [Protocol layer (5)](#protocol-layer-5)
+  - [Launch — RAMP (16)](#launch--ramp-16)
+  - [Protocol layer (6)](#protocol-layer-6)
 - [Commands](#commands)
 - [Connectors & enhancement tiers](#connectors--enhancement-tiers)
 - [Recommended workflows](#recommended-workflows)
@@ -71,8 +73,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 |-----------|---------------------------|
 | **Keyless by default** | Every skill works at **Tier 1** with data you paste or pull from free/first-party sources. Paid tools and MCP servers are an opt-in convenience, never a precondition. Paid-ads skills score from your **own-account manual export** — keyed ad APIs are never required. |
 | **Markdown, not a framework** | Skills are content. The only executable code is `hooks/claude-hook.sh` (Bash), `scripts/validate-skill.sh` (Bash), and `scripts/connectors/*.py` (Python **standard library only**). Nothing to install, audit, or keep up to date. |
-| **One shared contract** | All 69 skills expose the same seven sections and self-declare `discipline` + `phase` metadata, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
-| **Gated quality** | Five benchmarks drive five auditor-class gates that emit structured, machine-checkable verdicts — not vibes. A PostToolUse hook validates every gated artifact before it lands. |
+| **One shared contract** | All 86 skills expose the same seven sections and self-declare `discipline` + `phase` metadata, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
+| **Gated quality** | Six benchmarks drive six auditor-class gates that emit structured, machine-checkable verdicts — not vibes. A PostToolUse hook validates every gated artifact before it lands. |
 | **Truth lives in registries** | Canonical facts (brand entities, creator dossiers, offer/claim substantiation, per-subject consent) live in dedicated protocol-layer registries with sole-writer rules — gates judge against them instead of re-deriving them. |
 | **Memory across turns** | A HOT/WARM/COLD memory model carries findings, scores, and open loops between skills and sessions, sanitized on the way in. |
 | **Plain voice** | Skills ship an AI-slop detector and a banned-phrase list so output reads like a human wrote it. |
@@ -90,7 +92,7 @@ Use it with Claude Code, any Agent Skills-compatible host, or a plain `git clone
 | **[SkillHub.cn](https://skillhub.cn) (中文社区)** | `skillhub install aaron-<skill-name>` (e.g. `aaron-keyword-research`) |
 | **Any host** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
-In Claude Code, `marketplace add` only registers the catalog — run `/plugin install aaron-marketing@aaron` (or pick it from `/plugin`) to actually enable the skills and commands. To pull a **single** skill on a generic host: `npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research`. Browse the bundle on the [skills.sh registry](https://skills.sh/aaron-he-zhu/aaron-marketing-skills). Per-agent directories, frontmatter quirks, and what degrades outside the plugin: [docs/agent-compatibility.md](docs/agent-compatibility.md) (verified 69/69 installable, 2026-07).
+In Claude Code, `marketplace add` only registers the catalog — run `/plugin install aaron-marketing@aaron` (or pick it from `/plugin`) to actually enable the skills and commands. To pull a **single** skill on a generic host: `npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research`. Browse the bundle on the [skills.sh registry](https://skills.sh/aaron-he-zhu/aaron-marketing-skills). Per-agent directories, frontmatter quirks, and what degrades outside the plugin: [docs/agent-compatibility.md](docs/agent-compatibility.md) (verified 86/86 installable, 2026-07).
 
 Installing the plugin adds **nothing** to your `/mcp` list — the MCP catalogue lives in [`docs/mcp-catalog.json`](docs/mcp-catalog.json), deliberately outside the plugin-root `.mcp.json` path that Claude Code auto-registers, so it is a copy-paste reference only (see [Connectors](#connectors--enhancement-tiers)).
 
@@ -137,24 +139,24 @@ Every skill follows the **same activation contract** — seven sections in a fix
 6. **Instructions** — the numbered method (treats all exports as untrusted input).
 7. **Next Best Skill** — where to go next (with visited-set + max-depth termination rules).
 
-Every skill also self-declares `metadata.discipline` (seo-geo / influencer / paid / protocol) and `metadata.phase`, so routing and clustering work uniformly. The contract is documented once in [skill-contract.md](references/skill-contract.md); the shared cross-skill state lives in [state-model.md](references/state-model.md).
+Every skill also self-declares `metadata.discipline` (seo-geo / influencer / paid / email / launch / protocol) and `metadata.phase`, so routing and clustering work uniformly. The contract is documented once in [skill-contract.md](references/skill-contract.md); the shared cross-skill state lives in [state-model.md](references/state-model.md).
 
-### One lifecycle, four dialects
+### One lifecycle, five dialects
 
-The four disciplines share one meta-lifecycle spine; each adapts the granularity to its own workflow (phase *counts* differ by design):
+The five disciplines share one meta-lifecycle spine; each adapts the granularity to its own workflow (phase *counts* differ by design):
 
-| Meta-stage | SEO/GEO | Influencer | Paid (ROAS) | Email (SEND) |
-|------------|---------|---------------------|-------------|--------------|
-| **Understand** | research | discover | research | setup |
-| **Plan / create** | build | plan | orchestrate | engage |
-| **Activate / optimize** | optimize | activate | activate | nurture |
-| **Measure** | monitor | measure | scale | deliver |
+| Meta-stage | SEO/GEO | Influencer | Paid (ROAS) | Email (SEND) | Launch (RAMP) |
+|------------|---------|---------------------|-------------|--------------|---------------|
+| **Understand** | research | discover | research | setup | research |
+| **Plan / create** | build | plan | orchestrate | engage | assemble |
+| **Activate / optimize** | optimize | activate | activate | nurture | mobilize |
+| **Measure** | monitor | measure | scale | deliver | prove |
 
-All four use phase **directories** (`seo-geo/research/`…, `influencer/discover/`…, `ad/research/`…, `email/setup/`…). Note "activate" means creator outreach for influencer but account-gating for paid ads — same word, discipline-specific scope.
+All five use phase **directories** (`seo-geo/research/`…, `influencer/discover/`…, `ad/research/`…, `email/setup/`…, `launch/research/`…). Note "activate" means creator outreach for influencer but account-gating for paid ads — same word, discipline-specific scope.
 
-### Quality system: five frameworks, five gates
+### Quality system: six frameworks, six gates
 
-Five benchmarks make "good" measurable. Each defines dimensions, a rollup method, and a small set of **veto items** (hard fails that cap or block a score regardless of the rest):
+Six benchmarks make "good" measurable. Each defines dimensions, a rollup method, and a small set of **veto items** (hard fails that cap or block a score regardless of the rest):
 
 | Framework | Scores | Items / dimensions | Rollup | Veto items |
 |-----------|--------|--------------------|--------|------------|
@@ -163,6 +165,7 @@ Five benchmarks make "good" measurable. Each defines dimensions, a rollup method
 | **[C³](references/c3-benchmark.md)** | Influencer Creator / Content / Campaign | ACE / ART / ROI · 9 dimensions | **CVI = (ACE × ART × ROI)^⅓** (geometric) | ACE `A2`/`C1`/`E2`, ART `T1`/`T2` |
 | **[ROAS](references/roas-benchmark.md)** | Paid ads Return / Offer / Audience / Spend-efficiency | R / O / A / S | **RQS = floor(goal-weighted mean)** (arithmetic) | `R1`/`R2`/`O1`/`O2`/`A1` |
 | **[SEND](references/send-benchmark.md)** | Email marketing Sender-integrity / Engagement / Nurture / Direct-response | S / E / N / D | **EQS = floor(goal-weighted mean)** (arithmetic) | `S1`/`S2`/`N1`/`D1` |
+| **[RAMP](references/ramp-benchmark.md)** | Product launch Readiness / Assets / Momentum / Proof | R / A / M / P · 40 items | **LQS = floor(goal-weighted mean)** (arithmetic) | `R1`/`A1`/`M1`/`P1` (framework-qualified — distinct from ROAS `R1`/`A1`) |
 
 Each framework is enforced by an **auditor-class gate** — a skill that writes a gated artifact (`class: auditor-output`) validated by the PostToolUse hook. Gates are workflow steps, so each lives in its discipline and is counted there:
 
@@ -173,12 +176,13 @@ Each framework is enforced by an **auditor-class gate** — a skill that writes 
 | [content-reviewer](influencer/activate/content-reviewer/SKILL.md) | C³ ART | `influencer/activate/` (influencer) | APPROVED / REVISIONS / REJECTED before a creator post ships |
 | [ad-account-auditor](ad/activate/ad-account-auditor/SKILL.md) | ROAS RQS | `ad/activate/` (paid) | SHIP / FIX / BLOCK before budgets scale |
 | [email-quality-auditor](email/deliver/email-quality-auditor/SKILL.md) | SEND EQS | `email/deliver/` (email) | SHIP / FIX / BLOCK before send |
+| [launch-readiness-auditor](launch/mobilize/launch-readiness-auditor/SKILL.md) | RAMP LQS | `launch/mobilize/` (launch) | SHIP / FIX / BLOCK before the launch moment is committed |
 
-**Shared cap chassis:** a single veto caps the affected dimension and the overall at `min(raw, 60)`; **two or more vetoes → `BLOCKED`** (no final score). Verdicts are translated to plain language (no item IDs in user-facing reports). Gate mechanics — handoff schema, cap arithmetic, artifact-gate checklist — are specified once in [auditor-runbook.md](references/auditor-runbook.md), and the arithmetic of all five frameworks is locked by a deterministic golden test (see [Quality guards](#quality-guards-ci)).
+**Shared cap chassis:** a single veto caps the affected dimension and the overall at `min(raw, 60)`; **two or more vetoes → `BLOCKED`** (no final score). Verdicts are translated to plain language (no item IDs in user-facing reports). Gate mechanics — handoff schema, cap arithmetic, artifact-gate checklist — are specified once in [auditor-runbook.md](references/auditor-runbook.md), and the arithmetic of all six frameworks is locked by a deterministic golden test (see [Quality guards](#quality-guards-ci)).
 
 ### The protocol layer
 
-The `protocol/` directory holds the **shared truth & memory machinery** that sits outside the discipline phase-flows — 5 skills, counted separately:
+The `protocol/` directory holds the **shared truth & memory machinery** that sits outside the discipline phase-flows — 6 skills, counted separately:
 
 | Skill | Job | Anchored to | Canonical store |
 |-------|-----|-------------|-----------------|
@@ -186,6 +190,7 @@ The `protocol/` directory holds the **shared truth & memory machinery** that sit
 | [creator-registry](protocol/creator-registry/SKILL.md) | Canonical creator roster/dossier — deduped handles, provenance-labeled audience stats, rates, compliance history | influencer | `memory/creators/` |
 | [offer-claims-registry](protocol/offer-claims-registry/SKILL.md) | Offer & claim-substantiation ledger — the record the O1/T2 claim checks are judged against | paid | `memory/claims/` |
 | [consent-registry](protocol/consent-registry/SKILL.md) | Canonical per-subject consent/suppression record — the S2/N1 vetoes judge against it | email | `memory/consent/` |
+| [launch-registry](protocol/launch-registry/SKILL.md) | Canonical launch dossier/calendar — tier, one-way lifecycle stage, authoritative dates/embargo, channel submission ledger; the launch truth SSOT the R1 stage-truth veto judges against | launch | `memory/launch-registry/` |
 | [memory-management](protocol/memory-management/SKILL.md) | HOT/WARM/COLD memory lifecycle (capture · promote · demote · archive · query) | all disciplines | `memory/` |
 
 The registries follow a **sole-writer rule** (other skills submit via `candidates.md`), and they *curate* — the gates *judge*. The genuinely horizontal layer beneath everything is the `references/` protocols ([auditor-runbook](references/auditor-runbook.md), [state-model](references/state-model.md), [skill-contract](references/skill-contract.md), [humanizer-slop](references/humanizer-slop.md), [measurement-protocol](references/measurement-protocol.md)) — shared by design as documents, not skills.
@@ -206,10 +211,10 @@ The registries follow a **sole-writer rule** (other skills submit via `candidate
 |-------|---------|--------------|
 | `SessionStart` | `startup\|resume\|clear\|compact` | Injects the **sanitized** hot-cache + an open-loops pointer (prompt-injection lines are redacted; symlinked caches are rejected). |
 | `UserPromptSubmit` | (all) | Lightweight per-prompt context hook. |
-| `PostToolUse` | `Write\|Edit` | Hot-cache size warning **+ the Artifact Gate**: any file under `memory/audits/` that declares `class: auditor-output` is validated against the handoff schema and cap fields, or the write is blocked. The five auditor-class gates must declare that marker by contract; unmarked files are not auditor artifacts and pass through. |
+| `PostToolUse` | `Write\|Edit` | Hot-cache size warning **+ the Artifact Gate**: any file under `memory/audits/` that declares `class: auditor-output` is validated against the handoff schema and cap fields, or the write is blocked. The six auditor-class gates must declare that marker by contract; unmarked files are not auditor artifacts and pass through. |
 | `Stop` | (all) | No-op (exits silently). |
 
-The Artifact Gate is **framework-agnostic** — the same hook validates CORE-EEAT, CITE, C³, ROAS, and SEND artifacts with no per-framework code.
+The Artifact Gate is **framework-agnostic** — the same hook validates CORE-EEAT, CITE, C³, ROAS, SEND, and RAMP artifacts with no per-framework code.
 
 ---
 
@@ -357,13 +362,49 @@ Four phase directories under `email/` (4 skills each) follow the SEND loop; the 
 
 </details>
 
-### Protocol layer (5)
+### Launch — RAMP (16)
+
+Four phase directories under `launch/` (4 skills each) follow the RAMP loop; the gate (⛩ launch-readiness-auditor) sits in Mobilize. Only the gate computes the goal-weighted LQS — every other skill works one lever and hands off. Use-case-agnostic (B2B SaaS sales-led / dev-tool community launch / mobile app-store launch); the goal-weight column picks the emphasis.
+
+| Phase | Skills |
+|-------|--------|
+| **Research** | [positioning-mapper](launch/research/positioning-mapper/SKILL.md), [launch-tier-planner](launch/research/launch-tier-planner/SKILL.md), [launch-window-planner](launch/research/launch-window-planner/SKILL.md), [early-access-designer](launch/research/early-access-designer/SKILL.md) |
+| **Assemble** | [message-house-builder](launch/assemble/message-house-builder/SKILL.md), [launch-asset-packager](launch/assemble/launch-asset-packager/SKILL.md), [pricing-packaging-planner](launch/assemble/pricing-packaging-planner/SKILL.md), [sales-enablement-kit](launch/assemble/sales-enablement-kit/SKILL.md) |
+| **Mobilize** | ⛩ [launch-readiness-auditor](launch/mobilize/launch-readiness-auditor/SKILL.md), [launch-day-conductor](launch/mobilize/launch-day-conductor/SKILL.md), [community-launch-runner](launch/mobilize/community-launch-runner/SKILL.md), [press-media-relations](launch/mobilize/press-media-relations/SKILL.md) |
+| **Prove** | [launch-monitor](launch/prove/launch-monitor/SKILL.md), [launch-feedback-synthesizer](launch/prove/launch-feedback-synthesizer/SKILL.md), [launch-retro-analyzer](launch/prove/launch-retro-analyzer/SKILL.md), [momentum-planner](launch/prove/momentum-planner/SKILL.md) |
+
+<details><summary><b>Per-skill purpose (Launch)</b></summary>
+
+| Skill | RAMP lever | What it does |
+|-------|-----------|--------------|
+| positioning-mapper | R | Dunford-style positioning canvas — named competitive alternatives, unique attributes, value themes, beachhead segment, onlyness statement. |
+| launch-tier-planner | R | Tier decision (Tier 1 flagship / Tier 2 targeted / Tier 3 changelog-level), launch-type declaration, KPI targets, risk register with kill criteria. |
+| launch-window-planner | R | Candidate-window comparison (conflicts / tailwinds / risk), launch-week vs rolling-release call, store-review buffer, embargo window definition. |
+| early-access-designer | R | Waitlist→concept→alpha→beta→GA stage ladder with graduation criteria, cohort gating, feedback loop, referral mechanics (upstream of the R1 stage-truth veto). |
+| message-house-builder | A | Message house (tagline, one-liner, value pillars, proof points) + working-backwards PR-FAQ spine + per-channel angle packs (upstream of A1). |
+| launch-asset-packager | A | Tier-scoped launch asset manifest — press kit spec, demo/screenshot specs, launch FAQ, store-listing metadata, technical go-live checklist. |
+| pricing-packaging-planner | A | Launch pricing & packaging — tier structure, value-to-price map, launch-offer ladder, beta pricing with graduation path, guarantee terms. |
+| sales-enablement-kit | A | Internal enablement — battle cards, sales talk track, objection-handling table, internal FAQ + CS macros, embargo-disciplined internal announcement. |
+| ⛩ launch-readiness-auditor | R+A+M+P (LQS) | Auditor-class RAMP gate: scores LQS, enforces R1/A1/M1/P1, emits SHIP/FIX/BLOCK; carries a **T-1 go/no-go** mode. |
+| launch-day-conductor | M | Hour-blocked launch-day runbook — pre-conditions gate check, observation-window verdicts after irreversible pushes, P0–P3 incident ladder + rollback playbooks. |
+| community-launch-runner | M | Per-platform submission packages (Product Hunt, Show HN, subreddits, directory waves, regional/Chinese channels) under a platform red-line check. |
+| press-media-relations | M | Three-tier media/analyst list, embargo pitch timing, press-release draft in standard structure, analyst briefing outline. |
+| launch-monitor | P | T-0→T+30 window watch — instrumentation verification (upstream of P1), rank/review/news polling, D0/W1/M1 KPI snapshots, spike-vs-sustain reads. |
+| launch-feedback-synthesizer | P | Feedback theme digest, open→shipped status loop ("you asked, we shipped"), compliant social-proof harvest. |
+| launch-retro-analyzer | P | D1/W1/M1 retro — per-channel actual-vs-target, 5-Whys on the largest miss, keep/kill/change decisions, outcome snapshot to the registry. |
+| momentum-planner | P | T+1→T+30 momentum plan — launch-moment calendar, announcement-tier routing, relaunch legitimacy call, next Tier-1 moment. |
+
+**Reused cross-discipline** (counted in their home phases, not duplicated): `audience-mapper`, `trend-spotter`, `budget-optimizer`, `landing-optimizer`, `campaign-planner`, `outreach-manager`, `content-amplifier`, `email-creative-builder` / `email-sequence-designer` / `cold-outbound-sequencer`, `campaign-architect` / `ad-creative-builder`, `page-play-builder` / `content-writer`, `technical-seo-checker` / `serp-markup-builder`, `performance-monitor`, `keyword-research`, `entity-optimizer`, `offer-claims-registry`, `consent-registry`, `list-growth-designer`, `roi-calculator` / `performance-analyzer` / `report-generator` — see [ramp-benchmark.md](references/ramp-benchmark.md).
+
+</details>
+
+### Protocol layer (6)
 
 The shared truth & memory machinery — see [Architecture § The protocol layer](#the-protocol-layer) for roles and sole-writer rules.
 
 | Group | Skills |
 |-------|--------|
-| **Protocol** | [entity-optimizer](protocol/entity-optimizer/SKILL.md), [creator-registry](protocol/creator-registry/SKILL.md), [offer-claims-registry](protocol/offer-claims-registry/SKILL.md), [consent-registry](protocol/consent-registry/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
+| **Protocol** | [entity-optimizer](protocol/entity-optimizer/SKILL.md), [creator-registry](protocol/creator-registry/SKILL.md), [offer-claims-registry](protocol/offer-claims-registry/SKILL.md), [consent-registry](protocol/consent-registry/SKILL.md), [launch-registry](protocol/launch-registry/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
 
 <details><summary><b>Per-skill purpose (Protocol)</b></summary>
 
@@ -373,6 +414,7 @@ The shared truth & memory machinery — see [Architecture § The protocol layer]
 | creator-registry | Canonical creator roster/dossier — deduped handles, provenance-labeled audience stats, rates, compliance history. |
 | offer-claims-registry | Canonical offer & claim-substantiation ledger — the record the O1/T2 claim checks are judged against. |
 | consent-registry | Canonical per-subject consent/suppression record — opt-in timestamp + lawful basis, double-opt-in proof, append-only unsub/bounce/complaint history; the record the S2/N1 vetoes judge against. |
+| launch-registry | Canonical per-launch dossier + launch calendar — tier, launch type, one-way lifecycle stage (draft→…→GA), authoritative dates + embargo commitments, channel submission ledger, outcome snapshot; the launch truth SSOT. |
 | memory-management | Review, promote, demote, and archive HOT/WARM/COLD project memory. |
 
 </details>
@@ -381,7 +423,7 @@ The shared truth & memory machinery — see [Architecture § The protocol layer]
 
 ## Commands
 
-Five commands: `/aaron-marketing:auto` routes any goal across all four disciplines, and each discipline has exactly one explicit entrypoint. Source: [commands/](commands).
+Six commands: `/aaron-marketing:auto` routes any goal across all five disciplines, and each discipline has exactly one explicit entrypoint. Source: [commands/](commands).
 
 | Command | Use it for | Narrowing |
 |---------|-----------|-----------|
@@ -390,8 +432,9 @@ Five commands: `/aaron-marketing:auto` routes any goal across all four disciplin
 | `/aaron-marketing:influencer` | Influencer: audience insight, discovery & fit, planning, outreach, amplification, ROI | `--phase discover\|plan\|activate\|measure` |
 | `/aaron-marketing:ad` | Paid ads (ROAS loop): segments, structure, creative, experiment design, the audit gate, measurement | `--phase research\|orchestrate\|activate\|scale` |
 | `/aaron-marketing:email` | Email (SEND loop): deliverability/consent, segmentation, creative, lifecycle flows, monetization, send-testing, the audit gate | `--phase setup\|engage\|nurture\|deliver` |
+| `/aaron-marketing:launch` | Product launch (RAMP loop): positioning, tier & window, message house & assets, the readiness gate, launch-day run, monitoring & retro | `--phase research\|assemble\|mobilize\|prove` |
 
-Daily work normally starts with `/aaron-marketing:auto`; the other four are explicit discipline entrypoints, with `--mode` / `--phase` to narrow the stage.
+Daily work normally starts with `/aaron-marketing:auto`; the other five are explicit discipline entrypoints, with `--mode` / `--phase` to narrow the stage.
 
 **Rename note:** commands use the `/aaron-marketing:` prefix. The former `research` / `create` / `audit` / `track` commands are now modes of `/aaron-marketing:seo-geo` (flags unchanged). Older `/seo:*` and `/aaron-seo-geo:*` names recover via `auto` — e.g. `/aaron-marketing:auto /aaron-seo-geo:audit https://example.com/blog/post` returns `/aaron-marketing:seo-geo https://example.com/blog/post --mode audit`.
 
@@ -498,9 +541,9 @@ Every change runs against a set of fail-closed guards (all in `scripts/` and `te
 
 | Guard | Checks |
 |-------|--------|
-| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 69 skills. |
-| `golden-auditor-math.py` | Deterministic weight-sum + worked-example arithmetic for **all five** frameworks. |
-| `check-evals.py` | Eval structural lint + `structure-manifest.json` (69/69 skills carry eval cases). |
+| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 86 skills. |
+| `golden-auditor-math.py` | Deterministic weight-sum + worked-example arithmetic for **all six** frameworks. |
+| `check-evals.py` | Eval structural lint + `structure-manifest.json` (86/86 skills carry eval cases). |
 | `check-pii.py` | Blocks committed secrets / PII (token-level allowlist, fail-closed). |
 | `check-stdlib-only.sh` | Dependency-creep guard + the Paid-Ads keyed-API red line. |
 | `check-versions.sh` | Version-sync guard: bundle version identical across plugin.json / both marketplace mirrors / both README badges / CLAUDE.md / VERSIONS.md release line + changelog entry, and every SKILL.md version matches its VERSIONS.md row. |
@@ -514,7 +557,7 @@ Live endpoint drift is covered separately by the **manual** [`scripts/connectors
 ## Contributing & project docs
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — authoring rules, the contribution checklist, and the authoritative 8-file tracking list.
-- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `13.0.0`).
+- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `14.0.0`).
 - **[SECURITY.md](SECURITY.md)** · **[PRIVACY.md](PRIVACY.md)** · **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — security, privacy, and community policy.
 - **[CLAUDE.md](CLAUDE.md)** / **[AGENTS.md](AGENTS.md)** — agent-facing context for this repo.
 

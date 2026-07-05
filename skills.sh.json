@@ -91,13 +91,36 @@
       ]
     },
     {
-      "title": "Protocol layer (5) — shared truth registries & memory",
-      "description": "Cross-discipline machinery the other 64 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
+      "title": "Launch · RAMP (16) — research → assemble → mobilize → prove",
+      "description": "Product launches for B2B SaaS, dev-tool/community, and mobile app-store use cases: positioning and launch tiering with a risk register, launch windows and early-access ladders, message house and press kits, pricing/packaging and sales enablement, then the LQS readiness gate (launch-readiness-auditor) with a T-1 go/no-go, launch-day runbook, community/press execution, launch-window monitoring, feedback triage, retro, and momentum planning.",
+      "skills": [
+        "positioning-mapper",
+        "launch-tier-planner",
+        "launch-window-planner",
+        "early-access-designer",
+        "message-house-builder",
+        "launch-asset-packager",
+        "pricing-packaging-planner",
+        "sales-enablement-kit",
+        "launch-readiness-auditor",
+        "launch-day-conductor",
+        "community-launch-runner",
+        "press-media-relations",
+        "launch-monitor",
+        "launch-feedback-synthesizer",
+        "launch-retro-analyzer",
+        "momentum-planner"
+      ]
+    },
+    {
+      "title": "Protocol layer (6) — shared truth registries & memory",
+      "description": "Cross-discipline machinery the other 80 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, the canonical launch dossier/calendar, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
       "skills": [
         "entity-optimizer",
         "creator-registry",
         "offer-claims-registry",
         "consent-registry",
+        "launch-registry",
         "memory-management"
       ]
     }
