@@ -1,3 +1,5 @@
+<div align="center">
+
 # Aaron Marketing Skills
 
 **69 skills. 5 commands. Four marketing disciplines — SEO/GEO, influencer, paid ads, email — on one operating contract.**
@@ -15,6 +17,8 @@
 </p>
 
 [English](README.md) | [中文](docs/README.zh.md)
+
+</div>
 
 A library of Claude Skills and slash commands that turns a chat agent into a marketing operator. Four disciplines and a shared protocol layer, at a glance:
 
