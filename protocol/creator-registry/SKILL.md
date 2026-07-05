@@ -15,7 +15,7 @@ metadata: {"author": "aaron-he-zhu", "version": "13.0.0", "discipline": "protoco
 
 # Creator Registry
 
-The canonical creator roster SSOT — the entity-optimizer analog for the IMPACT discipline. Curates the canonical per-creator record — **registry, not gate**: no `class: auditor`, no cap fields, no veto scoring, no roll-up labels; it stores dated facts and history, and the existing gates and scorers judge against it.
+The canonical creator roster SSOT — the entity-optimizer analog for the influencer discipline. Curates the canonical per-creator record — **registry, not gate**: no `class: auditor`, no cap fields, no veto scoring, no roll-up labels; it stores dated facts and history, and the existing gates and scorers judge against it.
 
 One durable record per creator holds: verified cross-platform handles (identity dedup — is `@sarah_ig` the same person as `@sarahtok`?), audience stats each carrying an as-of date and a Measured / User-provided / Estimated label, rate card and negotiation history, past-campaign performance baselines, dated disclosure/FTC compliance events (each citing the content-reviewer verdict ID that produced it), exclusivity windows and contract status, and the confirmed contact path (with which waterfall step produced it). The registry registers, reconciles, and versions the record; it never scores, gates, or judges.
 

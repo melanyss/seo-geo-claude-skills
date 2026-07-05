@@ -1,6 +1,6 @@
 ---
 name: offsite-signal-analyzer
-slug: aaron-offsite-signal-analyzer
+slug: offsite-signal-analyzer
 displayName: "Offsite Signal Analyzer · 外链分析"
 summary: "外链分析/反向链接/AI流量/AI引荐/ChatGPT流量/AI转化"
 description: 'Use when the user asks to "analyze backlinks", "analyze my off-site signals", or "track AI traffic / ChatGPT / Perplexity referrals"; profiles referring domains, anchor-text mix, toxic links, and disavow candidates (backlinks mode) or isolates AI-assistant referral sessions in GA4/GSC/logs and reports their trend, landing pages, and AI-vs-organic conversion (ai-referrals mode). Not for internal links — use site-structure-optimizer; not for keyword positions — use rank-tracker; not for multi-metric stakeholder reports — use performance-monitor. 外链分析/反向链接/AI流量/AI引荐/ChatGPT流量/AI转化'

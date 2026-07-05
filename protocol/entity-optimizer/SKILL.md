@@ -1,6 +1,6 @@
 ---
 name: entity-optimizer
-slug: aaron-entity-optimizer
+slug: entity-optimizer
 displayName: "Entity Optimizer · 实体优化"
 summary: "实体优化/知识图谱"
 description: 'Use when the user asks to "optimize entity presence"; builds Knowledge Graph, Wikidata, sameAs, and AI recognition signals for a canonical entity identity. Not for page-level AI-citation readiness — use geo-content-optimizer. 实体优化/知识图谱'

@@ -1,6 +1,6 @@
 ---
 name: on-page-seo-auditor
-slug: aaron-on-page-seo-auditor
+slug: on-page-seo-auditor
 displayName: "On Page SEO Auditor · 页面SEO审计"
 summary: "页面SEO审计/排名诊断"
 description: 'Use when the user asks to "audit on-page SEO" or "diagnose why a single page dropped"; scores titles, meta, header structure, keyword placement, links, and images with prioritized fixes. Not for E-E-A-T / publish-readiness scoring — use content-quality-auditor; not for crawl / CWV / indexing — use technical-seo-checker. 页面SEO审计/排名诊断'

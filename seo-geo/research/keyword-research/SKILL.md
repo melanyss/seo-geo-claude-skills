@@ -1,6 +1,6 @@
 ---
 name: keyword-research
-slug: aaron-keyword-research
+slug: keyword-research
 displayName: "Keyword Research · 关键词研究"
 summary: "关键词研究/内容选题"
 description: 'Use when the user asks to "find keywords", "挖词", or "搜什么词"; prioritizes search volume, keyword difficulty, intent, and topic clusters from provided or connected data. Not for competitor-relative coverage gaps — use content-gap-analysis. 关键词研究/内容选题'

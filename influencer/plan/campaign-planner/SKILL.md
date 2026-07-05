@@ -10,7 +10,7 @@ compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when planning a new influencer campaign, launching a product with influencer support, building seasonal or tentpole activations, designing always-on creator programs, restructuring an underperforming campaign, or preparing a campaign plan to present to stakeholders. Activate when the user gives a brand, budget, audience, or timeframe and wants the full strategy-to-execution blueprint before briefs or outreach begin."
 argument-hint: "<brand or product> [budget] [platform] [timeframe]"
-metadata: {"author": "aaron-he-zhu", "version": "13.0.0", "discipline": "influencer", "phase": "plan", "family": "influencer-marketing", "impact-phase": "Plan", "hermes": {"tags": ["marketing", "influencer", "plan"], "category": "influencer"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "13.0.0", "discipline": "influencer", "phase": "plan", "family": "influencer-marketing", "hermes": {"tags": ["marketing", "influencer", "plan"], "category": "influencer"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Campaign Planner

@@ -1,6 +1,6 @@
 ---
 name: competitor-analysis
-slug: aaron-competitor-analysis
+slug: competitor-analysis
 displayName: "Competitor Analysis · 竞品分析"
 summary: "竞品分析/竞争对手"
 description: 'Use when the user asks to "analyze competitors" or "竞品分析"; benchmarks competitor keywords, content, backlinks, AI citations, and traffic share into strengths, weaknesses, and an action plan. Not for a pairwise topic-coverage gap map — use content-gap-analysis. 竞品分析/竞争对手'

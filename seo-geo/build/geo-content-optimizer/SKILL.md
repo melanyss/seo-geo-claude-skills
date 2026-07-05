@@ -1,6 +1,6 @@
 ---
 name: geo-content-optimizer
-slug: aaron-geo-content-optimizer
+slug: geo-content-optimizer
 displayName: "GEO Content Optimizer · AI引用优化"
 summary: "AI引用优化/GEO优化/AI搜索"
 description: 'Use when the user asks to "optimize for AI citations"; improves citation readiness for ChatGPT, Perplexity, AI Overviews, Gemini, and Claude. Not for structural on-page SEO — use on-page-seo-auditor; not for net-new drafting — use content-writer. AI引用优化/GEO优化/AI搜索'

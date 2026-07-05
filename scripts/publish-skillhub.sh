@@ -29,12 +29,16 @@ HOST="https://api.skillhub.cn"
 DRY_RUN=0
 ONLY_SKILL=""
 CHANGELOG="首次发布"
+THROTTLE=25       # seconds between real publishes (platform rate-limits bursts)
+RESUME_FROM=""    # skip manifest entries until this skill name (inclusive start)
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
     --skill) shift; ONLY_SKILL="${1:-}" ;;
     --changelog) shift; CHANGELOG="${1:-}" ;;
     --host) shift; HOST="${1:-}" ;;
+    --throttle) shift; THROTTLE="${1:-25}" ;;
+    --resume-from) shift; RESUME_FROM="${1:-}" ;;
     *) echo "unknown flag: $1" >&2; exit 1 ;;
   esac
   shift
@@ -54,9 +58,13 @@ for p in json.load(open('.claude-plugin/plugin.json'))['skills']:
     print(p[2:] if p.startswith('./') else p)
 ")
 
-fail=0 count=0
+fail=0 count=0 skipping=0
+[ -n "$RESUME_FROM" ] && skipping=1
 for dir in $SKILL_DIRS; do
   name=$(basename "$dir")
+  if [ "$skipping" -eq 1 ]; then
+    if [ "$name" = "$RESUME_FROM" ]; then skipping=0; else continue; fi
+  fi
   if [ -n "$ONLY_SKILL" ] && [ "$name" != "$ONLY_SKILL" ]; then continue; fi
   if [ ! -f "$dir/SKILL.md" ]; then
     echo "FAIL: $dir/SKILL.md missing" >&2; fail=1; continue
@@ -71,13 +79,30 @@ for dir in $SKILL_DIRS; do
   if [ "$DRY_RUN" -eq 1 ]; then
     cmd+=(--dry-run)
     echo "==> $slug (dry-run)"
+    "${cmd[@]}" || { echo "FAIL: dry-run failed for $slug" >&2; fail=1; }
   else
     cmd+=(--changelog "$CHANGELOG")
     echo "==> $slug"
-  fi
-  if ! "${cmd[@]}"; then
-    echo "FAIL: publish failed for $slug" >&2
-    fail=1
+    # rate-limit aware: retry up to 4x with a 70s backoff on 频率/429 errors
+    attempts=0 ok=0
+    while [ "$attempts" -lt 4 ]; do
+      out=$("${cmd[@]}" 2>&1); rc=$?
+      echo "$out"
+      if [ "$rc" -eq 0 ]; then ok=1; break; fi
+      if echo "$out" | grep -q "频率\|稍后再试\|429"; then
+        attempts=$((attempts + 1))
+        echo "    rate-limited — waiting 70s (retry $attempts/4)"
+        sleep 70
+      else
+        break
+      fi
+    done
+    if [ "$ok" -ne 1 ]; then
+      echo "FAIL: publish failed for $slug" >&2
+      fail=1
+    fi
+    # throttle between publishes so we stay under the platform burst limit
+    [ "$THROTTLE" -gt 0 ] && sleep "$THROTTLE"
   fi
   count=$((count + 1))
 done

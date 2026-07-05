@@ -19,10 +19,22 @@ Operational dossier for getting the bundle listed on every skills marketplace, d
 > 69 个营销技能,同一套运行契约:SEO/GEO、红人、付费广告、邮件营销,内置 5 个审计门与免密钥数据连接器。
 
 **Short blurb (EN, ~350 chars)**
-> A marketing operator for AI agents: 69 SKILL.md skills across SEO/GEO, influencer (IMPACT), paid ads (ROAS) and email (SEND), sharing one contract — trigger, quick start, handoff, next-best-skill. Five benchmark-driven auditor gates (CORE-EEAT, CITE, C³, ROAS, SEND) emit machine-checkable verdicts. Every skill runs Tier-1 on pasted data; zero-dependency Python connectors pull free/own data. Works on Claude Code (full plugin) and 70+ SKILL.md hosts.
+> A marketing operator for AI agents: 69 SKILL.md skills across SEO/GEO, influencer, paid ads (ROAS) and email (SEND), sharing one contract — trigger, quick start, handoff, next-best-skill. Five benchmark-driven auditor gates (CORE-EEAT, CITE, C³, ROAS, SEND) emit machine-checkable verdicts. Every skill runs Tier-1 on pasted data; zero-dependency Python connectors pull free/own data. Works on Claude Code (full plugin) and 70+ SKILL.md hosts.
 
 **Short blurb (中文, ~200 字)**
-> 把聊天 Agent 变成营销操作员的技能库:69 个 SKILL.md 技能覆盖 SEO/GEO、红人营销(IMPACT)、付费广告(ROAS)、邮件营销(SEND)四个学科,共享同一套契约(触发→快速开始→交棒→下一技能)。五套基准驱动五个审计门(CORE-EEAT/CITE/C³/ROAS/SEND),产出可机器校验的判定。每个技能都能仅凭粘贴的数据运行;零依赖 Python 连接器可拉取免费/自有数据。支持 Claude Code 完整插件与 70+ SKILL.md 宿主。
+> 把聊天 Agent 变成营销操作员的技能库:69 个 SKILL.md 技能覆盖 SEO/GEO、红人营销、付费广告(ROAS)、邮件营销(SEND)四个学科,共享同一套契约(触发→快速开始→交棒→下一技能)。五套基准驱动五个审计门(CORE-EEAT/CITE/C³/ROAS/SEND),产出可机器校验的判定。每个技能都能仅凭粘贴的数据运行;零依赖 Python 连接器可拉取免费/自有数据。支持 Claude Code 完整插件与 70+ SKILL.md 宿主。
+
+**Example use cases (EN — for submission forms asking "Example 1/2/…")**
+```text
+Example 1: "Research keywords for my SaaS product targeting small teams" — the keyword-research skill turns pasted or connected data into a prioritized keyword and topic-cluster plan.
+Example 2: "Audit this article for E-E-A-T and publish readiness" — content-quality-auditor scores it against the 80-item CORE-EEAT benchmark and returns a SHIP / FIX / BLOCK verdict with a prioritized fix plan.
+Example 3: "Find TikTok creators for a skincare launch and score their fit" — influencer-discovery builds a vetted candidate pool, then fit-scorer ranks it with go/pass verdicts.
+Example 4: "Audit my Google Ads account before I scale spend — exports attached" — ad-account-auditor runs the ROAS gate (RQS score + veto checks) on your own-account export, no ad-platform API keys needed.
+Example 5: "/aaron-marketing:auto turn our pricing page into an AI-citable comparison hub" — the auto command infers intent and chains the smallest useful workflow across the 69 skills.
+```
+
+**Reviewer/test notes (EN — for "submission details" fields)**
+> Validated with `claude plugin validate` (passes). 69 skills + 5 commands; CI enforces frontmatter validity, 8-file version-sync, and install-discovery guards on every commit. Latest release: v13.0.0.
 
 **Awesome-list entry line (EN, generic)**
 ```markdown
@@ -41,21 +53,21 @@ Operational dossier for getting the bundle listed on every skills marketplace, d
 | # | Platform | Type | Status |
 |---|----------|------|--------|
 | 1 | [skills.sh](https://skills.sh/aaron-he-zhu/aaron-marketing-skills) | registry (telemetry) | ✅ live — `skills.sh.json` groupings shipped |
-| 2 | [SkillHub.cn](https://skillhub.cn) | registry (publish) | 🟡 69/69 dry-run passed — `bash scripts/publish-skillhub.sh` |
+| 2 | [SkillHub.cn](https://skillhub.cn) | registry (publish) | ✅ **69/69 published 2026-07-04** (skillIds 94980–95031+; platform review pending; publish needed 25s throttling — `--throttle`/`--resume-from` now built into the script) |
 | 3 | [ClawHub](https://clawhub.ai) | registry (publish) | 🟡 2/69 published — `bash scripts/publish-clawhub.sh --i-accept-mit0` for the rest |
-| 4 | [Anthropic official plugins](https://github.com/anthropics/claude-plugins-official) | curated directory | 🔬 form: clau.de/plugin-directory-submission — *highest value* |
-| 5 | [Skills Directory](https://www.skillsdirectory.com) | directory + security scan | 🔬 form: /submit (GitHub sign-in) |
-| 6 | [askill.sh](https://askill.sh) | registry | 🔬 form: /submit |
+| 4 | [Anthropic community marketplace](https://github.com/anthropics/claude-plugins-community) | curated directory | 🟢 **submitted 2026-07-04, pending review** (Console form; surfaces: Claude Code + Cowork; watch the [community catalog](https://github.com/anthropics/claude-plugins-community/blob/main/.claude-plugin/marketplace.json) for `aaron-marketing`) |
+| 5 | [Skills Directory](https://www.skillsdirectory.com) | directory + security scan | 🟢 **submitted 2026-07-04** (owner, via /submit) |
+| 6 | [askill.sh](https://askill.sh) | registry | 🟡 CLI route times out from CN network (`askill login`/`submit` both) — use the **web form** askill.sh/submit instead; API token saved by owner |
 | 7 | [SkillsMP](https://skillsmp.com) | auto-crawl | 🟡 indexed but **stale (38/69 pre-v12)** — nudge maintainer (Reddit/X) to re-crawl |
 | 8 | [LobeHub Skills](https://lobehub.com/skills) | auto-crawl (topics) | ✅ crawl conditions met (topics verified) |
 | 9 | [agentskill.sh](https://agentskill.sh) / [skill0.io](https://skill0.io) / [crossaitools](https://crossaitools.com) | auto-crawl | ✅ passive — no lever beyond topics/stars |
 | 10 | `gh skill` (GitHub CLI) | decentralized channel | 🔴 layout unsupported — upstream FR drafted below |
-| 11 | [Qoder Community](https://qoder.com/marketplace) | catalog repo (PR) | 🔬 PR entry drafted below (marketing category exists) |
-| 12 | [AgentUse / Zerone Skill Market](https://www.zerone.market) | catalog repo (PR, bilingual) | 🔬 PR route below (`agentuse-share` fast-track available) |
-| 13 | [Skillstore](https://skillstore.io) | form + security audit | 🔬 submit flagship skill dirs (no root SKILL.md — note plugin structure) |
-| 14 | [Agent Skills Me](https://agentskills.me) | editor-curated aggregator | 🔬 /submit after login, or email hi@evergreenai.cn |
+| 11 | [Qoder Community](https://qoder.com/marketplace) | catalog repo (PR) | 🟢 **PR submitted**: [qoder-community#73](https://github.com/Qoder-AI/qoder-community/pull/73) (EN + zh entries, marketing category) |
+| 12 | [AgentUse / Zerone Skill Market](https://www.zerone.market) | catalog repo (PR, bilingual) | 🟢 **PR submitted**: [agent-use-skills#7](https://github.com/zerone-agent/agent-use-skills/pull/7) (bilingual intro + 6 platform guides) |
+| 13 | [Skillstore](https://skillstore.io) | form + security audit | 🟢 **submitted 2026-07-04** (owner, via /submit) |
+| 14 | [Agent Skills Me](https://agentskills.me) | editor-curated aggregator | 🟡 login flow flagged as risky by owner's browser — **email fallback**: hi@evergreenai.cn (draft in this doc's kit) |
 | 15 | [虾评Skill](https://xiaping.coze.com) | ZIP upload + points economy | ⬜ poor fit — per-skill ZIP repack + 虾米 quota grind; revisit only on demand |
-| 16 | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) + siblings | awesome lists (PR) | 🔬 entries drafted below |
+| 16 | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) + siblings | awesome lists (PR) | 🟢 **PR submitted**: [awesome-agent-skills#755](https://github.com/VoltAgent/awesome-agent-skills/pull/755) (Community Skills → Marketing); siblings still open |
 | 17 | [awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills) | awesome list (PR) | ⬜ gated on full ClawHub publish first |
 | 18 | Personal collections (anthropics, vercel-labs, antfu, obra, steipete, baoyu, …) | collections | ⬜ not venues |
 

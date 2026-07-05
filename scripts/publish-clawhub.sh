@@ -28,12 +28,14 @@ DRY_RUN=0
 ACCEPT_MIT0=0
 ONLY_SKILL=""
 OWNER=""
+THROTTLE=15       # seconds between real publishes (ClawHub rate-limits new-skill creation)
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
     --i-accept-mit0) ACCEPT_MIT0=1 ;;
     --skill) shift; ONLY_SKILL="${1:-}" ;;
     --owner) shift; OWNER="${1:-}" ;;
+    --throttle) shift; THROTTLE="${1:-15}" ;;
     *) echo "unknown flag: $1" >&2; exit 1 ;;
   esac
   shift
@@ -81,9 +83,34 @@ for dir in $SKILL_DIRS; do
 
   suffix=""; [ "$DRY_RUN" -eq 1 ] && suffix=" (dry-run)"
   echo "==> $name v$version$suffix"
-  if ! "${cmd[@]}"; then
-    echo "FAIL: publish failed for $name" >&2
-    fail=1
+  if [ "$DRY_RUN" -eq 1 ]; then
+    "${cmd[@]}" || { echo "FAIL: dry-run failed for $name" >&2; fail=1; }
+  else
+    # ClawHub enforces a new-skill creation rate limit — retry with backoff.
+    # "already exists" = this exact version is published — idempotent success
+    # (explicit --version bypasses the CLI's content-fingerprint skip).
+    attempts=0 ok=0
+    while [ "$attempts" -lt 4 ]; do
+      out=$("${cmd[@]}" 2>&1); rc=$?
+      echo "$out"
+      if [ "$rc" -eq 0 ]; then ok=1; break; fi
+      if echo "$out" | grep -q "already exists"; then
+        echo "    version already on ClawHub — skipping"
+        ok=1; break
+      fi
+      if echo "$out" | grep -qi "RateLimit\|reset in\|too many"; then
+        attempts=$((attempts + 1))
+        echo "    rate-limited — waiting 70s (retry $attempts/4)"
+        sleep 70
+      else
+        break
+      fi
+    done
+    if [ "$ok" -ne 1 ]; then
+      echo "FAIL: publish failed for $name" >&2
+      fail=1
+    fi
+    [ "$THROTTLE" -gt 0 ] && sleep "$THROTTLE"
   fi
   count=$((count + 1))
 done

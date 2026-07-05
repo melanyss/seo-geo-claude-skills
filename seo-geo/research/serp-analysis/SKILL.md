@@ -1,6 +1,6 @@
 ---
 name: serp-analysis
-slug: aaron-serp-analysis
+slug: serp-analysis
 displayName: "SERP Analysis · SERP分析"
 summary: "SERP分析/搜索结果"
 description: 'Use when the user asks to "analyze the SERP" or "SERP分析"; maps SERP features, layout, ranking factors, search intent, AI Overviews, and snippet opportunities for a query. Not for keyword demand discovery — use keyword-research. SERP分析/搜索结果'

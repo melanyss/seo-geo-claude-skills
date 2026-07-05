@@ -223,15 +223,18 @@ else
 fi
 
 # --- Required fields: SkillHub.cn publishing frontmatter ---
-# skillhub.cn (skillhub publish) requires slug/displayName + recommends summary;
-# the repo standardizes slug = aaron-<skill-name> (globally unique on the registry).
+# skillhub.cn (skillhub publish) requires slug/displayName + recommends summary.
+# Convention: prefer the unprefixed slug (<skill-name>) when the account owns it
+# on the registry; fall back to aaron-<skill-name> when the short slug is taken
+# by another publisher. The file records whichever the platform actually holds.
 SKH_SLUG=$(echo "$FRONTMATTER" | grep -E '^slug:' | sed 's/slug: *//' | tr -d '"' | tr -d '\r')
+DIR_BASE=$(basename "$SKILL_DIR")
 if [ -z "$SKH_SLUG" ]; then
-    fail "Missing required field: slug (SkillHub.cn publishing — expected: aaron-$(basename "$SKILL_DIR"))"
-elif [ "$SKH_SLUG" != "aaron-$(basename "$SKILL_DIR")" ]; then
-    fail "slug '$SKH_SLUG' != 'aaron-$(basename "$SKILL_DIR")' (repo slug convention: aaron-<skill-name>)"
+    fail "Missing required field: slug (SkillHub.cn publishing — '$DIR_BASE' or 'aaron-$DIR_BASE')"
+elif [ "$SKH_SLUG" = "$DIR_BASE" ] || [ "$SKH_SLUG" = "aaron-$DIR_BASE" ]; then
+    pass "slug matches the SkillHub convention ($SKH_SLUG)"
 else
-    pass "slug follows the aaron-<skill-name> convention"
+    fail "slug '$SKH_SLUG' must be '$DIR_BASE' (preferred) or 'aaron-$DIR_BASE' (conflict fallback)"
 fi
 if echo "$FRONTMATTER" | grep -qE '^displayName:'; then
     pass "displayName present (SkillHub.cn listing name)"
@@ -263,7 +266,7 @@ fi
 # --- Body length advisory ---
 BODY_LINES=$(awk 'BEGIN{n=0} /^---/{n++; next} n>=2{print}' "$SKILL_FILE" | wc -l | tr -d ' ')
 IS_AUDITOR=$(echo "$FRONTMATTER" | grep -qE '^class: *auditor' && echo "yes" || echo "no")
-# Influencer (IMPACT) skills intentionally inline their step matrices rather than
+# Influencer skills intentionally inline their step matrices rather than
 # extracting to references/ (see CLAUDE.md Contribution Rules); exempt them from the
 # >250-line references/ advisory by phase directory.
 PHASE_DIR=$(basename "$(dirname "$SKILL_DIR")")
@@ -272,7 +275,7 @@ case "$PHASE_DIR" in discover|plan|activate|measure) IS_INFLUENCER="yes";; *) IS
 if [ "$IS_AUDITOR" = "yes" ]; then
     pass "Auditor skill reads the shared runbook + keeps framework-specific examples inline ($BODY_LINES lines)"
 elif [ "$IS_INFLUENCER" = "yes" ] && [ "$BODY_LINES" -gt 250 ] && [ ! -d "$SKILL_DIR/references" ]; then
-    pass "Influencer (IMPACT) skill intentionally inlines its step matrices ($BODY_LINES lines) — see CLAUDE.md"
+    pass "Influencer skill intentionally inlines its step matrices ($BODY_LINES lines) — see CLAUDE.md"
 elif [ "$BODY_LINES" -gt 250 ] && [ ! -d "$SKILL_DIR/references" ]; then
     warn "Skill body is $BODY_LINES lines but no references/ directory found. Consider extracting detailed tables/rubrics."
 else

@@ -1,6 +1,6 @@
 ---
 name: technical-seo-checker
-slug: aaron-technical-seo-checker
+slug: technical-seo-checker
 displayName: "Technical SEO Checker · 技术SEO"
 summary: "技术SEO/网站速度"
 description: 'Use when the user asks to "check technical SEO"; audits crawlability, indexing, Core Web Vitals, robots.txt, sitemaps, canonicals, redirects, and migrations. Not for on-page tags or content — use on-page-seo-auditor. 技术SEO/网站速度'

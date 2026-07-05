@@ -1,6 +1,6 @@
 ---
 name: memory-management
-slug: aaron-memory-management
+slug: memory-management
 displayName: "Memory Management · 项目记忆"
 summary: "项目记忆/跨会话"
 description: 'Use when the user asks to "remember project context"; manages the cross-discipline marketing memory lifecycle (SEO/GEO + influencer + paid ads + email) — hot-cache, active work, archive tiers, and privacy cleanup. Not for content or domain scoring — use the auditors. 项目记忆/跨会话'

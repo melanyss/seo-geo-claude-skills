@@ -1,6 +1,6 @@
 ---
 name: domain-authority-auditor
-slug: aaron-domain-authority-auditor
+slug: domain-authority-auditor
 displayName: "Domain Authority Auditor · 域名权威"
 summary: "域名权威/网站可信度"
 description: 'Use when auditing domain authority, trust, or citation credibility; runs 40-item CITE scoring with veto checks (TRUSTED/CAUTIOUS/UNTRUSTED). Not for page-level content quality — use content-quality-auditor; not for backlink profiling alone — use offsite-signal-analyzer. 域名权威/网站可信度'

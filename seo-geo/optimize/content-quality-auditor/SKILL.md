@@ -1,6 +1,6 @@
 ---
 name: content-quality-auditor
-slug: aaron-content-quality-auditor
+slug: content-quality-auditor
 displayName: "Content Quality Auditor · 内容质量"
 summary: "内容质量/EEAT评分"
 description: 'Use when auditing content quality, E-E-A-T, or publish readiness; runs 80-item CORE-EEAT scoring with veto checks and a fix plan. Not for structural on-page tags/headers — use on-page-seo-auditor; not for domain/citation trust — use domain-authority-auditor. 内容质量/EEAT评分'
