@@ -1,6 +1,6 @@
 {
   "_comment": "SSOT for the GitHub repo About (sidebar description + topics). NOT read by GitHub directly — projected onto the repo by scripts/sync-about.sh (owner-run, --live), verified weekly by .github/workflows/about-drift.yml, and its leading skill count is checked against the tree by scripts/check-versions.sh. Edit here when the skill/discipline/gate counts change; the description MUST start with the current skill count so check-versions can parse it.",
-  "description": "86 marketing skills + 6 commands for Claude Code & AI agents across 5 disciplines — SEO/GEO, influencer, paid ads, email & product launch — on one shared contract, with 6 auditor gates: CORE-EEAT · CITE · C³ · ROAS · SEND · RAMP.",
+  "description": "103 marketing skills + 7 commands for Claude Code & AI agents across 6 disciplines — SEO/GEO, influencer, paid ads, email, product launch & organic social — on one shared contract, with 7 auditor gates: CORE-EEAT · CITE · C³ · ROAS · SEND · RAMP · ECHO.",
   "topics": [
     "agent-skills",
     "claude-code",

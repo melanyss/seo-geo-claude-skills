@@ -26,6 +26,9 @@ import indexpush  # noqa: E402
 import hn  # noqa: E402
 import producthunt  # noqa: E402
 import appstore  # noqa: E402
+import bluesky  # noqa: E402
+import fediverse  # noqa: E402
+import discourse  # noqa: E402
 import datetime as _dt  # noqa: E402
 
 
@@ -546,6 +549,131 @@ class AppstoreTests(unittest.TestCase):
         self.assertIn("media=software", url)
         self.assertIn("limit=200", url)   # SEARCH_MAX cap
         self.assertIn("limit=1", appstore.build_search_url("x", "us", 0))
+
+
+class BlueskyTests(unittest.TestCase):
+    def test_build_xrpc_url_encodes_params_and_picks_base(self):
+        url = bluesky.build_xrpc_url("app.bsky.actor.getProfile",
+                                     {"actor": "bsky.app"})
+        self.assertTrue(url.startswith(bluesky.PUBLIC_BASE + "/"))
+        self.assertIn("app.bsky.actor.getProfile?", url)
+        self.assertIn("actor=bsky.app", url)
+        # search hits the authed base, not the public AppView
+        authed = bluesky.build_xrpc_url("app.bsky.feed.searchPosts",
+                                        {"q": "acme"}, base=bluesky.AUTH_BASE)
+        self.assertTrue(authed.startswith(bluesky.AUTH_BASE + "/"))
+
+    def test_clamp_limit_window_and_default(self):
+        self.assertEqual(bluesky.clamp_limit(None), 25)
+        self.assertEqual(bluesky.clamp_limit(0), 1)
+        self.assertEqual(bluesky.clamp_limit(500), bluesky.MAX_LIMIT)
+
+    def test_parse_since_and_bad_date(self):
+        self.assertEqual(bluesky.parse_since("2026-06-01"),
+                         "2026-06-01T00:00:00Z")
+        with self.assertRaises(ValueError):
+            bluesky.parse_since("2026/06/01")
+
+    def test_resolve_credentials_over_supplied_mapping(self):
+        ident, pw, err = bluesky.resolve_credentials(
+            {"BSKY_IDENTIFIER": "me.bsky.social", "BSKY_APP_PASSWORD": "x-x"})
+        self.assertEqual((ident, pw, err), ("me.bsky.social", "x-x", None))
+        _, _, err = bluesky.resolve_credentials({"BSKY_IDENTIFIER": "me"})
+        self.assertIn("BSKY_APP_PASSWORD", err)
+
+    def test_parse_feed_marks_reposts(self):
+        payload = {"feed": [
+            {"post": {"uri": "at://1", "record": {"createdAt": "t1",
+                      "text": "hi"}, "author": {"handle": "a"},
+                      "likeCount": 3}},
+            {"post": {"uri": "at://2", "record": {"createdAt": "t0"}},
+             "reason": {"$type": "app.bsky.feed.defs#reasonRepost"}},
+        ]}
+        rows = bluesky.parse_feed(payload)
+        self.assertEqual(rows[0]["likes"], 3)
+        self.assertFalse(rows[0]["is_repost"])
+        self.assertTrue(rows[1]["is_repost"])
+
+
+class FediverseTests(unittest.TestCase):
+    def test_normalize_instance_strips_scheme_and_path(self):
+        self.assertEqual(fediverse.normalize_instance("https://mastodon.social/"),
+                         "mastodon.social")
+        self.assertEqual(fediverse.normalize_instance("HACHYDERM.IO/foo"),
+                         "HACHYDERM.IO")
+
+    def test_build_urls_cap_limits_and_encode(self):
+        self.assertEqual(
+            fediverse.build_trends_tags_url("mastodon.social", 999),
+            "https://mastodon.social/api/v1/trends/tags?limit=%d"
+            % fediverse.MAX_TRENDS)
+        tag = fediverse.build_tag_url("mastodon.social", "#opensource", 5)
+        self.assertIn("/api/v1/timelines/tag/opensource?", tag)
+        self.assertIn("limit=5", tag)
+        rss = fediverse.tag_rss_url("mastodon.social", "#opensource")
+        self.assertEqual(rss, "https://mastodon.social/tags/opensource.rss")
+
+    def test_build_lemmy_search_url_shape(self):
+        url = fediverse.build_lemmy_search_url("lemmy.world", "self host",
+                                               "TopMonth", 99)
+        self.assertIn("type_=All", url)
+        self.assertIn("sort=TopMonth", url)
+        self.assertIn("limit=%d" % fediverse.LEMMY_MAX, url)  # capped
+
+    def test_parse_trend_tag_totals_7day_uses(self):
+        parsed = fediverse.parse_trend_tag({
+            "name": "opensource", "url": "https://x/tags/opensource",
+            "history": [{"day": "1751328000", "uses": "5", "accounts": "3"},
+                        {"day": "1751241600", "uses": "2", "accounts": "1"}]})
+        self.assertEqual(parsed["name"], "opensource")
+        self.assertEqual(parsed["uses_7d"], 7)
+        self.assertEqual(parsed["accounts_today"], 3)   # newest day first
+
+    def test_strip_html_unwraps_paragraphs_and_entities(self):
+        self.assertEqual(fediverse.strip_html("<p>a&amp;b<br>c</p>"), "a&b\nc")
+
+
+class DiscourseTests(unittest.TestCase):
+    def test_normalize_base_to_origin_no_trailing_slash(self):
+        self.assertEqual(discourse.normalize_base("meta.discourse.org"),
+                         "https://meta.discourse.org")
+        self.assertEqual(
+            discourse.normalize_base("https://meta.discourse.org/latest/"),
+            "https://meta.discourse.org")
+
+    def test_build_endpoint_urls(self):
+        base = "https://meta.discourse.org"
+        self.assertEqual(discourse.build_latest_url(base),
+                         base + "/latest.json")
+        self.assertEqual(discourse.build_topic_url(base, 42),
+                         base + "/t/42.json")
+        d = discourse.build_directory_url(base, period="monthly", limit=999)
+        self.assertIn("/directory_items.json?", d)
+        self.assertIn("period=monthly", d)
+        self.assertIn("limit=%d" % discourse.DIRECTORY_MAX_API, d)  # capped
+
+    def test_time_to_first_response_skips_op_self_replies(self):
+        posts = [
+            {"post_number": 1, "username": "op", "created_at": "2026-07-01T00:00:00Z"},
+            {"post_number": 2, "username": "op", "created_at": "2026-07-01T00:05:00Z"},
+            {"post_number": 3, "username": "other", "created_at": "2026-07-01T00:10:00Z"},
+        ]
+        self.assertEqual(discourse.time_to_first_response(posts), 600)
+        # no reply by another user -> None (unanswered)
+        self.assertIsNone(discourse.time_to_first_response(
+            [{"post_number": 1, "username": "op",
+              "created_at": "2026-07-01T00:00:00Z"}]))
+
+    def test_parse_directory_tallies_trust_levels(self):
+        payload = {"directory_items": [
+            {"user": {"username": "a", "trust_level": 2}},
+            {"user": {"username": "b", "trust_level": 2}},
+            {"user": {"username": "c", "trust_level": 0}},
+        ]}
+        out = discourse.parse_directory(payload)
+        self.assertEqual(out["rows_counted"], 3)
+        self.assertEqual(out["trust_level_distribution"]["2_member"], 2)
+        self.assertEqual(out["trust_level_distribution"]["0_new"], 1)
 
 
 if __name__ == "__main__":

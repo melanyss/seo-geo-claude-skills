@@ -54,7 +54,7 @@ fi
 # ---- 2. per-skill sync ------------------------------------------------------
 skill_count=0
 for f in seo-geo/*/*/SKILL.md influencer/*/*/SKILL.md ad/*/*/SKILL.md \
-         email/*/*/SKILL.md launch/*/*/SKILL.md protocol/*/SKILL.md; do
+         email/*/*/SKILL.md launch/*/*/SKILL.md social/*/*/SKILL.md protocol/*/SKILL.md; do
   [ -f "$f" ] || continue
   skill_count=$((skill_count + 1))
   name=$(sed -n 's/^name: *//p' "$f" | head -1)

@@ -16,10 +16,21 @@ partner channels (competitor-tracker), and measuring posted campaign videos
 
 TERMS CAVEAT — quota extensions are refused for bulk scraping/competitive
 harvesting. This helper is for vetting a named shortlist and measuring your
-own campaign content, not for building a creator database. For keyless
-cadence-tracking without the API, every channel has an RSS feed:
-https://www.youtube.com/feeds/videos.xml?channel_id=UC… (pipe into
-rss_monitor.py).
+own campaign content, not for building a creator database.
+
+KEYLESS `rss` MODE — zero-quota cadence/velocity complement: every channel
+has an official Atom feed at
+https://www.youtube.com/feeds/videos.xml?channel_id=UC… with its latest 15
+uploads (title, videoId, published, media:statistics views,
+media:starRating). No key, no quota units; no published rate limit — this is
+for named-channel cadence checks, be gentle. An @handle works too via ONE
+extra keyless HTML fetch of the channel page (the UC… id is read from the
+canonical link / itemprop identifier / browseId — verified live 2026-07);
+unknown ids and handles answer HTTP 404. Feed quirk (verified live 2026-07):
+the feed-level <yt:channelId> drops the UC prefix; entry-level carries it.
+
+Read-only: every subcommand (key-based and rss) only GETs public data;
+nothing is posted or mutated.
 
 Note: subscriberCount is the value YouTube publicly displays (rounded per
 their policy); label it Measured-as-displayed.
@@ -32,14 +43,18 @@ CLI:
   python3 youtube.py channel @mkbhd
   python3 youtube.py channel UCBJycsmduvYEL83R_U4JriQ
   python3 youtube.py videos @mkbhd --limit 10
+  python3 youtube.py rss UC_x5XG1OV2P6uZZ5FSM9Ttw   # keyless, 0 quota
+  python3 youtube.py rss @GoogleDevelopers          # +1 HTML fetch to resolve
 """
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import json
 import os
 import re
 import sys
+import xml.etree.ElementTree as ET
 from urllib.parse import urlencode, urlsplit
 
 import _http
@@ -48,6 +63,20 @@ API_BASE = "https://www.googleapis.com/youtube/v3"
 ENV_KEY = "YOUTUBE_API_KEY"
 SIGNUP_URL = "https://console.cloud.google.com/apis/library/youtube.googleapis.com"
 MAX_VIDEOS = 50  # one playlistItems page
+
+FEED_BASE = "https://www.youtube.com/feeds/videos.xml"  # keyless, latest 15
+HTML_HOST = "https://www.youtube.com"
+_ATOM = "{http://www.w3.org/2005/Atom}"
+_MEDIA = "{http://search.yahoo.com/mrss/}"
+_YT = "{http://www.youtube.com/xml/schemas/2015}"
+# UC… id in a channel page's HTML, most-stable first. Verified live 2026-07:
+# canonical link, itemprop identifier, and "browseId" all carry it;
+# a literal "channelId":"UC…" JSON key does NOT appear.
+CHANNEL_ID_PATTERNS = (
+    r'rel="canonical" href="https://www\.youtube\.com/channel/(UC[\w-]{10,})"',
+    r'itemprop="identifier" content="(UC[\w-]{10,})"',
+    r'"browseId":"(UC[\w-]{10,})"',
+)
 
 
 def parse_channel_ref(ref):
@@ -76,6 +105,62 @@ def build_url(resource, params):
 def uploads_playlist(channel_id):
     """A channel's uploads playlist id is its channel id with UC → UU. Pure."""
     return "UU" + channel_id[2:] if channel_id.startswith("UC") else None
+
+
+def build_feed_url(channel_id):
+    """The keyless per-channel RSS feed URL. Pure / no network."""
+    return FEED_BASE + "?" + urlencode({"channel_id": channel_id})
+
+
+def extract_channel_id(html):
+    """First UC… channel id in a channel page's HTML, or None. Pure."""
+    for pattern in CHANNEL_ID_PATTERNS:
+        m = re.search(pattern, html or "")
+        if m:
+            return m.group(1)
+    return None
+
+
+def _num(value, cast):
+    try:
+        return cast(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_feed(xml_text):
+    """videos.xml Atom feed → channel + per-video stats. Pure.
+
+    Raises xml.etree.ElementTree.ParseError on non-XML input. The feed-level
+    <yt:channelId> drops the UC prefix (observed live 2026-07); entry-level
+    carries it, so the channel id is read from the first entry.
+    """
+    root = ET.fromstring(xml_text)
+    channel_id = None
+    videos = []
+    for e in root.findall(_ATOM + "entry"):
+        channel_id = channel_id or e.findtext(_YT + "channelId")
+        views = rating_avg = rating_count = None
+        comm = e.find("%sgroup/%scommunity" % (_MEDIA, _MEDIA))
+        if comm is not None:
+            stats = comm.find(_MEDIA + "statistics")
+            if stats is not None:
+                views = _num(stats.get("views"), int)
+            star = comm.find(_MEDIA + "starRating")
+            if star is not None:
+                rating_avg = _num(star.get("average"), float)
+                rating_count = _num(star.get("count"), int)
+        videos.append({
+            "video_id": e.findtext(_YT + "videoId"),
+            "title": e.findtext(_ATOM + "title"),
+            "published": e.findtext(_ATOM + "published"),
+            "views": views,
+            "star_rating_avg": rating_avg,
+            "star_rating_count": rating_count,
+        })
+    return {"channel_id": channel_id,
+            "channel_title": root.findtext(_ATOM + "title"),
+            "videos": videos}
 
 
 def _call(key, resource, params):
@@ -147,6 +232,60 @@ def videos(key, ref, limit=10):
     return out
 
 
+def resolve_handle(handle):
+    """@handle → UC… channel id via one keyless HTML fetch of the channel page."""
+    r = _http.get_text(HTML_HOST + "/" + handle)
+    if r.get("status") != 200:
+        return {"channel_id": None,
+                "error": ("unknown handle %r (HTTP 404)" % handle
+                          if r.get("status") == 404
+                          else r.get("error") or "HTTP %s" % r.get("status"))}
+    cid = extract_channel_id(r.get("text") or "")
+    if not cid:
+        return {"channel_id": None,
+                "error": "no channel id found on youtube.com/%s (consent wall "
+                         "or layout change?) — pass the UC… channel id instead"
+                         % handle}
+    return {"channel_id": cid, "error": None}
+
+
+def rss(ref):
+    """Latest 15 uploads from the keyless channel RSS feed. 0 quota units."""
+    kind, value = parse_channel_ref(ref)
+    resolved_from = None
+    if kind == "handle":
+        rh = resolve_handle(value)
+        if rh["error"]:
+            return {"ref": ref, "error": rh["error"]}
+        channel_id, resolved_from = rh["channel_id"], value
+    else:
+        channel_id = value
+    r = _http.get_text(build_feed_url(channel_id))
+    if r.get("status") != 200 or not r.get("text"):
+        return {"ref": ref, "channel_id": channel_id,
+                "error": ("unknown channel id %r (HTTP 404)" % channel_id
+                          if r.get("status") == 404
+                          else r.get("error") or "HTTP %s" % r.get("status"))}
+    try:
+        parsed = parse_feed(r["text"])
+    except ET.ParseError as e:
+        return {"ref": ref, "channel_id": channel_id,
+                "error": "feed is not parseable XML (%s)" % e}
+    return {
+        "ref": ref,
+        "channel_id": parsed["channel_id"] or channel_id,
+        "resolved_from": resolved_from,   # @handle when one HTML fetch was used
+        "channel_title": parsed["channel_title"],
+        "video_count_in_feed": len(parsed["videos"]),
+        "videos": parsed["videos"],
+        "label": "Measured (official keyless channel RSS feed; latest 15 "
+                 "uploads max)",
+        "as_of": _dt.datetime.now(_dt.timezone.utc)
+                    .strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "error": None,
+    }
+
+
 def build_parser():
     p = argparse.ArgumentParser(
         prog="youtube.py",
@@ -166,11 +305,25 @@ def build_parser():
     s.add_argument("ref", help="@handle, channel id (UC…), or channel URL.")
     s.add_argument("--limit", type=int, default=10,
                    help="Videos to fetch (<=%d)." % MAX_VIDEOS)
+
+    s = sub.add_parser("rss", help="KEYLESS: latest 15 uploads from the "
+                                   "channel RSS feed (title/videoId/published/"
+                                   "views/starRating) — 0 quota units.")
+    s.add_argument("ref", help="Channel id (UC…) or /channel/ URL — the feed "
+                               "needs the id; an @handle costs one extra "
+                               "keyless HTML fetch to resolve it.")
     return p
 
 
 def main(argv=None):
     args = build_parser().parse_args(argv)
+    if args.command == "rss":          # keyless — no API key gate
+        result = rss(args.ref)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        if result.get("error"):
+            print("error: %s" % result["error"], file=sys.stderr)
+            return 2
+        return 0
     key = args.key or os.environ.get(ENV_KEY) or ""
     if not key:
         print(json.dumps({"error": "missing_api_key", "env_var": ENV_KEY,

@@ -4,14 +4,14 @@ slug: aaron-launch-monitor
 displayName: "Launch Monitor · 发布窗口监控"
 summary: "发布监控/排名轮询/火焰战比/spike-sustain"
 description: 'Use when the user asks to "monitor my launch", "track our Product Hunt / Hacker News ranking", or "watch the launch window"; runs the T-0 to T+30 window watch — pre-launch instrumentation verification (UTM/event checks, the upstream of RAMP P1), HN rank/points/comments polling with a comments-over-points flamewar early-warning (Estimated heuristic), PH votes/featured status, store charts and reviews, news echo, D0/W1/M1 KPI snapshots vs targets, spike-vs-sustain and owned-capture reads, and alert thresholds against the launch-tier KPI targets. Not for launch-day go/rollback calls — use launch-day-conductor; not for metric deep-dives — use performance-analyzer; not for SEO rank tracking — use rank-tracker. 发布监控/排名轮询/火焰战比/spike-sustain'
-version: "14.0.0"
+version: "15.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when watching an active launch window (T-0 to T+30): verifying instrumentation before launch (UTM and conversion events per surface), polling HN rank/points/comments with a flamewar early-warning, Product Hunt votes/featured status, app-store charts and reviews, and news echo; producing D0/W1/M1 KPI snapshots vs targets, spike-vs-sustain and owned-capture reads, and threshold alerts. The window watcher below the day-of runbook (launch-day-conductor) and upstream of the retro (launch-retro-analyzer)."
 argument-hint: "<launch date / platforms> [KPI targets] [--pre-launch | --snapshot D0|W1|M1]"
 allowed-tools: WebFetch
-metadata: {"author": "aaron-he-zhu", "version": "14.0.0", "discipline": "launch", "phase": "prove", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "prove"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "launch", "phase": "prove", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "prove"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Launch Monitor
@@ -20,7 +20,7 @@ Watches the launch window — T-0 through T+30 — so traction is verifiable whi
 
 Telemetry comes from keyless or free-key connectors — `scripts/connectors/hn.py` (keyless), `scripts/connectors/producthunt.py` (free-key developer token), `scripts/connectors/appstore.py` (keyless documented endpoints), `scripts/connectors/gdelt.py` (news echo) — and degrades to user-pasted values when a connector or key is missing. It works one lever — window telemetry — and hands off.
 
-**Scope guard**: this skill watches and alerts; it does **not** decide. Launch-day go/rollback calls belong to [launch-day-conductor](../../mobilize/launch-day-conductor/SKILL.md); metric deep-dives and channel diagnosis to [performance-analyzer](../../../influencer/measure/performance-analyzer/SKILL.md); SEO position tracking to [rank-tracker](../../../seo-geo/monitor/rank-tracker/SKILL.md); feedback-theme triage to [launch-feedback-synthesizer](../launch-feedback-synthesizer/SKILL.md); the retro verdict to [launch-retro-analyzer](../launch-retro-analyzer/SKILL.md); the LQS and the `P1` veto to [launch-readiness-auditor](../../mobilize/launch-readiness-auditor/SKILL.md). Monitoring past T+30 is not a launch task — hand it to [performance-monitor](../../../seo-geo/monitor/performance-monitor/SKILL.md).
+**Scope guard**: this skill watches and alerts; it does **not** decide. Launch-day go/rollback calls belong to [launch-day-conductor](../../mobilize/launch-day-conductor/SKILL.md); metric deep-dives and channel diagnosis to [performance-analyzer](../../../influencer/measure/performance-analyzer/SKILL.md); SEO position tracking to [rank-tracker](../../../seo-geo/monitor/rank-tracker/SKILL.md); feedback-theme triage to [launch-feedback-synthesizer](../launch-feedback-synthesizer/SKILL.md); the retro verdict to [launch-retro-analyzer](../launch-retro-analyzer/SKILL.md); the LQS and the `P1` veto to [launch-readiness-auditor](../../mobilize/launch-readiness-auditor/SKILL.md). Monitoring past T+30 is not a launch task — hand it to [performance-monitor](../../../seo-geo/monitor/performance-monitor/SKILL.md); always-on brand/community listening outside a launch window is [social-pulse-monitor](../../../social/observe/social-pulse-monitor/SKILL.md)'s job.
 
 ## Quick Start
 

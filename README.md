@@ -2,11 +2,11 @@
 
 # Aaron Marketing Skills
 
-**86 marketing skills — SEO/GEO, influencer, paid ads, email, launch — on one contract.**
+**103 marketing skills — SEO/GEO, influencer, paid ads, email, launch, social — on one contract.**
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-14.0.0-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-15.0.0-orange" alt="Version"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
 </p>
@@ -20,7 +20,7 @@
 
 </div>
 
-A library of Claude Skills and slash commands that turns a chat agent into a marketing operator. Five disciplines and a shared protocol layer, at a glance:
+A library of Claude Skills and slash commands that turns a chat agent into a marketing operator. Six disciplines and a shared protocol layer, at a glance:
 
 | Layer | Skills | Lifecycle (phase directories) | Framework → gate | Entrypoint |
 |-------|--------|-------------------------------|------------------|------------|
@@ -29,7 +29,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 | **Paid ads** | 16 | research → orchestrate → activate → scale | [ROAS](references/roas-benchmark.md) → `ad-account-auditor` (RQS) | `/aaron-marketing:ad` |
 | **Email** | 16 | setup → engage → nurture → deliver | [SEND](references/send-benchmark.md) → `email-quality-auditor` (EQS) | `/aaron-marketing:email` |
 | **Launch** | 16 | research → assemble → mobilize → prove | [RAMP](references/ramp-benchmark.md) → `launch-readiness-auditor` (LQS) | `/aaron-marketing:launch` |
-| **Protocol layer** | 6 | — (shared machinery, outside the phase flows) | 5 truth registries (entity · creator · offer/claims · consent · launch) + HOT/WARM/COLD memory | — |
+| **Social** | 16 | explore → craft → host → observe | [ECHO](references/echo-benchmark.md) → `social-quality-auditor` (SQS) | `/aaron-marketing:social` |
+| **Protocol layer** | 7 | — (shared machinery, outside the phase flows) | 6 truth registries (entity · creator · offer/claims · consent · launch · channel) + HOT/WARM/COLD memory | — |
 
 `/aaron-marketing:auto` routes any natural-language goal across all of it. Everything is **plain Markdown** — the only code is a Bash hook runner, a Bash validator, and zero-dependency Python-stdlib data helpers (no `pip`, no build step). **Every skill runs at Tier 1 with nothing but data you paste in**; connectors only automate retrieval.
 
@@ -44,8 +45,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 - [First run](#first-run)
 - [Architecture](#architecture)
   - [The shared skill contract](#the-shared-skill-contract)
-  - [One lifecycle, five dialects](#one-lifecycle-five-dialects)
-  - [Quality system: six frameworks, six gates](#quality-system-six-frameworks-six-gates)
+  - [One lifecycle, six dialects](#one-lifecycle-six-dialects)
+  - [Quality system: seven frameworks, seven gates](#quality-system-seven-frameworks-seven-gates)
   - [The protocol layer](#the-protocol-layer)
   - [Memory & automation hooks](#memory--automation-hooks)
 - [Skill catalog](#skill-catalog)
@@ -54,7 +55,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
   - [Paid Ads — ROAS (16)](#paid-ads--roas-16)
   - [Email — SEND (16)](#email--send-16)
   - [Launch — RAMP (16)](#launch--ramp-16)
-  - [Protocol layer (6)](#protocol-layer-6)
+  - [Social — ECHO (16)](#social--echo-16)
+  - [Protocol layer (7)](#protocol-layer-7)
 - [Commands](#commands)
 - [Connectors & enhancement tiers](#connectors--enhancement-tiers)
 - [Recommended workflows](#recommended-workflows)
@@ -73,8 +75,8 @@ A library of Claude Skills and slash commands that turns a chat agent into a mar
 |-----------|---------------------------|
 | **Keyless by default** | Every skill works at **Tier 1** with data you paste or pull from free/first-party sources. Paid tools and MCP servers are an opt-in convenience, never a precondition. Paid-ads skills score from your **own-account manual export** — keyed ad APIs are never required. |
 | **Markdown, not a framework** | Skills are content. The only executable code is `hooks/claude-hook.sh` (Bash), `scripts/validate-skill.sh` (Bash), and `scripts/connectors/*.py` (Python **standard library only**). Nothing to install, audit, or keep up to date. |
-| **One shared contract** | All 86 skills expose the same seven sections and self-declare `discipline` + `phase` metadata, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
-| **Gated quality** | Six benchmarks drive six auditor-class gates that emit structured, machine-checkable verdicts — not vibes. A PostToolUse hook validates every gated artifact before it lands. |
+| **One shared contract** | All 103 skills expose the same seven sections and self-declare `discipline` + `phase` metadata, so the library behaves like one operating system: each skill knows its inputs, outputs, and the next best skill to hand off to. |
+| **Gated quality** | Seven benchmarks drive seven auditor-class gates that emit structured, machine-checkable verdicts — not vibes. A PostToolUse hook validates every gated artifact before it lands. |
 | **Truth lives in registries** | Canonical facts (brand entities, creator dossiers, offer/claim substantiation, per-subject consent) live in dedicated protocol-layer registries with sole-writer rules — gates judge against them instead of re-deriving them. |
 | **Memory across turns** | A HOT/WARM/COLD memory model carries findings, scores, and open loops between skills and sessions, sanitized on the way in. |
 | **Plain voice** | Skills ship an AI-slop detector and a banned-phrase list so output reads like a human wrote it. |
@@ -92,7 +94,7 @@ Use it with Claude Code, any Agent Skills-compatible host, or a plain `git clone
 | **[SkillHub.cn](https://skillhub.cn) (中文社区)** | `skillhub install aaron-<skill-name>` (e.g. `aaron-keyword-research`) |
 | **Any host** | `git clone https://github.com/aaron-he-zhu/aaron-marketing-skills` |
 
-In Claude Code, `marketplace add` only registers the catalog — run `/plugin install aaron-marketing@aaron` (or pick it from `/plugin`) to actually enable the skills and commands. To pull a **single** skill on a generic host: `npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research`. Browse the bundle on the [skills.sh registry](https://skills.sh/aaron-he-zhu/aaron-marketing-skills). Per-agent directories, frontmatter quirks, and what degrades outside the plugin: [docs/agent-compatibility.md](docs/agent-compatibility.md) (verified 86/86 installable, 2026-07).
+In Claude Code, `marketplace add` only registers the catalog — run `/plugin install aaron-marketing@aaron` (or pick it from `/plugin`) to actually enable the skills and commands. To pull a **single** skill on a generic host: `npx skills add aaron-he-zhu/aaron-marketing-skills -s keyword-research`. Browse the bundle on the [skills.sh registry](https://skills.sh/aaron-he-zhu/aaron-marketing-skills). Per-agent directories, frontmatter quirks, and what degrades outside the plugin: [docs/agent-compatibility.md](docs/agent-compatibility.md) (verified 103/103 installable, 2026-07).
 
 Installing the plugin adds **nothing** to your `/mcp` list — the MCP catalogue lives in [`docs/mcp-catalog.json`](docs/mcp-catalog.json), deliberately outside the plugin-root `.mcp.json` path that Claude Code auto-registers, so it is a copy-paste reference only (see [Connectors](#connectors--enhancement-tiers)).
 
@@ -139,24 +141,24 @@ Every skill follows the **same activation contract** — seven sections in a fix
 6. **Instructions** — the numbered method (treats all exports as untrusted input).
 7. **Next Best Skill** — where to go next (with visited-set + max-depth termination rules).
 
-Every skill also self-declares `metadata.discipline` (seo-geo / influencer / paid / email / launch / protocol) and `metadata.phase`, so routing and clustering work uniformly. The contract is documented once in [skill-contract.md](references/skill-contract.md); the shared cross-skill state lives in [state-model.md](references/state-model.md).
+Every skill also self-declares `metadata.discipline` (seo-geo / influencer / paid / email / launch / social / protocol) and `metadata.phase`, so routing and clustering work uniformly. The contract is documented once in [skill-contract.md](references/skill-contract.md); the shared cross-skill state lives in [state-model.md](references/state-model.md).
 
-### One lifecycle, five dialects
+### One lifecycle, six dialects
 
-The five disciplines share one meta-lifecycle spine; each adapts the granularity to its own workflow (phase *counts* differ by design):
+The six disciplines share one meta-lifecycle spine; each adapts the granularity to its own workflow (phase *counts* differ by design):
 
-| Meta-stage | SEO/GEO | Influencer | Paid (ROAS) | Email (SEND) | Launch (RAMP) |
-|------------|---------|---------------------|-------------|--------------|---------------|
-| **Understand** | research | discover | research | setup | research |
-| **Plan / create** | build | plan | orchestrate | engage | assemble |
-| **Activate / optimize** | optimize | activate | activate | nurture | mobilize |
-| **Measure** | monitor | measure | scale | deliver | prove |
+| Meta-stage | SEO/GEO | Influencer | Paid (ROAS) | Email (SEND) | Launch (RAMP) | Social (ECHO) |
+|------------|---------|---------------------|-------------|--------------|---------------|---------------|
+| **Understand** | research | discover | research | setup | research | explore |
+| **Plan / create** | build | plan | orchestrate | engage | assemble | craft |
+| **Activate / optimize** | optimize | activate | activate | nurture | mobilize | host |
+| **Measure** | monitor | measure | scale | deliver | prove | observe |
 
-All five use phase **directories** (`seo-geo/research/`…, `influencer/discover/`…, `ad/research/`…, `email/setup/`…, `launch/research/`…). Note "activate" means creator outreach for influencer but account-gating for paid ads — same word, discipline-specific scope.
+All six use phase **directories** (`seo-geo/research/`…, `influencer/discover/`…, `ad/research/`…, `email/setup/`…, `launch/research/`…, `social/explore/`…). Note "activate" means creator outreach for influencer but account-gating for paid ads — same word, discipline-specific scope.
 
-### Quality system: six frameworks, six gates
+### Quality system: seven frameworks, seven gates
 
-Six benchmarks make "good" measurable. Each defines dimensions, a rollup method, and a small set of **veto items** (hard fails that cap or block a score regardless of the rest):
+Seven benchmarks make "good" measurable. Each defines dimensions, a rollup method, and a small set of **veto items** (hard fails that cap or block a score regardless of the rest):
 
 | Framework | Scores | Items / dimensions | Rollup | Veto items |
 |-----------|--------|--------------------|--------|------------|
@@ -166,6 +168,7 @@ Six benchmarks make "good" measurable. Each defines dimensions, a rollup method,
 | **[ROAS](references/roas-benchmark.md)** | Paid ads Return / Offer / Audience / Spend-efficiency | R / O / A / S | **RQS = floor(goal-weighted mean)** (arithmetic) | `R1`/`R2`/`O1`/`O2`/`A1` |
 | **[SEND](references/send-benchmark.md)** | Email marketing Sender-integrity / Engagement / Nurture / Direct-response | S / E / N / D | **EQS = floor(goal-weighted mean)** (arithmetic) | `S1`/`S2`/`N1`/`D1` |
 | **[RAMP](references/ramp-benchmark.md)** | Product launch Readiness / Assets / Momentum / Proof | R / A / M / P · 40 items | **LQS = floor(goal-weighted mean)** (arithmetic) | `R1`/`A1`/`M1`/`P1` (framework-qualified — distinct from ROAS `R1`/`A1`) |
+| **[ECHO](references/echo-benchmark.md)** | Organic social Embeddedness / Craft / Hosting / Observability | E / C / H / O | **SQS = floor(goal-weighted mean)** (arithmetic) | `E1`/`C1`/`C2`/`H1`/`H2`/`O1` (framework-qualified — distinct from ROAS `O1`/`O2`) |
 
 Each framework is enforced by an **auditor-class gate** — a skill that writes a gated artifact (`class: auditor-output`) validated by the PostToolUse hook. Gates are workflow steps, so each lives in its discipline and is counted there:
 
@@ -177,12 +180,13 @@ Each framework is enforced by an **auditor-class gate** — a skill that writes 
 | [ad-account-auditor](ad/activate/ad-account-auditor/SKILL.md) | ROAS RQS | `ad/activate/` (paid) | SHIP / FIX / BLOCK before budgets scale |
 | [email-quality-auditor](email/deliver/email-quality-auditor/SKILL.md) | SEND EQS | `email/deliver/` (email) | SHIP / FIX / BLOCK before send |
 | [launch-readiness-auditor](launch/mobilize/launch-readiness-auditor/SKILL.md) | RAMP LQS | `launch/mobilize/` (launch) | SHIP / FIX / BLOCK before the launch moment is committed |
+| [social-quality-auditor](social/host/social-quality-auditor/SKILL.md) | ECHO SQS | `social/host/` (social) | SHIP / FIX / BLOCK before publishing |
 
-**Shared cap chassis:** a single veto caps the affected dimension and the overall at `min(raw, 60)`; **two or more vetoes → `BLOCKED`** (no final score). Verdicts are translated to plain language (no item IDs in user-facing reports). Gate mechanics — handoff schema, cap arithmetic, artifact-gate checklist — are specified once in [auditor-runbook.md](references/auditor-runbook.md), and the arithmetic of all six frameworks is locked by a deterministic golden test (see [Quality guards](#quality-guards-ci)).
+**Shared cap chassis:** a single veto caps the affected dimension and the overall at `min(raw, 60)`; **two or more vetoes → `BLOCKED`** (no final score). Verdicts are translated to plain language (no item IDs in user-facing reports). Gate mechanics — handoff schema, cap arithmetic, artifact-gate checklist — are specified once in [auditor-runbook.md](references/auditor-runbook.md), and the arithmetic of all seven frameworks is locked by a deterministic golden test (see [Quality guards](#quality-guards-ci)).
 
 ### The protocol layer
 
-The `protocol/` directory holds the **shared truth & memory machinery** that sits outside the discipline phase-flows — 6 skills, counted separately:
+The `protocol/` directory holds the **shared truth & memory machinery** that sits outside the discipline phase-flows — 7 skills, counted separately:
 
 | Skill | Job | Anchored to | Canonical store |
 |-------|-----|-------------|-----------------|
@@ -191,6 +195,7 @@ The `protocol/` directory holds the **shared truth & memory machinery** that sit
 | [offer-claims-registry](protocol/offer-claims-registry/SKILL.md) | Offer & claim-substantiation ledger — the record the O1/T2 claim checks are judged against | paid | `memory/claims/` |
 | [consent-registry](protocol/consent-registry/SKILL.md) | Canonical per-subject consent/suppression record — the S2/N1 vetoes judge against it | email | `memory/consent/` |
 | [launch-registry](protocol/launch-registry/SKILL.md) | Canonical launch dossier/calendar — tier, one-way lifecycle stage, authoritative dates/embargo, channel submission ledger; the launch truth SSOT the R1 stage-truth veto judges against | launch | `memory/launch-registry/` |
+| [channel-registry](protocol/channel-registry/SKILL.md) | Canonical per-channel record — handles, ownership/authorization, platform norms, disclosure defaults; the channel truth SSOT the ECHO E1 channel-truth veto judges against | social | `memory/channels/` |
 | [memory-management](protocol/memory-management/SKILL.md) | HOT/WARM/COLD memory lifecycle (capture · promote · demote · archive · query) | all disciplines | `memory/` |
 
 The registries follow a **sole-writer rule** (other skills submit via `candidates.md`), and they *curate* — the gates *judge*. The genuinely horizontal layer beneath everything is the `references/` protocols ([auditor-runbook](references/auditor-runbook.md), [state-model](references/state-model.md), [skill-contract](references/skill-contract.md), [humanizer-slop](references/humanizer-slop.md), [measurement-protocol](references/measurement-protocol.md)) — shared by design as documents, not skills.
@@ -214,7 +219,7 @@ The registries follow a **sole-writer rule** (other skills submit via `candidate
 | `PostToolUse` | `Write\|Edit` | Hot-cache size warning **+ the Artifact Gate**: any file under `memory/audits/` that declares `class: auditor-output` is validated against the handoff schema and cap fields, or the write is blocked. The six auditor-class gates must declare that marker by contract; unmarked files are not auditor artifacts and pass through. |
 | `Stop` | (all) | No-op (exits silently). |
 
-The Artifact Gate is **framework-agnostic** — the same hook validates CORE-EEAT, CITE, C³, ROAS, SEND, and RAMP artifacts with no per-framework code.
+The Artifact Gate is **framework-agnostic** — the same hook validates CORE-EEAT, CITE, C³, ROAS, SEND, RAMP, and ECHO artifacts with no per-framework code.
 
 ---
 
@@ -398,13 +403,49 @@ Four phase directories under `launch/` (4 skills each) follow the RAMP loop; the
 
 </details>
 
-### Protocol layer (6)
+### Social — ECHO (16)
+
+Four phase directories under `social/` (4 skills each) follow the ECHO loop; the gate (⛩ social-quality-auditor) sits in Host. Only the gate computes the goal-weighted SQS — every other skill works one lever and hands off. Use-case-agnostic (community/dev-tool / B2C brand / B2B founder-led); the goal-weight column picks the emphasis. The discipline ships **no** posting, engagement, or DM automation of any kind.
+
+| Phase | Skills |
+|-------|--------|
+| **Explore** | [channel-portfolio-planner](social/explore/channel-portfolio-planner/SKILL.md), [voice-dossier-builder](social/explore/voice-dossier-builder/SKILL.md), [platform-norm-profiler](social/explore/platform-norm-profiler/SKILL.md), [participation-warmup-planner](social/explore/participation-warmup-planner/SKILL.md) |
+| **Craft** | [social-calendar-builder](social/craft/social-calendar-builder/SKILL.md), [social-creative-builder](social/craft/social-creative-builder/SKILL.md), [short-video-scripter](social/craft/short-video-scripter/SKILL.md), [advocacy-program-designer](social/craft/advocacy-program-designer/SKILL.md) |
+| **Host** | ⛩ [social-quality-auditor](social/host/social-quality-auditor/SKILL.md), [engagement-inbox-manager](social/host/engagement-inbox-manager/SKILL.md), [social-selling-planner](social/host/social-selling-planner/SKILL.md), [crisis-response-planner](social/host/crisis-response-planner/SKILL.md) |
+| **Observe** | [social-pulse-monitor](social/observe/social-pulse-monitor/SKILL.md), [share-of-voice-tracker](social/observe/share-of-voice-tracker/SKILL.md), [dark-social-attributor](social/observe/dark-social-attributor/SKILL.md), [social-measurement-loop](social/observe/social-measurement-loop/SKILL.md) |
+
+<details><summary><b>Per-skill purpose (Social)</b></summary>
+
+| Skill | ECHO lever | What it does |
+|-------|-----------|--------------|
+| channel-portfolio-planner | E | Pick the platform mix and per-channel role/cadence from where the audience actually is (records channels to the registry). |
+| voice-dossier-builder | E | Brand voice, tone, persona, and do/don't lexicon for consistent human-sounding presence. |
+| platform-norm-profiler | E | Per-platform norms, formats, ranking signals, and red-line rules before you post there. |
+| participation-warmup-planner | E | Non-promotional community warm-up plan — where to show up and add value before selling. |
+| social-calendar-builder | C | Editorial calendar — themes, series, cadence balanced to real capacity (no over-posting). |
+| social-creative-builder | C | Platform-native posts (hook/body/CTA), message-matched and claims-ledger-aware. |
+| short-video-scripter | C | Short-form video scripts — hook, beats, on-screen text, retention structure. |
+| advocacy-program-designer | C | Employee/community advocacy program — opt-in, disclosure defaults, sharable asset kit. |
+| ⛩ social-quality-auditor | E+C+H+O (SQS) | Auditor-class ECHO gate: scores SQS, enforces E1/C1/C2/H1/H2/O1, emits SHIP/FIX/BLOCK; carries a **pre-publish go/no-go** mode. |
+| engagement-inbox-manager | H | Reply/comment/DM triage playbook — response tiers, escalation, genuine-engagement discipline (no manufactured/baited engagement). |
+| social-selling-planner | H | Founder/team social-selling motion — relationship-first outreach, no automated DMs. |
+| crisis-response-planner | H | Pre-drafted crisis tiers, holding statements, escalation ladder, and pause-the-queue triggers. |
+| social-pulse-monitor | O | Mentions/sentiment/topic pulse from keyless sources, spike-vs-sustain reads (proxy data labeled). |
+| share-of-voice-tracker | O | Share-of-voice vs named competitors over a period-stable denominator. |
+| dark-social-attributor | O | Attribute dark-social/unlinked traffic — UTM discipline, self-reported-attribution capture, referral parsing. |
+| social-measurement-loop | O | Read one shipped change back against a baseline over a window → Promote / Keep-testing / Rollback. |
+
+**Reused cross-discipline** (counted in their home phases, not duplicated): `trend-spotter`, `audience-mapper`, `content-amplifier`, `outreach-manager`, `competitor-tracker`, `landing-optimizer`, `performance-analyzer`, `roi-calculator`, `report-generator`, `offer-claims-registry`, `community-launch-runner`, `creator-registry`, `page-play-builder`, `memory-management` — see [echo-benchmark.md](references/echo-benchmark.md).
+
+</details>
+
+### Protocol layer (7)
 
 The shared truth & memory machinery — see [Architecture § The protocol layer](#the-protocol-layer) for roles and sole-writer rules.
 
 | Group | Skills |
 |-------|--------|
-| **Protocol** | [entity-optimizer](protocol/entity-optimizer/SKILL.md), [creator-registry](protocol/creator-registry/SKILL.md), [offer-claims-registry](protocol/offer-claims-registry/SKILL.md), [consent-registry](protocol/consent-registry/SKILL.md), [launch-registry](protocol/launch-registry/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
+| **Protocol** | [entity-optimizer](protocol/entity-optimizer/SKILL.md), [creator-registry](protocol/creator-registry/SKILL.md), [offer-claims-registry](protocol/offer-claims-registry/SKILL.md), [consent-registry](protocol/consent-registry/SKILL.md), [launch-registry](protocol/launch-registry/SKILL.md), [channel-registry](protocol/channel-registry/SKILL.md), [memory-management](protocol/memory-management/SKILL.md) |
 
 <details><summary><b>Per-skill purpose (Protocol)</b></summary>
 
@@ -415,6 +456,7 @@ The shared truth & memory machinery — see [Architecture § The protocol layer]
 | offer-claims-registry | Canonical offer & claim-substantiation ledger — the record the O1/T2 claim checks are judged against. |
 | consent-registry | Canonical per-subject consent/suppression record — opt-in timestamp + lawful basis, double-opt-in proof, append-only unsub/bounce/complaint history; the record the S2/N1 vetoes judge against. |
 | launch-registry | Canonical per-launch dossier + launch calendar — tier, launch type, one-way lifecycle stage (draft→…→GA), authoritative dates + embargo commitments, channel submission ledger, outcome snapshot; the launch truth SSOT. |
+| channel-registry | Canonical per-channel record — handles, ownership/authorization, platform norms, disclosure defaults; the channel truth SSOT the ECHO E1 channel-truth veto judges against. |
 | memory-management | Review, promote, demote, and archive HOT/WARM/COLD project memory. |
 
 </details>
@@ -423,7 +465,7 @@ The shared truth & memory machinery — see [Architecture § The protocol layer]
 
 ## Commands
 
-Six commands: `/aaron-marketing:auto` routes any goal across all five disciplines, and each discipline has exactly one explicit entrypoint. Source: [commands/](commands).
+Seven commands: `/aaron-marketing:auto` routes any goal across all six disciplines, and each discipline has exactly one explicit entrypoint. Source: [commands/](commands).
 
 | Command | Use it for | Narrowing |
 |---------|-----------|-----------|
@@ -433,8 +475,9 @@ Six commands: `/aaron-marketing:auto` routes any goal across all five discipline
 | `/aaron-marketing:ad` | Paid ads (ROAS loop): segments, structure, creative, experiment design, the audit gate, measurement | `--phase research\|orchestrate\|activate\|scale` |
 | `/aaron-marketing:email` | Email (SEND loop): deliverability/consent, segmentation, creative, lifecycle flows, monetization, send-testing, the audit gate | `--phase setup\|engage\|nurture\|deliver` |
 | `/aaron-marketing:launch` | Product launch (RAMP loop): positioning, tier & window, message house & assets, the readiness gate, launch-day run, monitoring & retro | `--phase research\|assemble\|mobilize\|prove` |
+| `/aaron-marketing:social` | Organic social (ECHO loop): channel portfolio & voice, calendar & creative, the quality gate, engagement/crisis hosting, pulse & measurement | `--phase explore\|craft\|host\|observe` |
 
-Daily work normally starts with `/aaron-marketing:auto`; the other five are explicit discipline entrypoints, with `--mode` / `--phase` to narrow the stage.
+Daily work normally starts with `/aaron-marketing:auto`; the other six are explicit discipline entrypoints, with `--mode` / `--phase` to narrow the stage.
 
 **Rename note:** commands use the `/aaron-marketing:` prefix. The former `research` / `create` / `audit` / `track` commands are now modes of `/aaron-marketing:seo-geo` (flags unchanged). Older `/seo:*` and `/aaron-seo-geo:*` names recover via `auto` — e.g. `/aaron-marketing:auto /aaron-seo-geo:audit https://example.com/blog/post` returns `/aaron-marketing:seo-geo https://example.com/blog/post --mode audit`.
 
@@ -512,13 +555,15 @@ seo-geo/{research,build,optimize,monitor}/                  # SEO/GEO (16, incl.
 influencer/{discover,plan,activate,measure}/                   # Influencer (16, incl. its gate)
 ad/research|orchestrate|activate|scale/            # Paid Ads — ROAS (16, incl. its gate)
 email/setup|engage|nurture|deliver/                  # Email — SEND (16, incl. its gate)
-protocol/                                            # Protocol layer (5) — truth registries + memory
-commands/        # 5 slash commands (auto, seo-geo, influencer, ad, email)
-references/      # shared contract, state model, the 5 benchmarks, auditor runbook, platform packs
+launch/research|assemble|mobilize|prove/             # Launch — RAMP (16, incl. its gate)
+social/explore|craft|host|observe/                   # Social — ECHO (16, incl. its gate)
+protocol/                                            # Protocol layer (7) — truth registries + memory
+commands/        # 7 slash commands (auto, seo-geo, influencer, ad, email, launch, social)
+references/      # shared contract, state model, the 7 benchmarks, auditor runbook, platform packs
 evals/           # per-skill structural eval cases + structure-manifest.json
 hooks/           # hooks.json + claude-hook.sh (the only runtime logic)
 scripts/         # validate-skill.sh + connectors/ (stdlib) + CI guards
-memory/          # HOT/WARM/COLD scaffolding + registry stores (entities/creators/claims/consent)
+memory/          # HOT/WARM/COLD scaffolding + registry stores (entities/creators/claims/consent/launch/channels)
 docs/            # localized README (zh)
 .claude-plugin/  # plugin.json + marketplace.json mirror
 ```
@@ -541,9 +586,9 @@ Every change runs against a set of fail-closed guards (all in `scripts/` and `te
 
 | Guard | Checks |
 |-------|--------|
-| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 86 skills. |
-| `golden-auditor-math.py` | Deterministic weight-sum + worked-example arithmetic for **all six** frameworks. |
-| `check-evals.py` | Eval structural lint + `structure-manifest.json` (86/86 skills carry eval cases). |
+| `validate-skill.sh` | Frontmatter, required sections, version consistency, plugin-relative links across all 103 skills. |
+| `golden-auditor-math.py` | Deterministic weight-sum + worked-example arithmetic for **all seven** frameworks. |
+| `check-evals.py` | Eval structural lint + `structure-manifest.json` (103/103 skills carry eval cases). |
 | `check-pii.py` | Blocks committed secrets / PII (token-level allowlist, fail-closed). |
 | `check-stdlib-only.sh` | Dependency-creep guard + the Paid-Ads keyed-API red line. |
 | `check-versions.sh` | Version-sync guard: bundle version identical across plugin.json / both marketplace mirrors / both README badges / CLAUDE.md / VERSIONS.md release line + changelog entry, and every SKILL.md version matches its VERSIONS.md row. |
@@ -557,7 +602,7 @@ Live endpoint drift is covered separately by the **manual** [`scripts/connectors
 ## Contributing & project docs
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — authoring rules, the contribution checklist, and the authoritative 8-file tracking list.
-- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `14.0.0`).
+- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `15.0.0`).
 - **[SECURITY.md](SECURITY.md)** · **[PRIVACY.md](PRIVACY.md)** · **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — security, privacy, and community policy.
 - **[CLAUDE.md](CLAUDE.md)** / **[AGENTS.md](AGENTS.md)** — agent-facing context for this repo.
 
@@ -565,7 +610,7 @@ Live endpoint drift is covered separately by the **manual** [`scripts/connectors
 
 ## Disclaimer
 
-These skills assist SEO/GEO, influencer-marketing, paid-ads, and email-marketing workflows but do **not** guarantee rankings, AI citations, traffic, engagement, conversions, ROAS, deliverability, or business outcomes. Influencer-, ad-, and email-compliance checks (FTC disclosure, claim integrity, platform policy, consent/opt-in) are guidance, not legal advice. Verify recommendations with qualified professionals before relying on them for major strategy, financial, or legal decisions.
+These skills assist SEO/GEO, influencer-marketing, paid-ads, email-marketing, product-launch, and organic-social workflows but do **not** guarantee rankings, AI citations, traffic, engagement, conversions, ROAS, deliverability, or business outcomes. Influencer-, ad-, email-, and social-compliance checks (FTC disclosure, claim integrity, platform policy, consent/opt-in, material-connection disclosure) are guidance, not legal advice. Verify recommendations with qualified professionals before relying on them for major strategy, financial, or legal decisions.
 
 ## License
 

@@ -4,13 +4,13 @@ slug: aaron-launch-registry
 displayName: "Launch Registry · 发布台账"
 summary: "发布台账/发布日历/阶段与禁运期唯一真相"
 description: 'Use when the user asks to "log this launch", "what is our launch date / embargo", "record the stage change to beta / GA", or "update the channel submission ledger"; maintains the canonical per-launch dossier and launch calendar under memory/launch-registry/ — tier, launch type, lifecycle stage (draft→concept→alpha→beta→GA, one-way GA), authoritative dates + embargo commitments, the channel submission ledger, asset-manifest version pointers, and the post-launch outcome snapshot — and promotes intake candidates in batch. Not for scoring the R1 stage-truth veto or issuing an LQS verdict — use launch-readiness-auditor; not for planning tier or timeline — use launch-tier-planner. 发布台账/发布日历/阶段与禁运期记录'
-version: "14.0.0"
+version: "15.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when recording or querying the canonical facts of a launch: the authoritative launch date or window, the lifecycle stage (draft/concept/alpha/beta/GA), embargo and partner date commitments, which channels were submitted to and their status, which asset-manifest version shipped, or the post-launch outcome snapshot. Also when reconciling launch candidates dropped by other skills, or answering which launch moment is next on the calendar."
 argument-hint: "<launch slug, 'record stage change', or 'promote candidates'>"
-metadata: {"author": "aaron-he-zhu", "version": "14.0.0", "discipline": "protocol", "phase": "protocol", "geo-relevance": "low", "hermes": {"tags": ["marketing", "protocol"], "category": "protocol"}, "openclaw": {"emoji": "🗂️", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "protocol", "phase": "protocol", "geo-relevance": "low", "hermes": {"tags": ["marketing", "protocol"], "category": "protocol"}, "openclaw": {"emoji": "🗂️", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Launch Registry

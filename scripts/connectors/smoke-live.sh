@@ -72,6 +72,23 @@ check "appstore.py charts" \
   'import json,sys; d=json.load(sys.stdin); assert d and d[0]["rank"] == 1 and d[0]["id"] and d[0]["name"]' \
   python3 appstore.py charts --country us --max 10
 
+# --- keyless social listening --------------------------------------------------
+check "bluesky.py profile" \
+  'import json,sys; d=json.load(sys.stdin); assert d["error"] is None and d["did"] and d["followers"] is not None' \
+  python3 bluesky.py profile bsky.app
+
+check "fediverse.py trends" \
+  'import json,sys; d=json.load(sys.stdin); assert d["error"] is None and d["instance"]["version"] and isinstance(d["tags"], list)' \
+  python3 fediverse.py trends --instance mastodon.social --max 3
+
+check "discourse.py health" \
+  'import json,sys; d=json.load(sys.stdin); assert d["error"] is None and d["about"]["users_count"] and d["about"]["title"]' \
+  python3 discourse.py health https://meta.discourse.org --max 20
+
+check "youtube.py rss (keyless)" \
+  'import json,sys; d=json.load(sys.stdin); assert d["error"] is None and d["channel_id"] and d["video_count_in_feed"] > 0' \
+  python3 youtube.py rss UC_x5XG1OV2P6uZZ5FSM9Ttw
+
 # --- keyless hosted fetchers ---------------------------------------------------
 check "firecrawl.py scrape" \
   'import json,sys; d=json.load(sys.stdin); assert d["status"]==200 and d["data"]["data"]["markdown"]' \

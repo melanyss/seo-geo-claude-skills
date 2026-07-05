@@ -24,6 +24,7 @@ Thanks for your interest in contributing! This guide covers adding skills, impro
 | Paid Ads | `ad/<phase>/` | Builds, audits, and scales paid-ad campaigns (ROAS loop: research/orchestrate/activate/scale) |
 | Email | `email/<phase>/` | Grows, sends, and audits email programs (SEND loop: setup/engage/nurture/deliver) |
 | Launch | `launch/<phase>/` | Plans, gates, executes, and proves product launches (RAMP loop: research/assemble/mobilize/prove) |
+| Social | `social/<phase>/` | Plans, crafts, hosts, and measures organic social (ECHO loop: explore/craft/host/observe) |
 
 ### 2. Create the skill directory
 
@@ -55,7 +56,7 @@ The `name` field must match the directory name exactly. `metadata` must be a **s
 
 Use the compact shared skeleton from `references/skill-contract.md`: `Quick Start`, `Skill Contract`, `Handoff Summary`, `Data Sources`, `Instructions`, `Reference Materials`, and `Next Best Skill`. Optional sections such as `What This Skill Does`, `Example`, `Tips for Success`, `Save Results`, and `Validation Checkpoints` are welcome when they improve execution quality. Put detailed references in the skill's `references/` subdirectory.
 
-Auditor-class skills are the exception: they `Read references/auditor-runbook.md` at activation (the framework-agnostic SSOT: handoff schema, cap method, Artifact Gate, translation format) via a plugin-relative path, and keep only their framework-specific §2 worked examples, §3 guardrails, and §5 veto-ID rows inline in the `SKILL.md` body. Six skills are auditor-class gate consumers, each scored against one framework and writing to its own audit sink:
+Auditor-class skills are the exception: they `Read references/auditor-runbook.md` at activation (the framework-agnostic SSOT: handoff schema, cap method, Artifact Gate, translation format) via a plugin-relative path, and keep only their framework-specific §2 worked examples, §3 guardrails, and §5 veto-ID rows inline in the `SKILL.md` body. Seven skills are auditor-class gate consumers, each scored against one framework and writing to its own audit sink:
 
 | Auditor-class skill | Framework | Audit sink |
 |---------------------|-----------|------------|
@@ -65,6 +66,7 @@ Auditor-class skills are the exception: they `Read references/auditor-runbook.md
 | `ad-account-auditor` | ROAS RQS (paid-ads gate) | `memory/audits/ad/` |
 | `email-quality-auditor` | SEND EQS (email SEND gate) | `memory/audits/email/` |
 | `launch-readiness-auditor` | RAMP LQS (launch readiness gate) | `memory/audits/launch/` |
+| `social-quality-auditor` | ECHO SQS (organic-social gate) | `memory/audits/social/` |
 
 Cross-cutting reference protocols apply across disciplines: the humanizer-slop protocol, the measurement-protocol decision protocol, and the per-channel `platforms/` reference packs. These stay references (not skills) by design — each is consumed as a pre-handoff sub-step inside discipline skills, so promoting one to a standalone skill would duplicate that step.
 
@@ -75,7 +77,7 @@ Cross-cutting reference protocols apply across disciplines: the humanizer-slop p
 ```
 
 CI runs additional guards beyond the per-skill validator:
-- **golden-math** — validates the rollup math for all **six** quality frameworks: CORE-EEAT (80-item content quality, SEO/GEO), CITE (40-item domain authority, SEO/GEO), C³ (influencer — ACE/ART/ROI with CVI geometric-mean rollup, veto ACE A2/C1/E2 + ART T1/T2), ROAS (paid ads — R Return / O Offer / A Audience / S Spend-efficiency, RQS arithmetic weighted-mean rollup like CITE, veto R1/R2/O1/O2/A1; see [references/roas-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/roas-benchmark.md)), SEND (email — S Sender-integrity/deliverability / E Engagement / N Nurture-lifecycle / D Direct-response, EQS arithmetic goal-weighted-mean rollup like ROAS, veto S1/S2/N1/D1; see [references/send-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/send-benchmark.md)), and RAMP (launch — R Readiness / A Assets / M Momentum / P Proof, LQS arithmetic goal-weighted-mean rollup like SEND, veto RAMP R1/A1/M1/P1 with framework-name qualification against the ROAS ID collision; see [references/ramp-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/ramp-benchmark.md)).
+- **golden-math** — validates the rollup math for all **seven** quality frameworks: CORE-EEAT (80-item content quality, SEO/GEO), CITE (40-item domain authority, SEO/GEO), C³ (influencer — ACE/ART/ROI with CVI geometric-mean rollup, veto ACE A2/C1/E2 + ART T1/T2), ROAS (paid ads — R Return / O Offer / A Audience / S Spend-efficiency, RQS arithmetic weighted-mean rollup like CITE, veto R1/R2/O1/O2/A1; see [references/roas-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/roas-benchmark.md)), SEND (email — S Sender-integrity/deliverability / E Engagement / N Nurture-lifecycle / D Direct-response, EQS arithmetic goal-weighted-mean rollup like ROAS, veto S1/S2/N1/D1; see [references/send-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/send-benchmark.md)), RAMP (launch — R Readiness / A Assets / M Momentum / P Proof, LQS arithmetic goal-weighted-mean rollup like SEND, veto RAMP R1/A1/M1/P1 with framework-name qualification against the ROAS ID collision; see [references/ramp-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/ramp-benchmark.md)), and ECHO (organic social — E Embeddedness / C Craft / H Hosting / O Observability, SQS arithmetic goal-weighted-mean rollup like RAMP, veto ECHO E1/C1/C2/H1/H2/O1 with framework-name qualification against the ROAS O1 ID collision; see [references/echo-benchmark.md](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/echo-benchmark.md)).
 - **check-evals** — structural lint over the eval fixtures.
 - **check-pii** — scans for committed PII.
 - **check-stdlib-only** — enforces the zero-dependency Python-stdlib rule for connector helpers, including the Paid-Ads keyed-API red line (no keyed paid-ad API calls baked into skills).
@@ -89,8 +91,8 @@ After adding or updating a skill, keep these **9 tracking surfaces** in sync. **
 - `.claude-plugin/marketplace.json` — **byte-identical mirror** of the root `marketplace.json` (copy it after editing the root)
 - `README.md` — skills table + version badge
 - `CLAUDE.md` — category table + version
-- `AGENTS.md` — name/count line + framework item/dimension counts (CORE-EEAT / CITE / C³ / ROAS / SEND / RAMP)
-- `docs/README.zh.md` — Chinese README: the 86 · 16 / 16 / 16 / 16 / 16 / 6 counts (skills / SEO-GEO / influencer / paid ads / email / launch / protocol) + 6 commands + version badge
+- `AGENTS.md` — name/count line + framework item/dimension counts (CORE-EEAT / CITE / C³ / ROAS / SEND / RAMP / ECHO)
+- `docs/README.zh.md` — Chinese README: the 103 · 16 / 16 / 16 / 16 / 16 / 16 / 7 counts (skills / SEO-GEO / influencer / paid ads / email / launch / social / protocol) + 7 commands + version badge
 - `.github/repo-about.json` — the GitHub repo **About** SSOT (sidebar description + topics). The About is *not* read by GitHub directly and *not* editable by the CI token, so it silently drifted on the v13/v14 discipline bumps. Edit the count/disciplines/gates here, then project it onto GitHub with `bash scripts/sync-about.sh --live` (owner-run, needs admin auth). `check-versions.sh` asserts its skill count matches the tree; the weekly `about-drift.yml` sentinel fails red if GitHub drifts from it.
 
 For release bumps, also sync README badges and localized README badges.

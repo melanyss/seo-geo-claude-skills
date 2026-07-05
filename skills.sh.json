@@ -113,14 +113,37 @@
       ]
     },
     {
-      "title": "Protocol layer (6) — shared truth registries & memory",
-      "description": "Cross-discipline machinery the other 80 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, the canonical launch dossier/calendar, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
+      "title": "Social · ECHO (16) — explore → craft → host → observe",
+      "description": "Organic social for B2C brands, dev-tool communities, and B2B founder-led motions: channel portfolio and voice dossiers, dated platform norm cards and participation warmup, the always-on calendar with platform-native creative and advocacy programs, the SQS pre-publish gate (social-quality-auditor) with inbox/crisis operations, then keyless listening, share-of-voice, dark-social attribution and the measurement write-back loop.",
+      "skills": [
+        "channel-portfolio-planner",
+        "voice-dossier-builder",
+        "platform-norm-profiler",
+        "participation-warmup-planner",
+        "social-calendar-builder",
+        "social-creative-builder",
+        "short-video-scripter",
+        "advocacy-program-designer",
+        "social-quality-auditor",
+        "engagement-inbox-manager",
+        "social-selling-planner",
+        "crisis-response-planner",
+        "social-pulse-monitor",
+        "share-of-voice-tracker",
+        "dark-social-attributor",
+        "social-measurement-loop"
+      ]
+    },
+    {
+      "title": "Protocol layer (7) — shared truth registries & memory",
+      "description": "Cross-discipline machinery the other 96 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, the canonical launch dossier/calendar, the brand-owned channel dossiers, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
       "skills": [
         "entity-optimizer",
         "creator-registry",
         "offer-claims-registry",
         "consent-registry",
         "launch-registry",
+        "channel-registry",
         "memory-management"
       ]
     }

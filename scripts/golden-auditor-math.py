@@ -28,6 +28,7 @@ C3 = os.path.join(ROOT, "references", "c3-benchmark.md")
 ROAS = os.path.join(ROOT, "references", "roas-benchmark.md")
 SEND = os.path.join(ROOT, "references", "send-benchmark.md")
 RAMP = os.path.join(ROOT, "references", "ramp-benchmark.md")
+ECHO = os.path.join(ROOT, "references", "echo-benchmark.md")
 CQA = os.path.join(ROOT, "seo-geo", "optimize", "content-quality-auditor", "SKILL.md")
 DAA = os.path.join(ROOT, "seo-geo", "monitor", "domain-authority-auditor", "SKILL.md")
 
@@ -188,6 +189,28 @@ check("R=80 A=75 M=70 P=78" in ramp_text, "RAMP input vector present in ramp-ben
 check("floor(76.35) = 76" in ramp_text, "RAMP B2B/Mobile result 76 present in ramp-benchmark")
 check("floor(75.0) = 75" in ramp_text, "RAMP Dev-tool result 75 present in ramp-benchmark")
 check("min(76, 60) = 60" in ramp_text, "RAMP veto-cap example present in ramp-benchmark")
+
+print("== ECHO SQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
+echo_text = open(ECHO, encoding="utf-8").read()
+ecwe = re.compile(r"E\s*[×xX*]\s*([\d.]+)\s*\+\s*C\s*[×xX*]\s*([\d.]+)\s*\+\s*H\s*[×xX*]\s*([\d.]+)\s*\+\s*O\s*[×xX*]\s*([\d.]+)")
+ecrows = ecwe.findall(echo_text)
+check(len(ecrows) >= 3, "found all three ECHO goal-weight formulas (got %d)" % len(ecrows))
+echo_vec = {"E": 80, "C": 75, "H": 70, "O": 78}
+if len(ecrows) >= 3:
+    community = {k: float(v) for k, v in zip("ECHO", ecrows[0])}
+    b2c = {k: float(v) for k, v in zip("ECHO", ecrows[1])}
+    founder = {k: float(v) for k, v in zip("ECHO", ecrows[2])}
+    check(abs(sum(community.values()) - 1.0) < 1e-9, "ECHO Community weights sum to 1.0 (got %.2f)" % sum(community.values()))
+    check(abs(sum(b2c.values()) - 1.0) < 1e-9, "ECHO B2C weights sum to 1.0 (got %.2f)" % sum(b2c.values()))
+    check(abs(sum(founder.values()) - 1.0) < 1e-9, "ECHO Founder-led weights sum to 1.0 (got %.2f)" % sum(founder.values()))
+    check(weighted(echo_vec, community) == 75, "ECHO Community example (E80 C75 H70 O78) == 75 (got %d)" % weighted(echo_vec, community))
+    check(weighted(echo_vec, b2c) == 74, "ECHO B2C example (same vector) == 74 (got %d)" % weighted(echo_vec, b2c))
+    check(weighted(echo_vec, founder) == 76, "ECHO Founder-led example (same vector) == 76 (got %d)" % weighted(echo_vec, founder))
+check("E=80 C=75 H=70 O=78" in echo_text, "ECHO input vector present in echo-benchmark")
+check("floor(75.6) = 75" in echo_text, "ECHO Community result 75 present in echo-benchmark")
+check("floor(74.85) = 74" in echo_text, "ECHO B2C result 74 present in echo-benchmark")
+check("floor(76.3) = 76" in echo_text, "ECHO Founder-led result 76 present in echo-benchmark")
+check("min(76, 60) = 60" in echo_text, "ECHO veto-cap example present in echo-benchmark")
 
 print()
 if fails:

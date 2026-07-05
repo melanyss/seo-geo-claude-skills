@@ -1,101 +1,131 @@
 # Aaron Marketing Skills — Versions
 
-Current versions for the plugin and all 86 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
+Current versions for the plugin and all 103 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `14.0.0` (2026-07-05). Fifth discipline: **Product Launch (RAMP)** — 16 new skills under `launch/{research,assemble,mobilize,prove}/`, the sixth protocol registry `launch-registry`, the sixth benchmark framework RAMP (`references/ramp-benchmark.md`), the sixth gate `launch-readiness-auditor` (LQS + T-1 go/no-go), the sixth command `/aaron-marketing:launch`, and three new read-only connectors (`hn.py` keyless, `producthunt.py` free-key non-commercial, `appstore.py` keyless documented-endpoints-only). Major version per the discipline-addition convention: the whole bundle — all **86 skills** — is at `14.0.0`.
+**Current release**: `15.0.0` (2026-07-05). Sixth discipline: **Organic Social (ECHO)** — 16 new skills under `social/{explore,craft,host,observe}/`, the seventh protocol registry `channel-registry`, the seventh benchmark framework ECHO (`references/echo-benchmark.md`), the seventh gate `social-quality-auditor` (SQS + pre-publish go/no-go), the seventh command `/aaron-marketing:social`, and three new keyless read-only connectors (`bluesky.py`, `fediverse.py`, `discourse.py`) plus a `youtube.py` `--rss` mode. Major version per the discipline-addition convention: the whole bundle — all **103 skills** — is at `15.0.0`.
 
 ## Skills
 
 | Skill | Category | Version | Last Updated |
 |-------|----------|---------|--------------|
-| keyword-research | research | 14.0.0 | 2026-07-05 |
-| competitor-analysis | research | 14.0.0 | 2026-07-05 |
-| serp-analysis | research | 14.0.0 | 2026-07-05 |
-| content-gap-analysis | research | 14.0.0 | 2026-07-05 |
-| content-writer | build | 14.0.0 | 2026-07-05 |
-| geo-content-optimizer | build | 14.0.0 | 2026-07-05 |
-| serp-markup-builder | build | 14.0.0 | 2026-07-05 |
-| page-play-builder | build | 14.0.0 | 2026-07-05 |
-| content-quality-auditor | optimize | 14.0.0 | 2026-07-05 |
-| technical-seo-checker | optimize | 14.0.0 | 2026-07-05 |
-| on-page-seo-auditor | optimize | 14.0.0 | 2026-07-05 |
-| site-structure-optimizer | optimize | 14.0.0 | 2026-07-05 |
-| domain-authority-auditor | monitor | 14.0.0 | 2026-07-05 |
-| rank-tracker | monitor | 14.0.0 | 2026-07-05 |
-| performance-monitor | monitor | 14.0.0 | 2026-07-05 |
-| offsite-signal-analyzer | monitor | 14.0.0 | 2026-07-05 |
-| audience-mapper | discover | 14.0.0 | 2026-07-05 |
-| trend-spotter | discover | 14.0.0 | 2026-07-05 |
-| influencer-discovery | discover | 14.0.0 | 2026-07-05 |
-| fit-scorer | discover | 14.0.0 | 2026-07-05 |
-| competitor-tracker | plan | 14.0.0 | 2026-07-05 |
-| campaign-planner | plan | 14.0.0 | 2026-07-05 |
-| brief-generator | plan | 14.0.0 | 2026-07-05 |
-| budget-optimizer | plan | 14.0.0 | 2026-07-05 |
-| outreach-manager | activate | 14.0.0 | 2026-07-05 |
-| content-reviewer | activate | 14.0.0 | 2026-07-05 |
-| contract-helper | activate | 14.0.0 | 2026-07-05 |
-| content-amplifier | activate | 14.0.0 | 2026-07-05 |
-| landing-optimizer | measure | 14.0.0 | 2026-07-05 |
-| performance-analyzer | measure | 14.0.0 | 2026-07-05 |
-| roi-calculator | measure | 14.0.0 | 2026-07-05 |
-| report-generator | measure | 14.0.0 | 2026-07-05 |
-| campaign-architect | paid | 14.0.0 | 2026-07-05 |
-| audience-segment-builder | paid | 14.0.0 | 2026-07-05 |
-| search-term-miner | paid | 14.0.0 | 2026-07-05 |
-| product-feed-optimizer | paid | 14.0.0 | 2026-07-05 |
-| ad-creative-builder | paid | 14.0.0 | 2026-07-05 |
-| ad-test-designer | paid | 14.0.0 | 2026-07-05 |
-| bid-strategy-planner | paid | 14.0.0 | 2026-07-05 |
-| landing-experience-checker | paid | 14.0.0 | 2026-07-05 |
-| ad-account-auditor | paid | 14.0.0 | 2026-07-05 |
-| conversion-signal-qa | paid | 14.0.0 | 2026-07-05 |
-| placement-exclusion-manager | paid | 14.0.0 | 2026-07-05 |
-| conversion-value-mapper | paid | 14.0.0 | 2026-07-05 |
-| paid-measurement-loop | paid | 14.0.0 | 2026-07-05 |
-| attribution-reconciler | paid | 14.0.0 | 2026-07-05 |
-| budget-pacing-monitor | paid | 14.0.0 | 2026-07-05 |
-| fatigue-frequency-manager | paid | 14.0.0 | 2026-07-05 |
-| deliverability-qa | email | 14.0.0 | 2026-07-05 |
-| list-segment-builder | email | 14.0.0 | 2026-07-05 |
-| list-growth-designer | email | 14.0.0 | 2026-07-05 |
-| list-hygiene-monitor | email | 14.0.0 | 2026-07-05 |
-| email-creative-builder | email | 14.0.0 | 2026-07-05 |
-| subject-line-lab | email | 14.0.0 | 2026-07-05 |
-| email-render-builder | email | 14.0.0 | 2026-07-05 |
-| dynamic-content-personalizer | email | 14.0.0 | 2026-07-05 |
-| email-sequence-designer | email | 14.0.0 | 2026-07-05 |
-| newsletter-monetization-planner | email | 14.0.0 | 2026-07-05 |
-| preference-frequency-manager | email | 14.0.0 | 2026-07-05 |
-| reactivation-specialist | email | 14.0.0 | 2026-07-05 |
-| email-quality-auditor | email | 14.0.0 | 2026-07-05 |
-| send-experiment-designer | email | 14.0.0 | 2026-07-05 |
-| inbox-placement-monitor | email | 14.0.0 | 2026-07-05 |
-| cold-outbound-sequencer | email | 14.0.0 | 2026-07-05 |
-| positioning-mapper | launch | 14.0.0 | 2026-07-05 |
-| launch-tier-planner | launch | 14.0.0 | 2026-07-05 |
-| launch-window-planner | launch | 14.0.0 | 2026-07-05 |
-| early-access-designer | launch | 14.0.0 | 2026-07-05 |
-| message-house-builder | launch | 14.0.0 | 2026-07-05 |
-| launch-asset-packager | launch | 14.0.0 | 2026-07-05 |
-| pricing-packaging-planner | launch | 14.0.0 | 2026-07-05 |
-| sales-enablement-kit | launch | 14.0.0 | 2026-07-05 |
-| launch-readiness-auditor | launch | 14.0.0 | 2026-07-05 |
-| launch-day-conductor | launch | 14.0.0 | 2026-07-05 |
-| community-launch-runner | launch | 14.0.0 | 2026-07-05 |
-| press-media-relations | launch | 14.0.0 | 2026-07-05 |
-| launch-monitor | launch | 14.0.0 | 2026-07-05 |
-| launch-feedback-synthesizer | launch | 14.0.0 | 2026-07-05 |
-| launch-retro-analyzer | launch | 14.0.0 | 2026-07-05 |
-| momentum-planner | launch | 14.0.0 | 2026-07-05 |
-| entity-optimizer | protocol | 14.0.0 | 2026-07-05 |
-| creator-registry | protocol | 14.0.0 | 2026-07-05 |
-| offer-claims-registry | protocol | 14.0.0 | 2026-07-05 |
-| consent-registry | protocol | 14.0.0 | 2026-07-05 |
-| launch-registry | protocol | 14.0.0 | 2026-07-05 |
-| memory-management | protocol | 14.0.0 | 2026-07-05 |
+| keyword-research | research | 15.0.0 | 2026-07-05 |
+| competitor-analysis | research | 15.0.0 | 2026-07-05 |
+| serp-analysis | research | 15.0.0 | 2026-07-05 |
+| content-gap-analysis | research | 15.0.0 | 2026-07-05 |
+| content-writer | build | 15.0.0 | 2026-07-05 |
+| geo-content-optimizer | build | 15.0.0 | 2026-07-05 |
+| serp-markup-builder | build | 15.0.0 | 2026-07-05 |
+| page-play-builder | build | 15.0.0 | 2026-07-05 |
+| content-quality-auditor | optimize | 15.0.0 | 2026-07-05 |
+| technical-seo-checker | optimize | 15.0.0 | 2026-07-05 |
+| on-page-seo-auditor | optimize | 15.0.0 | 2026-07-05 |
+| site-structure-optimizer | optimize | 15.0.0 | 2026-07-05 |
+| domain-authority-auditor | monitor | 15.0.0 | 2026-07-05 |
+| rank-tracker | monitor | 15.0.0 | 2026-07-05 |
+| performance-monitor | monitor | 15.0.0 | 2026-07-05 |
+| offsite-signal-analyzer | monitor | 15.0.0 | 2026-07-05 |
+| audience-mapper | discover | 15.0.0 | 2026-07-05 |
+| trend-spotter | discover | 15.0.0 | 2026-07-05 |
+| influencer-discovery | discover | 15.0.0 | 2026-07-05 |
+| fit-scorer | discover | 15.0.0 | 2026-07-05 |
+| competitor-tracker | plan | 15.0.0 | 2026-07-05 |
+| campaign-planner | plan | 15.0.0 | 2026-07-05 |
+| brief-generator | plan | 15.0.0 | 2026-07-05 |
+| budget-optimizer | plan | 15.0.0 | 2026-07-05 |
+| outreach-manager | activate | 15.0.0 | 2026-07-05 |
+| content-reviewer | activate | 15.0.0 | 2026-07-05 |
+| contract-helper | activate | 15.0.0 | 2026-07-05 |
+| content-amplifier | activate | 15.0.0 | 2026-07-05 |
+| landing-optimizer | measure | 15.0.0 | 2026-07-05 |
+| performance-analyzer | measure | 15.0.0 | 2026-07-05 |
+| roi-calculator | measure | 15.0.0 | 2026-07-05 |
+| report-generator | measure | 15.0.0 | 2026-07-05 |
+| campaign-architect | paid | 15.0.0 | 2026-07-05 |
+| audience-segment-builder | paid | 15.0.0 | 2026-07-05 |
+| search-term-miner | paid | 15.0.0 | 2026-07-05 |
+| product-feed-optimizer | paid | 15.0.0 | 2026-07-05 |
+| ad-creative-builder | paid | 15.0.0 | 2026-07-05 |
+| ad-test-designer | paid | 15.0.0 | 2026-07-05 |
+| bid-strategy-planner | paid | 15.0.0 | 2026-07-05 |
+| landing-experience-checker | paid | 15.0.0 | 2026-07-05 |
+| ad-account-auditor | paid | 15.0.0 | 2026-07-05 |
+| conversion-signal-qa | paid | 15.0.0 | 2026-07-05 |
+| placement-exclusion-manager | paid | 15.0.0 | 2026-07-05 |
+| conversion-value-mapper | paid | 15.0.0 | 2026-07-05 |
+| paid-measurement-loop | paid | 15.0.0 | 2026-07-05 |
+| attribution-reconciler | paid | 15.0.0 | 2026-07-05 |
+| budget-pacing-monitor | paid | 15.0.0 | 2026-07-05 |
+| fatigue-frequency-manager | paid | 15.0.0 | 2026-07-05 |
+| deliverability-qa | email | 15.0.0 | 2026-07-05 |
+| list-segment-builder | email | 15.0.0 | 2026-07-05 |
+| list-growth-designer | email | 15.0.0 | 2026-07-05 |
+| list-hygiene-monitor | email | 15.0.0 | 2026-07-05 |
+| email-creative-builder | email | 15.0.0 | 2026-07-05 |
+| subject-line-lab | email | 15.0.0 | 2026-07-05 |
+| email-render-builder | email | 15.0.0 | 2026-07-05 |
+| dynamic-content-personalizer | email | 15.0.0 | 2026-07-05 |
+| email-sequence-designer | email | 15.0.0 | 2026-07-05 |
+| newsletter-monetization-planner | email | 15.0.0 | 2026-07-05 |
+| preference-frequency-manager | email | 15.0.0 | 2026-07-05 |
+| reactivation-specialist | email | 15.0.0 | 2026-07-05 |
+| email-quality-auditor | email | 15.0.0 | 2026-07-05 |
+| send-experiment-designer | email | 15.0.0 | 2026-07-05 |
+| inbox-placement-monitor | email | 15.0.0 | 2026-07-05 |
+| cold-outbound-sequencer | email | 15.0.0 | 2026-07-05 |
+| positioning-mapper | launch | 15.0.0 | 2026-07-05 |
+| launch-tier-planner | launch | 15.0.0 | 2026-07-05 |
+| launch-window-planner | launch | 15.0.0 | 2026-07-05 |
+| early-access-designer | launch | 15.0.0 | 2026-07-05 |
+| message-house-builder | launch | 15.0.0 | 2026-07-05 |
+| launch-asset-packager | launch | 15.0.0 | 2026-07-05 |
+| pricing-packaging-planner | launch | 15.0.0 | 2026-07-05 |
+| sales-enablement-kit | launch | 15.0.0 | 2026-07-05 |
+| launch-readiness-auditor | launch | 15.0.0 | 2026-07-05 |
+| launch-day-conductor | launch | 15.0.0 | 2026-07-05 |
+| community-launch-runner | launch | 15.0.0 | 2026-07-05 |
+| press-media-relations | launch | 15.0.0 | 2026-07-05 |
+| launch-monitor | launch | 15.0.0 | 2026-07-05 |
+| launch-feedback-synthesizer | launch | 15.0.0 | 2026-07-05 |
+| launch-retro-analyzer | launch | 15.0.0 | 2026-07-05 |
+| momentum-planner | launch | 15.0.0 | 2026-07-05 |
+| channel-portfolio-planner | explore | 15.0.0 | 2026-07-05 |
+| voice-dossier-builder | explore | 15.0.0 | 2026-07-05 |
+| platform-norm-profiler | explore | 15.0.0 | 2026-07-05 |
+| participation-warmup-planner | explore | 15.0.0 | 2026-07-05 |
+| social-calendar-builder | craft | 15.0.0 | 2026-07-05 |
+| social-creative-builder | craft | 15.0.0 | 2026-07-05 |
+| short-video-scripter | craft | 15.0.0 | 2026-07-05 |
+| advocacy-program-designer | craft | 15.0.0 | 2026-07-05 |
+| social-quality-auditor | host | 15.0.0 | 2026-07-05 |
+| engagement-inbox-manager | host | 15.0.0 | 2026-07-05 |
+| social-selling-planner | host | 15.0.0 | 2026-07-05 |
+| crisis-response-planner | host | 15.0.0 | 2026-07-05 |
+| social-pulse-monitor | observe | 15.0.0 | 2026-07-05 |
+| share-of-voice-tracker | observe | 15.0.0 | 2026-07-05 |
+| dark-social-attributor | observe | 15.0.0 | 2026-07-05 |
+| social-measurement-loop | observe | 15.0.0 | 2026-07-05 |
+| entity-optimizer | protocol | 15.0.0 | 2026-07-05 |
+| creator-registry | protocol | 15.0.0 | 2026-07-05 |
+| offer-claims-registry | protocol | 15.0.0 | 2026-07-05 |
+| consent-registry | protocol | 15.0.0 | 2026-07-05 |
+| launch-registry | protocol | 15.0.0 | 2026-07-05 |
+| channel-registry | protocol | 15.0.0 | 2026-07-05 |
+| memory-management | protocol | 15.0.0 | 2026-07-05 |
 
 ## Changelog
+
+### v15.0.0 — Sixth discipline: Organic Social (ECHO) (2026-07-05)
+
+Major release per the discipline-addition convention (launch/RAMP v14.0.0 precedent): the bundle grows 86 → **103 skills** (16 × 6 disciplines + 7 protocol), 6 → **7 commands**, 6 → **7 frameworks/gates**, and every skill aligns to `15.0.0`. Scope discipline: organic social only — the discipline ships **no posting, engagement, or DM automation of any kind**.
+
+- **New discipline `social/`** — 16 skills on the ECHO loop (Explore → Craft → Host → Observe): `channel-portfolio-planner` (platform mix + focus), `voice-dossier-builder` (brand-voice profile), `platform-norm-profiler` (per-platform norms/rules), `participation-warmup-planner` (community warm-up); `social-calendar-builder` (cadence + calendar), `social-creative-builder` (post creative, claims-aware), `short-video-scripter` (short-form video scripts), `advocacy-program-designer` (employee/creator advocacy); `social-quality-auditor`, `engagement-inbox-manager` (reply/mention triage), `social-selling-planner` (founder-led social selling), `crisis-response-planner` (issue/crisis playbook); `social-pulse-monitor` (mentions/sentiment pulse), `share-of-voice-tracker` (SOV vs competitors), `dark-social-attributor` (unattributed-share modeling), `social-measurement-loop` (SQS-tied measurement loop).
+- **New framework ECHO** (`references/echo-benchmark.md`): E Embeddedness / C Craft / H Hosting / O Observability, 40 items (4×10, channel-agnostic), SQS = floor(goal-weighted mean) with three goal-weight columns (community-devtool ·30/·20/·30/·20, B2C-brand ·10/·45/·25/·20, B2B-founder-led ·20/·30/·15/·35); six vetoes ECHO E1 (channel-truth vs channel-registry, no record = NEEDS_INPUT), C1 (claim integrity vs the claims ledger — same red line as ROAS O1 / SEND D1 / RAMP A1), C2 (undisclosed material connection or realistic synthetic media), H1 (manufactured/baited engagement — pods/bought/automated replies-DMs/like-tag-share bait, genuine-question carve-out), H2 (UGC republishing without recorded permission — public posting is never permission, organic never covers paid), O1 (engagement rate without a named/period-stable denominator, or proxy data presented as Measured); over-posting/cadence-over-capacity is a guardrail under H, not a veto. Golden-math fixture `E=80 C=75 H=70 O=78` → 75/74/76 (single-veto cap min(76,60)=60) locked in `golden-auditor-math.py`. Naming disambiguation: ECHO O1/O2 collide textually with ROAS O1/O2 (ROAS O2 is a veto, ECHO O2 is not), ECHO E2 collides with C³ ACE E2 (a veto), ECHO C1 collides with C³ C1 / CORE C01 — shared docs qualify with the framework name; auditor-runbook bumped 2.3 → 2.4.
+- **Seventh gate `social-quality-auditor`** (social/host/, `class: auditor`): sole SQS computer + veto enforcer, pre-publish go/no-go mode, artifacts at `memory/audits/social/`, standalone-install fallback like the other six gates.
+- **Seventh protocol registry `channel-registry`**: canonical per-channel record at `memory/channels/` — handle/URL, ownership + verification status, per-platform norms/rules snapshot, disclosure defaults, outcome snapshot; sole-writer with a five-state machine and a T-0 batch-promote clause (state-model) so host/observe skills append candidates without blocking on the registry.
+- **Three new read-only connectors** (all keyless, endpoints live-verified 2026-07): `bluesky.py` (AT Protocol public API — actor/feed/search), `fediverse.py` (Mastodon-compatible public timelines/search), `discourse.py` (public Discourse forum JSON — topics/posts/tags); plus a `youtube.py` `--rss` mode (keyless channel-feed pull, no API key). `threads.py` stays **recipe-only** for v15 (free-key but a Meta developer-app setup hurdle). `gdelt.py`/`tavily.py` remain proxy sources (always labeled). Reddit's keyless `.json` now 403s → `.rss` recipe only. No posting/engagement/DM automation is added by any of them.
+- **Reverse edits to existing skills**: `content-amplifier` gains two clauses tying repurposing + paid-amplification into the social calendar seam; `trend-spotter` feeds cultural timing into `social-calendar-builder`; `community-launch-runner` cross-links the social host layer; `audience-mapper` gains a social-persona lane; `outreach-manager` gains a social-DM-mechanics note (spec only, no automation); `launch-monitor` + `launch-feedback-synthesizer` clarify the post-window social-listening seam; `attribution-reconciler` gains a dark-social seam handoff to `dark-social-attributor`.
+- **Repo family +2** (registry rows first, per policy): `social-marketing-echo-benchmark` (published standard, `body` sync of `references/echo-benchmark.md`) and `social-marketing-agent-skills` (signpost, `list` sync of the `social/` skills); `sync-family.sh` targets extended.
+- **Chassis updates**: CI validate matrix + `check-evals.py` PHASE_DIRS gain the four `social/` phase dirs; `skills.sh.json` gains the Social grouping (103 = 103 asserted); evals 103/103 with 5 seed cases per new skill; skill-contract/state-model/CONTRIBUTING/CLAUDE.md/AGENTS.md/README/docs/README.zh.md counts and tables updated; `/aaron-marketing:auto` learns the social-disambiguation rule (organic social → social; paid social stays ROAS; creator collaborations stay influencer).
 
 ### v14.0.0 — Fifth discipline: Product Launch (RAMP) (2026-07-05)
 

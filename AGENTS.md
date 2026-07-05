@@ -4,18 +4,18 @@ Guidelines for AI agents working in this repository. For full runtime context, s
 
 ## Repository Overview
 
-- **Name**: aaron-marketing-skills — 86 skills (16 SEO/GEO + 16 influencer + 16 paid + 16 email + 16 launch + 6 protocol), 5 disciplines + a protocol layer, 6 commands, shared references
+- **Name**: aaron-marketing-skills — 103 skills (16 SEO/GEO + 16 influencer + 16 paid + 16 email + 16 launch + 16 social + 7 protocol), 6 disciplines + a protocol layer, 7 commands, shared references
 - **Repository**: https://github.com/aaron-he-zhu/aaron-marketing-skills
 - **Author**: Aaron He Zhu | **License**: Apache 2.0
 - **Specs**: [Agent Skills](https://agentskills.io/specification.md)
-- **Cross-agent compatibility**: all 86 skills install on the 70+ SKILL.md hosts served by `npx skills` (which reads the skill declarations from `.claude-plugin/plugin.json` — no mirror directory needed, never add one). Per-agent matrix + degradation rules: [docs/agent-compatibility.md](docs/agent-compatibility.md); CI enforces the discovery count. New/renamed skills must also be added to a grouping in the repo-root `skills.sh.json` (lays out the [skills.sh page](https://skills.sh/aaron-he-zhu/aaron-marketing-skills); CI-enforced coverage).
-Content-first repository: skills and commands are Markdown; Claude Code hooks use a small Bash runner; `scripts/connectors/` holds zero-dependency Python-stdlib helpers (no pip deps) — data pullers (including the keyless hosted fetchers `firecrawl.py` and `tavily.py`, which robots-pre-flight every delegated site fetch) plus one ESP-automation helper (`resend.py`, whose mutating subcommands dry-run by default and require `--live`). Primary directories: SEO/GEO `seo-geo/research/`, `seo-geo/build/`, `seo-geo/optimize/`, `seo-geo/monitor/`; protocol layer `protocol/`; influencer `influencer/discover/`, `influencer/plan/`, `influencer/activate/`, `influencer/measure/`; paid ads `ad/research`, `ad/orchestrate`, `ad/activate`, `ad/scale`; email `email/setup`, `email/engage`, `email/nurture`, `email/deliver`; launch `launch/research`, `launch/assemble`, `launch/mobilize`, `launch/prove`; plus `commands/`, `references/`, `scripts/connectors/`.
+- **Cross-agent compatibility**: all 103 skills install on the 70+ SKILL.md hosts served by `npx skills` (which reads the skill declarations from `.claude-plugin/plugin.json` — no mirror directory needed, never add one). Per-agent matrix + degradation rules: [docs/agent-compatibility.md](docs/agent-compatibility.md); CI enforces the discovery count. New/renamed skills must also be added to a grouping in the repo-root `skills.sh.json` (lays out the [skills.sh page](https://skills.sh/aaron-he-zhu/aaron-marketing-skills); CI-enforced coverage).
+Content-first repository: skills and commands are Markdown; Claude Code hooks use a small Bash runner; `scripts/connectors/` holds zero-dependency Python-stdlib helpers (no pip deps) — data pullers (including the keyless hosted fetchers `firecrawl.py` and `tavily.py`, which robots-pre-flight every delegated site fetch) plus one ESP-automation helper (`resend.py`, whose mutating subcommands dry-run by default and require `--live`). Primary directories: SEO/GEO `seo-geo/research/`, `seo-geo/build/`, `seo-geo/optimize/`, `seo-geo/monitor/`; protocol layer `protocol/`; influencer `influencer/discover/`, `influencer/plan/`, `influencer/activate/`, `influencer/measure/`; paid ads `ad/research`, `ad/orchestrate`, `ad/activate`, `ad/scale`; email `email/setup`, `email/engage`, `email/nurture`, `email/deliver`; launch `launch/research`, `launch/assemble`, `launch/mobilize`, `launch/prove`; social `social/explore`, `social/craft`, `social/host`, `social/observe`; plus `commands/`, `references/`, `scripts/connectors/`.
 
 Install instructions live in [README.md](README.md). Keep this file focused on authoring and maintenance rules.
 
 ### New skills (v12.1.0) — 4×4 symmetry refactor
 
-The bundle is now five disciplines of exactly **4 phases × 4 skills = 16** each (80 discipline + 6 protocol = **86**). No capability was deleted — reductions are mode-preserving merges. Full per-phase listings are in [CLAUDE.md § Skills by Phase](CLAUDE.md).
+The bundle is now six disciplines of exactly **4 phases × 4 skills = 16** each (96 discipline + 7 protocol = **103**). No capability was deleted — reductions are mode-preserving merges. Full per-phase listings are in [CLAUDE.md § Skills by Phase](CLAUDE.md).
 
 **SEO/GEO (16)** — merges: `content-writer` (seo-content-writer + content-refresher) · `serp-markup-builder` (meta-tags-optimizer + schema-markup-generator) · `page-play-builder` (programmatic + parasite + comparison + local SEO, 4 modes) · `site-structure-optimizer` (internal-linking-optimizer + site-architecture) · `performance-monitor` (performance-reporter + alert-manager) · `offsite-signal-analyzer` (backlink-analyzer + ai-traffic).
 
@@ -67,7 +67,7 @@ Sixteen skills added across the 38 → 54 expansion (six SEO/GEO + four paid in 
 | `allowed-tools` | Pre-approved tools (e.g., `WebFetch`) |
 | `metadata` | **Single-line strict-JSON object** — OpenClaw's parser reads single-line keys only; the validator fails a YAML block map. `metadata.version` must match top-level `version`. |
 | `metadata.author/geo-relevance` | Discovery and categorization. |
-| `metadata.discipline` + `metadata.phase` | On every skill (86/86): `discipline` = seo-geo/influencer/paid/email/launch/protocol; `phase` = lifecycle phase. Uniform routing/clustering tags. |
+| `metadata.discipline` + `metadata.phase` | On every skill (103/103): `discipline` = seo-geo/influencer/paid/email/launch/social/protocol; `phase` = lifecycle phase. Uniform routing/clustering tags. |
 | `metadata.hermes` | Hermes Agent extension: `{"tags": ["marketing", <discipline>, <phase>], "category": <discipline>}` for `hermes skills browse` filtering. |
 | `metadata.openclaw` | OpenClaw extension: `{"emoji": <discipline emoji>, "homepage": <repo URL>}` for the macOS UI. |
 | `slug` | SkillHub.cn publishing identity — must be `aaron-<skill-name>` (validator-enforced). |
@@ -88,7 +88,8 @@ See [CLAUDE.md § Quality Frameworks](CLAUDE.md) for details. Summary:
 - **ROAS** (R Return / O Offer / A Audience / S Spend-efficiency, RQS arithmetic weighted-mean rollup like CITE): paid ads. [Full reference](references/roas-benchmark.md)
 - **SEND** (S Sender-integrity/deliverability / E Engagement / N Nurture-lifecycle / D Direct-response, EQS arithmetic goal-weighted-mean rollup like ROAS): email marketing. [Full reference](references/send-benchmark.md)
 - **RAMP** (40 items, 4 dimensions × 10: R Readiness / A Assets / M Momentum / P Proof, LQS arithmetic goal-weighted floor-mean rollup like ROAS/SEND): product launch. [Full reference](references/ramp-benchmark.md)
-- Veto items: CORE-EEAT (T04, C01, R10) · CITE (T03, T05, T09) · C³ (ACE A2/C1/E2, ART T1/T2) · ROAS (R1/R2/O1/O2/A1) · SEND (S1/S2/N1/D1) · RAMP (R1/A1/M1/P1 — IDs collide with ROAS, always qualify with the framework name)
+- **ECHO** (40 items, 4 dimensions × 10: E Embeddedness / C Craft / H Hosting / O Observability, SQS arithmetic goal-weighted floor-mean rollup like RAMP): organic social. [Full reference](references/echo-benchmark.md)
+- Veto items: CORE-EEAT (T04, C01, R10) · CITE (T03, T05, T09) · C³ (ACE A2/C1/E2, ART T1/T2) · ROAS (R1/R2/O1/O2/A1) · SEND (S1/S2/N1/D1) · RAMP (R1/A1/M1/P1 — IDs collide with ROAS, always qualify with the framework name) · ECHO (E1/C1/C2/H1/H2/O1 — always qualify with the framework name; ECHO O1 vs ROAS O1, ECHO C1 vs C³ C1/CORE C01)
 
 ## Tool Connector Pattern
 
@@ -96,9 +97,9 @@ Skills use `~~category` placeholders. See [CONNECTORS.md](CONNECTORS.md). Every 
 
 ## Inter-Skill Handoff
 
-See [CLAUDE.md § Inter-Skill Handoff](CLAUDE.md). Key fields (per skill-contract §Handoff Summary Format): status, objective, key findings, evidence, assumptions, open loops, recommended next skill — plus `cap_applied` / `raw_overall_score` / `final_overall_score` for the 6 auditor-class gates.
+See [CLAUDE.md § Inter-Skill Handoff](CLAUDE.md). Key fields (per skill-contract §Handoff Summary Format): status, objective, key findings, evidence, assumptions, open loops, recommended next skill — plus `cap_applied` / `raw_overall_score` / `final_overall_score` for the 7 auditor-class gates.
 
-Auditor-class gates: `content-quality-auditor` (CORE-EEAT publish gate), `domain-authority-auditor` (CITE citation-trust gate), `content-reviewer` (C³ ART gate → `memory/audits/influencer/`), `ad-account-auditor` (ROAS gate → `memory/audits/ad/`), `email-quality-auditor` (SEND gate → `memory/audits/email/`), and `launch-readiness-auditor` (RAMP LQS gate → `memory/audits/launch/`). New cross-cutting reference protocols: `humanizer-slop`, the `measurement-protocol` decision protocol, and `platforms/`.
+Auditor-class gates: `content-quality-auditor` (CORE-EEAT publish gate), `domain-authority-auditor` (CITE citation-trust gate), `content-reviewer` (C³ ART gate → `memory/audits/influencer/`), `ad-account-auditor` (ROAS gate → `memory/audits/ad/`), `email-quality-auditor` (SEND gate → `memory/audits/email/`), `launch-readiness-auditor` (RAMP LQS gate → `memory/audits/launch/`), and `social-quality-auditor` (ECHO SQS gate → `memory/audits/social/`). New cross-cutting reference protocols: `humanizer-slop`, the `measurement-protocol` decision protocol, and `platforms/`.
 
 ## Git Workflow
 
@@ -107,7 +108,7 @@ Auditor-class gates: `content-quality-auditor` (CORE-EEAT publish gate), `domain
 - **After skill changes**: update the tracking files — the authoritative 8-file list is in [CONTRIBUTING.md §6](CONTRIBUTING.md) (VERSIONS.md, `.claude-plugin/plugin.json`, root `marketplace.json` + its `.claude-plugin/marketplace.json` mirror, README.md, CLAUDE.md, AGENTS.md, docs/README.zh.md). For release bumps, also sync localized README badges. `scripts/check-versions.sh` (CI) fails on any drift — run it locally after syncing.
 - **Adding a connector**: follow [docs/connector-playbook.md](docs/connector-playbook.md) end to end — qualify (category / connector-vs-recipe / safety class), verify against primary docs + a live call, implement to house style, offline-test the pure builders, wire skills by the differentiation rule, hit the six doc touchpoints, track, regress, record.
 - **Use `references/` for detail** — keep `SKILL.md` focused. Auditor-class skills `Read references/auditor-runbook.md` at activation (the framework-agnostic SSOT) and keep only their framework-specific §2 worked examples, §3 guardrails, and §5 veto-ID rows inline.
-- **Validate**: `./scripts/validate-skill.sh <category>/<skill-name>` before release PRs. CI guards: `golden-math` (6 frameworks), `check-evals`, `check-pii`, `check-stdlib-only` (incl. the Paid-Ads keyed-API red line).
+- **Validate**: `./scripts/validate-skill.sh <category>/<skill-name>` before release PRs. CI guards: `golden-math` (7 frameworks), `check-evals`, `check-pii`, `check-stdlib-only` (incl. the Paid-Ads keyed-API red line).
 
 ## Writing Style
 

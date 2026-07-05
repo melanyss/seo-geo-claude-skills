@@ -3,19 +3,19 @@ name: outreach-manager
 slug: outreach-manager
 displayName: "Outreach Manager · 建联外联管理"
 summary: "红人及媒体建联:分层触达序列、跟进节奏与回复率优化"
-description: 'Use when the user asks to "write influencer outreach", "follow up with a creator", "pitch a journalist, hunter, or launch partner", or "negotiate partnership terms"; produces personalized pitches, multi-touch follow-up sequences, negotiation scripts with objection handling, and a status pipeline tracker — the shared outreach mechanics engine for creator, media/analyst, and launch-partner targets. Not for finalizing signed agreements — use contract-helper; not for media-list tiering, embargo terms, or press-release structure — use press-media-relations.'
-version: "14.0.0"
+description: 'Use when the user asks to "write influencer outreach", "follow up with a creator", "pitch a journalist, hunter, or launch partner", or "negotiate partnership terms"; produces personalized pitches, multi-touch follow-up sequences, negotiation scripts with objection handling, and a status pipeline tracker — the shared outreach mechanics engine for creator, media/analyst, launch-partner, and social-selling / advocate-recruitment targets. Not for finalizing signed agreements — use contract-helper; not for media-list tiering, embargo terms, or press-release structure — use press-media-relations.'
+version: "15.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Activate the skill when the user wants to contact a creator, journalist, analyst, hunter, or launch partner; draft or personalize a pitch message; build a follow-up cadence for non-responders; re-engage a past partner; negotiate rate or scope; handle pricing objections; or track outreach status across a target list. For media targets the list/angle/embargo artifact comes from press-media-relations — this skill executes the pitch mechanics."
 argument-hint: "<influencer handle or list> [platform] [budget]"
-metadata: {"author": "aaron-he-zhu", "version": "14.0.0", "discipline": "influencer", "phase": "activate", "family": "influencer-marketing", "hermes": {"tags": ["marketing", "influencer", "activate"], "category": "influencer"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "influencer", "phase": "activate", "family": "influencer-marketing", "hermes": {"tags": ["marketing", "influencer", "activate"], "category": "influencer"}, "openclaw": {"emoji": "📣", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Outreach Manager
 
-Craft personal, professional, persistent outreach; manage negotiations; track relationship progress. Home discipline is influencer (creator outreach), and the same mechanics engine — personalization, multi-touch cadence, negotiation scripts, pipeline tracking — serves media/analyst and launch-partner targets when [press-media-relations](../../../launch/mobilize/press-media-relations/SKILL.md) hands over its media list, angles, and embargo terms. The list, the angle, and the embargo stay with the handing-off skill; this skill owns the pitch execution.
+Craft personal, professional, persistent outreach; manage negotiations; track relationship progress. Home discipline is influencer (creator outreach), and the same mechanics engine — personalization, multi-touch cadence, negotiation scripts, pipeline tracking — serves media/analyst and launch-partner targets when [press-media-relations](../../../launch/mobilize/press-media-relations/SKILL.md) hands over its media list, angles, and embargo terms, and social-selling / advocate-recruitment targets when [social-selling-planner](../../../social/host/social-selling-planner/SKILL.md) or [advocacy-program-designer](../../../social/craft/advocacy-program-designer/SKILL.md) hands over a warm 1:1. The list, the angle, and the embargo stay with the handing-off skill; this skill owns the pitch execution.
 
 ## Quick Start
 

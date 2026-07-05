@@ -1,8 +1,8 @@
 {
   "id": "aaron-marketing",
   "name": "aaron-marketing",
-  "version": "14.0.0",
-  "description": "86 marketing skills and 6 commands on one shared contract across five disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), email marketing across the SEND loop (deliverability/consent, list growth, segmentation, creative, lifecycle flows, newsletter monetization, send-testing, email-quality audit), and product launch across the RAMP loop (positioning, launch tiering + risk register, launch windows, early access, message house, press kits, pricing/packaging, launch-day runbook, community/press launch execution, launch monitoring, retro, momentum), plus a shared protocol layer (entity/creator/offer-claim/consent/launch truth registries, project memory) serving all five. Frameworks: CORE-EEAT, CITE, C3, ROAS, SEND, RAMP.",
+  "version": "15.0.0",
+  "description": "103 marketing skills and 7 commands on one shared contract across six disciplines: SEO/GEO (keyword research, content creation, technical audits, schema markup, programmatic/parasite/local SEO, site architecture, AI-traffic, monitoring), influencer marketing (audience insight, discovery, campaign planning, outreach, amplification, ROI tracking), paid ads across the ROAS loop (audience segments, campaign architecture, ad creative, experiment design, account audit, conversion-signal QA, measurement loop, attribution reconciliation), email marketing across the SEND loop (deliverability/consent, list growth, segmentation, creative, lifecycle flows, newsletter monetization, send-testing, email-quality audit), product launch across the RAMP loop (positioning, launch tiering + risk register, launch windows, early access, message house, press kits, pricing/packaging, launch-day runbook, community/press launch execution, launch monitoring, retro, momentum), and organic social across the ECHO loop (channel portfolio, voice dossiers, platform norm cards, participation warmup, posting calendar, platform-native creative, short-video scripts, advocacy programs, social-quality audit, inbox/crisis operations, social selling, listening/SOV/dark-social measurement), plus a shared protocol layer (entity/creator/offer-claim/consent/launch/channel truth registries, project memory) serving all six. Frameworks: CORE-EEAT, CITE, C3, ROAS, SEND, RAMP, ECHO.",
   "author": {
     "name": "Aaron He Zhu",
     "email": "hello@zhuhe.io",
@@ -41,7 +41,14 @@
     "go-to-market",
     "launch-marketing",
     "product-hunt",
-    "ramp-framework"
+    "ramp-framework",
+    "social-media-marketing",
+    "organic-social",
+    "community-management",
+    "social-selling",
+    "employee-advocacy",
+    "dark-social",
+    "echo-framework"
   ],
   "commands": [
     "./commands/"
@@ -127,11 +134,28 @@
     "./launch/prove/launch-feedback-synthesizer",
     "./launch/prove/launch-retro-analyzer",
     "./launch/prove/momentum-planner",
+    "./social/explore/channel-portfolio-planner",
+    "./social/explore/voice-dossier-builder",
+    "./social/explore/platform-norm-profiler",
+    "./social/explore/participation-warmup-planner",
+    "./social/craft/social-calendar-builder",
+    "./social/craft/social-creative-builder",
+    "./social/craft/short-video-scripter",
+    "./social/craft/advocacy-program-designer",
+    "./social/host/social-quality-auditor",
+    "./social/host/engagement-inbox-manager",
+    "./social/host/social-selling-planner",
+    "./social/host/crisis-response-planner",
+    "./social/observe/social-pulse-monitor",
+    "./social/observe/share-of-voice-tracker",
+    "./social/observe/dark-social-attributor",
+    "./social/observe/social-measurement-loop",
     "./protocol/entity-optimizer",
     "./protocol/creator-registry",
     "./protocol/offer-claims-registry",
     "./protocol/consent-registry",
     "./protocol/launch-registry",
+    "./protocol/channel-registry",
     "./protocol/memory-management"
   ]
 }
