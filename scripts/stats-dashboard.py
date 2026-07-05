@@ -143,10 +143,12 @@ def write_badges(dirpath, clawhub, skillhub, skillssh):
     """Write shields.io endpoint-badge JSONs. A total of 0 (transient fetch
     failure) preserves the previously committed value so the badge never zeroes."""
     dirpath.mkdir(parents=True, exist_ok=True)
+    # label = platform name only (mirrors the skills.sh "Skills <n>" badge);
+    # the number is the message. No "downloads"/"下载" suffix.
     specs = [
-        ("clawhub.json", "ClawHub downloads", clawhub, "FF6B35"),
-        ("skillhub.json", "SkillHub 下载", skillhub, "00A9A5"),
-        ("skillssh.json", "skills.sh installs", skillssh, "0A0A0A"),
+        ("clawhub.json", "ClawHub", clawhub, "FF6B35"),
+        ("skillhub.json", "SkillHub", skillhub, "00A9A5"),
+        ("skillssh.json", "skills.sh", skillssh, "0A0A0A"),
     ]
     for fname, label, value, color in specs:
         path = dirpath / fname

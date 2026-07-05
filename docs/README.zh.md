@@ -8,8 +8,8 @@
 [![Last Commit](https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills)](https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-purple)](https://claude.ai/download)
 [![skills.sh](https://skills.sh/b/aaron-he-zhu/aaron-marketing-skills)](https://skills.sh/aaron-he-zhu/aaron-marketing-skills)
-[![ClawHub downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/badges/clawhub.json)](https://clawhub.ai/aaron-he-zhu)
-[![SkillHub downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/badges/skillhub.json)](https://skillhub.cn/user/user_2c0f1e77)
+[![ClawHub](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/badges/clawhub.json)](https://clawhub.ai/aaron-he-zhu)
+[![SkillHub](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/badges/skillhub.json)](https://skillhub.cn/user/user_2c0f1e77)
 
 [English](../README.md) | **中文**
 
