@@ -44,6 +44,14 @@ else
   done
   grep -q "version-$BUNDLE-orange" README.md || err "README.md badge != $BUNDLE"
   grep -q "version-$BUNDLE-orange" docs/README.zh.md || err "docs/README.zh.md badge != $BUNDLE"
+  # Full version-lock over the localized README set (owner decision 2026-07-05):
+  # every translated README carries the machine-checkable version badge; the count
+  # words in prose are human-maintained per release.
+  for lf in docs/README.de.md docs/README.es.md docs/README.fr.md docs/README.it.md \
+            docs/README.ja.md docs/README.ko.md docs/README.pt.md docs/README.zh-Hant.md; do
+    [ -f "$lf" ] || { err "$lf missing (localized README set is version-locked)"; continue; }
+    grep -q "version-$BUNDLE-orange" "$lf" || err "$lf badge != $BUNDLE"
+  done
   grep -q "current bundle: \`$BUNDLE\`" README.md || err "README.md 'current bundle' line != $BUNDLE"
   grep -q "当前包：\`$BUNDLE\`" docs/README.zh.md || err "docs/README.zh.md 当前包 line != $BUNDLE"
   grep -q "Current bundle version: \`$BUNDLE\`" CLAUDE.md || err "CLAUDE.md bundle declaration != $BUNDLE"
@@ -54,7 +62,8 @@ fi
 # ---- 2. per-skill sync ------------------------------------------------------
 skill_count=0
 for f in seo-geo/*/*/SKILL.md influencer/*/*/SKILL.md ad/*/*/SKILL.md \
-         email/*/*/SKILL.md launch/*/*/SKILL.md social/*/*/SKILL.md protocol/*/SKILL.md; do
+         email/*/*/SKILL.md launch/*/*/SKILL.md social/*/*/SKILL.md \
+         narrative/*/*/SKILL.md protocol/*/SKILL.md; do
   [ -f "$f" ] || continue
   skill_count=$((skill_count + 1))
   name=$(sed -n 's/^name: *//p' "$f" | head -1)

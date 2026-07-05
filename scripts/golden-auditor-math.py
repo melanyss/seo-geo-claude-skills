@@ -29,6 +29,7 @@ ROAS = os.path.join(ROOT, "references", "roas-benchmark.md")
 SEND = os.path.join(ROOT, "references", "send-benchmark.md")
 RAMP = os.path.join(ROOT, "references", "ramp-benchmark.md")
 ECHO = os.path.join(ROOT, "references", "echo-benchmark.md")
+TALE = os.path.join(ROOT, "references", "tale-benchmark.md")
 CQA = os.path.join(ROOT, "seo-geo", "optimize", "content-quality-auditor", "SKILL.md")
 DAA = os.path.join(ROOT, "seo-geo", "monitor", "domain-authority-auditor", "SKILL.md")
 
@@ -211,6 +212,28 @@ check("floor(75.6) = 75" in echo_text, "ECHO Community result 75 present in echo
 check("floor(74.85) = 74" in echo_text, "ECHO B2C result 74 present in echo-benchmark")
 check("floor(76.3) = 76" in echo_text, "ECHO Founder-led result 76 present in echo-benchmark")
 check("min(76, 60) = 60" in echo_text, "ECHO veto-cap example present in echo-benchmark")
+
+print("== TALE NQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
+tale_text = open(TALE, encoding="utf-8").read()
+tlwe = re.compile(r"T\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*L\s*[×xX*]\s*([\d.]+)\s*\+\s*E\s*[×xX*]\s*([\d.]+)")
+tlrows = tlwe.findall(tale_text)
+check(len(tlrows) >= 3, "found all three TALE goal-weight formulas (got %d)" % len(tlrows))
+tale_vec = {"T": 80, "A": 76, "L": 72, "E": 70}
+if len(tlrows) >= 3:
+    b2b = {k: float(v) for k, v in zip("TALE", tlrows[0])}
+    dtc = {k: float(v) for k, v in zip("TALE", tlrows[1])}
+    founder = {k: float(v) for k, v in zip("TALE", tlrows[2])}
+    check(abs(sum(b2b.values()) - 1.0) < 1e-9, "TALE B2B-category weights sum to 1.0 (got %.2f)" % sum(b2b.values()))
+    check(abs(sum(dtc.values()) - 1.0) < 1e-9, "TALE DTC weights sum to 1.0 (got %.2f)" % sum(dtc.values()))
+    check(abs(sum(founder.values()) - 1.0) < 1e-9, "TALE Founder weights sum to 1.0 (got %.2f)" % sum(founder.values()))
+    check(weighted(tale_vec, b2b) == 75, "TALE B2B-category example (T80 A76 L72 E70) == 75 (got %d)" % weighted(tale_vec, b2b))
+    check(weighted(tale_vec, dtc) == 73, "TALE DTC example (same vector) == 73 (got %d)" % weighted(tale_vec, dtc))
+    check(weighted(tale_vec, founder) == 74, "TALE Founder example (same vector) == 74 (got %d)" % weighted(tale_vec, founder))
+check("T=80 A=76 L=72 E=70" in tale_text, "TALE input vector present in tale-benchmark")
+check("floor(75.7) = 75" in tale_text, "TALE B2B-category result 75 present in tale-benchmark")
+check("floor(73.9) = 73" in tale_text, "TALE DTC result 73 present in tale-benchmark")
+check("floor(74.5) = 74" in tale_text, "TALE Founder result 74 present in tale-benchmark")
+check("min(75, 60) = 60" in tale_text, "TALE veto-cap example present in tale-benchmark")
 
 print()
 if fails:

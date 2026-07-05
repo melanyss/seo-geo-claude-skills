@@ -196,6 +196,20 @@ Only `channel-registry` writes canonical records here. Other skills submit updat
 
 **Lifecycle exemption**: dossiers and the four standing files are standing state, not dated run artifacts — exempt from the 90-day WARM demotion (like the other registries); a channel retires on a dated `retired` transition, and `memory-management` remains the sole executor of archival.
 
+### `memory/narrative-registry/`
+
+Store (the brand canon truth SSOT — the versioned narrative of record every discipline reads voice and message from, three standing files):
+
+- `canon.md` — the current brand canon: strategic narrative, tagline, message pillars, brand-language register, and the approved proof points, each judged against **TALE A1**
+- `versions.md` — the append-only version log of canon revisions with dated evidence per transition (the narrative-drift fact base)
+- `candidates.md` — intake from other skills (mirror of the entity/creator/claims/consent/launch/channel pattern)
+
+Only `narrative-registry` writes canonical records here. Other skills submit updates to `memory/narrative-registry/candidates.md` only. The discipline's WARM working files (drafts, tests, monitoring readouts) live separately under `memory/narrative/<skill>/`.
+
+**Versioned-canon atomic-promotion clause**: a canon revision lands as one atomic promotion — `narrative-registry` rewrites `canon.md` and appends the matching dated row to `versions.md` in the same operation, so the current canon and its version log never disagree. A partial promotion is never a valid state.
+
+**Lifecycle exemption**: `canon.md` and `versions.md` are standing state, not dated run artifacts — exempt from the 90-day WARM demotion (like the other registries); superseded canon is retained in `versions.md` rather than archived, and `memory-management` remains the sole executor of any archival.
+
 ### `memory/research/`
 
 Common subfolders:
@@ -351,6 +365,7 @@ When a skill describes state updates, it should:
 - `consent-registry` is the sole writer of canonical records in `memory/consent/`; other skills write to `memory/consent/candidates.md` only
 - `launch-registry` is the sole writer of canonical records in `memory/launch-registry/`; other skills write to `memory/launch-registry/candidates.md` only (incl. the T-0 batch-promote appends)
 - `channel-registry` is the sole writer of canonical records in `memory/channels/`; other skills write to `memory/channels/candidates.md` only (incl. the intra-day/incident batch-promote appends)
+- `narrative-registry` is the sole writer of canonical records in `memory/narrative-registry/`; other skills write to `memory/narrative-registry/candidates.md` only
 - `content-quality-auditor` owns publish-readiness state in `memory/audits/content/`
 - `domain-authority-auditor` owns citation-trust state in `memory/audits/domain/`
 - `content-reviewer` owns the C³ ART gate state in `memory/audits/influencer/`

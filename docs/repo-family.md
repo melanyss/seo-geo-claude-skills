@@ -16,10 +16,12 @@ This repository (`aaron-marketing-skills`) is the **single source of truth (SSOT
 | [email-marketing-send-benchmark](https://github.com/aaron-he-zhu/email-marketing-send-benchmark) | published standard | live mirror | `body` | `references/send-benchmark.md` |
 | [launch-marketing-ramp-benchmark](https://github.com/aaron-he-zhu/launch-marketing-ramp-benchmark) | published standard | live mirror | `body` | `references/ramp-benchmark.md` |
 | [social-marketing-echo-benchmark](https://github.com/aaron-he-zhu/social-marketing-echo-benchmark) | published standard | live mirror | `body` | `references/echo-benchmark.md` |
+| [narrative-marketing-tale-benchmark](https://github.com/aaron-he-zhu/narrative-marketing-tale-benchmark) | published standard | live mirror | `body` | `references/tale-benchmark.md` |
 | [paid-ads-agent-skills](https://github.com/aaron-he-zhu/paid-ads-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`ad/` skills) |
 | [email-marketing-agent-skills](https://github.com/aaron-he-zhu/email-marketing-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`email/` skills) |
 | [product-launch-agent-skills](https://github.com/aaron-he-zhu/product-launch-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`launch/` skills) |
 | [social-media-agent-skills](https://github.com/aaron-he-zhu/social-media-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`social/` skills) |
+| [brand-narrative-agent-skills](https://github.com/aaron-he-zhu/brand-narrative-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`narrative/` skills) |
 | [seo-geo-claude-skills](https://github.com/aaron-he-zhu/seo-geo-claude-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`seo-geo/` skills) · final standalone line at tag `v9.9.12` |
 | [influencer-marketing-agent-skills](https://github.com/aaron-he-zhu/influencer-marketing-agent-skills) | signpost | live mirror | `list` | `.claude-plugin/plugin.json` (`influencer/` skills) · final standalone line at tag `standalone-final` |
 
@@ -28,7 +30,7 @@ Freshness is self-documenting: every `body`/`list` mirror carries its synced umb
 ## Tiers
 
 - **SSOT** — the only place development happens. Downstream repos never receive content that doesn't exist here first.
-- **Published standard** — the seven benchmark frameworks' citable public homes (CORE-EEAT, CITE, C³, ROAS, SEND, RAMP, ECHO). Content is the product; each carries a provenance note pointing at its working copy in `references/`.
+- **Published standard** — the eight benchmark frameworks' citable public homes (CORE-EEAT, CITE, C³, ROAS, SEND, RAMP, ECHO, TALE). Content is the product; each carries a provenance note pointing at its working copy in `references/`.
 - **Signpost** — README-only discovery surfaces, one per discipline. Banner + current skill list + install pointer to the umbrella; **no skill content, no `plugin.json`** — deliberately non-installable so nobody installs a stale snapshot. The two pre-merge standalones (seo-geo, influencer) keep their final full lines under git tags (`v9.9.12` / `standalone-final`), linked from their banners, with old→new mapping tables for returning users; already-installed copies of those lines keep working offline.
 
 ## Sync modes
@@ -51,8 +53,8 @@ Every family repo README opens with the same recognizable block. Three variants 
 ```markdown
 > [!IMPORTANT]
 > **This is a signpost repo — the skills live in [aaron-marketing-skills](https://github.com/aaron-he-zhu/aaron-marketing-skills).**
-> The 16 <discipline> skills listed below are actively developed there, as one of 6 disciplines in a 103-skill bundle
-> sharing one contract, seven benchmark-driven gates, and keyless data connectors. This repo carries no skill content —
+> The 16 <discipline> skills listed below are actively developed there, as one of 7 disciplines in a 120-skill bundle
+> sharing one contract, eight benchmark-driven gates, and keyless data connectors. This repo carries no skill content —
 > it exists so you can find the discipline; the bundle is where you install it.
 ```
 

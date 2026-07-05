@@ -4,13 +4,13 @@ slug: aaron-positioning-mapper
 displayName: "Positioning Mapper · 定位画布"
 summary: "定位画布/竞争替代品/独特价值/滩头细分"
 description: 'Use when the user asks to "map our positioning", "name our competitive alternatives", or "pick a beachhead segment for the launch"; produces a Dunford-style positioning canvas — named competitive alternatives (including spreadsheet and status quo), unique attributes (verifiable, or routed to the claims ledger), value themes (attribute→benefit→value chains), a target beachhead segment scored on serviceability / pain intensity / reachability, and a one-sentence onlyness statement — the sole upstream of the message house and the entity-signal source for the canonical entity profile. Not for the message house or per-channel launch copy — use message-house-builder; not for audience/persona profiling itself — use audience-mapper; not for SEO keyword positioning — use keyword-research. 定位画布/竞争替代品/独特价值/滩头细分'
-version: "15.0.0"
+version: "16.0.0"
 license: Apache-2.0
 compatibility: "Claude Code and compatible agent-skill hosts"
 homepage: "https://github.com/aaron-he-zhu/aaron-marketing-skills"
 when_to_use: "Use when defining launch positioning before any launch copy exists: naming the real competitive alternatives (including spreadsheet / manual process / status quo), isolating unique attributes, mapping value themes, choosing the beachhead segment, or writing the onlyness statement. The first move of the RAMP Research phase, the sole upstream of message-house-builder, and the entity-signal source for entity-optimizer. Not the message house itself and not persona research."
 argument-hint: "<product / offering> [known alternatives] [candidate segments]"
-metadata: {"author": "aaron-he-zhu", "version": "15.0.0", "discipline": "launch", "phase": "research", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "research"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
+metadata: {"author": "aaron-he-zhu", "version": "16.0.0", "discipline": "launch", "phase": "research", "geo-relevance": "low", "hermes": {"tags": ["marketing", "launch", "research"], "category": "launch"}, "openclaw": {"emoji": "🚀", "homepage": "https://github.com/aaron-he-zhu/aaron-marketing-skills"}}
 ---
 
 # Positioning Mapper
@@ -39,7 +39,7 @@ Run the onlyness test on our current positioning: "[current one-liner]" — does
 
 - **Reads**: product facts and capability list (User-provided); win-loss reasons and user-interview notes (User-provided); [competitor-analysis](../../../seo-geo/research/competitor-analysis/SKILL.md) findings from `memory/research/competitor-analysis/` when present; the stage record in `memory/launch-registry/` so the canvas matches what is actually shippable; competitor public messaging via `scripts/connectors/firecrawl.py` / `scripts/connectors/tavily.py` (keyless, robots pre-flight applies).
 - **Writes**: the canvas to `memory/launch/positioning-mapper/`; unverifiable or comparative attribute claims marked `[needs source]` to `memory/claims/candidates.md` (this skill never adjudicates them); any registry-grade stage/date fact it surfaces goes to `memory/launch-registry/candidates.md` only — [launch-registry](../../../protocol/launch-registry/SKILL.md) is the sole writer of its records.
-- **Promotes**: the chosen beachhead, the onlyness statement, and the named-alternatives set to `memory/hot-cache.md` and `memory/open-loops.md` (ask before writing); durable positioning choices are proposed as pending-decision items — never written to `decisions.md` directly. Canonical name / category / differentiator route to [entity-optimizer](../../../protocol/entity-optimizer/SKILL.md) as entity signals.
+- **Promotes**: the chosen beachhead, the onlyness statement, and the named-alternatives set to `memory/hot-cache.md` and `memory/open-loops.md` (ask before writing); durable positioning choices are proposed as pending-decision items — never written to `decisions.md` directly. Canonical name / category / differentiator route to [entity-optimizer](../../../protocol/entity-optimizer/SKILL.md) as entity signals. When the positioning is the brand's **durable narrative** (beyond this one launch), it also routes to `memory/narrative-registry/candidates.md` via [positioning-truth-tracer](../../../narrative/trace/positioning-truth-tracer/SKILL.md) — the narrative canon SSOT.
 - **Done when**: the alternatives list includes at least one non-vendor option (status quo / spreadsheet / manual process); every unique attribute is either verifiable or marked `[needs source]` and submitted to claims candidates; and the beachhead is scored on all three criteria with the onlyness statement holding in one sentence.
 - **Primary next skill**: [message-house-builder](../../assemble/message-house-builder/SKILL.md) — turn the canvas into the messaging hierarchy and PR-FAQ spine.
 

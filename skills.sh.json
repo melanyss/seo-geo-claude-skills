@@ -135,8 +135,30 @@
       ]
     },
     {
-      "title": "Protocol layer (7) — shared truth registries & memory",
-      "description": "Cross-discipline machinery the other 96 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, the canonical launch dossier/calendar, the brand-owned channel dossiers, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
+      "title": "Brand Narrative · TALE (16) — trace → architect → land → evaluate",
+      "description": "The strategy layer every channel expresses: trace the current message and positioning truth, architect the durable message house/voice/story canon, land it consistently across every surface, then evaluate resonance — the NQS gate (narrative-quality-auditor) with a pre-publish consistency check, message testing, echo-rate/AI-answer resonance, and drift monitoring. Absorbs positioning; keyless, ships no new connector.",
+      "skills": [
+        "narrative-baseline-mapper",
+        "category-narrative-mapper",
+        "audience-belief-mapper",
+        "positioning-truth-tracer",
+        "strategic-narrative-designer",
+        "message-system-architect",
+        "brand-language-codifier",
+        "story-bank-builder",
+        "narrative-cascade-planner",
+        "pitch-narrative-builder",
+        "narrative-enablement-kit",
+        "proof-point-packager",
+        "narrative-quality-auditor",
+        "message-test-designer",
+        "narrative-resonance-monitor",
+        "narrative-drift-monitor"
+      ]
+    },
+    {
+      "title": "Protocol layer (8) — shared truth registries & memory",
+      "description": "Cross-discipline machinery the other 112 skills read from: canonical entity profiles, the creator roster, offer/claim substantiation, per-subject consent/suppression records, the canonical launch dossier/calendar, the brand-owned channel dossiers, the brand narrative canon, and the campaign memory loop. Anything below this section is a legacy pre-v12 skill name kept only for historical installs.",
       "skills": [
         "entity-optimizer",
         "creator-registry",
@@ -144,6 +166,7 @@
         "consent-registry",
         "launch-registry",
         "channel-registry",
+        "narrative-registry",
         "memory-management"
       ]
     }

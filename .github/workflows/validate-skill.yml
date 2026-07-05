@@ -69,6 +69,7 @@ jobs:
             email/setup email/engage email/nurture email/deliver \
             launch/research launch/assemble launch/mobilize launch/prove \
             social/explore social/craft social/host social/observe \
+            narrative/trace narrative/architect narrative/land narrative/evaluate \
             -mindepth 2 -maxdepth 2 -name SKILL.md \
             -print | sort | while read -r file; do
             bash scripts/validate-skill.sh "$(dirname "$file")"

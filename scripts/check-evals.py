@@ -38,6 +38,7 @@ PHASE_DIRS = [
     "email/setup", "email/engage", "email/nurture", "email/deliver",                                                          # email marketing
     "launch/research", "launch/assemble", "launch/mobilize", "launch/prove",                                                  # product launch (RAMP)
     "social/explore", "social/craft", "social/host", "social/observe",                                                        # organic social (ECHO)
+    "narrative/trace", "narrative/architect", "narrative/land", "narrative/evaluate",                                          # brand narrative (TALE)
 ]
 REQUIRED_CASE_KEYS = [
     "id", "type", "target_skill", "scenario",

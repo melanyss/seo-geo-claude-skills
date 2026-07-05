@@ -177,6 +177,8 @@ The influencer-marketing skills use these additional placeholders (plus `~~CRM`,
 
 **Threads — recipe only, not a shipped connector.** `threads.py` is intentionally left as a recipe: the official [Threads API](https://developers.facebook.com/docs/threads) needs a Meta developer app + a long-lived access token (no keyless read path exists), so it does not fit the keyless-bundled ethos. Until a keyless path appears, treat Threads listening as manual (or route it through self-host RSSHub → `rss_monitor.py`).
 
+**Brand Narrative (TALE) — no new connector.** The 7th discipline (Brand Narrative & Messaging, framework TALE) ships **no new connector**: narrative resonance and message-drift monitoring reuse the existing keyless surfaces — `bluesky.py`, `gdelt.py`, `tavily.py`, `wayback.py`, `pageviews.py`, `firecrawl.py` — plus the social `share-of-voice-tracker`, all read-only listening/measurement. No new `~~category` and no `narrative.py`; `narrative-resonance-monitor` / `narrative-drift-monitor` route through these same helpers with proxy reads always labeled.
+
 ### Email / SEND categories
 
 The email-marketing skills add one placeholder, `~~email platform` (the ESP), and reuse `~~web analytics` (GA4) + `~~ecommerce` for revenue truth. Every deliverability signal is **keyless** — it comes from public DNS, the free DMARC aggregate (RUA) report you already receive, or a seed-list test — so no keyed ESP API is ever required (keyed ESP APIs are opt-in Tier-2/3 MCP). The SEND framework scores from the user's **own-account manual export**, exactly like ad/ROAS.

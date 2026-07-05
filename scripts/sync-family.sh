@@ -152,6 +152,9 @@ check_marker_target launch-marketing-ramp-benchmark references/ramp-benchmark.md
 gen_body references/echo-benchmark.md > "$TMP/gen-echo.md"
 check_marker_target social-marketing-echo-benchmark references/echo-benchmark.md "$TMP/gen-echo.md"
 
+gen_body references/tale-benchmark.md > "$TMP/gen-tale.md"
+check_marker_target narrative-marketing-tale-benchmark references/tale-benchmark.md "$TMP/gen-tale.md"
+
 gen_list ad > "$TMP/gen-ad.md"
 check_marker_target paid-ads-agent-skills 'plugin.json#ad' "$TMP/gen-ad.md"
 
@@ -169,6 +172,9 @@ check_marker_target product-launch-agent-skills 'plugin.json#launch' "$TMP/gen-l
 
 gen_list social > "$TMP/gen-social.md"
 check_marker_target social-media-agent-skills 'plugin.json#social' "$TMP/gen-social.md"
+
+gen_list narrative > "$TMP/gen-narrative.md"
+check_marker_target brand-narrative-agent-skills 'plugin.json#narrative' "$TMP/gen-narrative.md"
 
 check_ids_target core-eeat-content-benchmark references/core-eeat-benchmark.md README.md
 check_ids_target cite-domain-rating references/cite-domain-rating.md README.md
