@@ -124,9 +124,18 @@ def idempotency_key(explicit=None):
     return "resend-py/%s" % uuid.uuid4()
 
 
+class ContentError(ValueError):
+    """An --html/--text argument that looks like a file path but isn't one."""
+
+
 def _content(value):
     """Resolve an --html/--text argument: '-' = stdin, an existing file path
-    is read, anything else is used as the literal string."""
+    is read, anything else is used as the literal string. A value that looks
+    like a path (has a separator or a template extension) but is not an
+    existing file raises ContentError instead of being sent as a literal
+    body — a mistyped --html path (e.g. `welcom.html`) must not silently become
+    the email body. Detection is by template extension only, so inline HTML/text
+    (which contains '/' and URLs) is still sent literally."""
     if value is None:
         return None
     if value == "-":
@@ -134,6 +143,13 @@ def _content(value):
     if os.path.isfile(value):
         with open(value, "r", encoding="utf-8") as f:
             return f.read()
+    # Only a template EXTENSION marks a mistyped path — NOT a bare '/' separator:
+    # inline --html bodies contain '/' in every closing tag (</p>) and --text bodies
+    # routinely contain URLs, and both must still be sent as the literal body.
+    looks_like_path = value.lower().endswith((".html", ".htm", ".txt", ".md"))
+    if looks_like_path:
+        raise ContentError(
+            "'%s' looks like a file path but no such file exists" % value)
     return value
 
 
@@ -198,7 +214,10 @@ def build_spec(args):
             return {"error": "no_recipients"}
         if len(to_list) > TO_MAX:
             return {"error": "too_many_recipients", "limit": TO_MAX, "given": len(to_list)}
-        body = _message_body(args, to_list)
+        try:
+            body = _message_body(args, to_list)
+        except ContentError as e:
+            return {"error": "bad_content", "detail": str(e)}
         if "html" not in body and "text" not in body:
             return {"error": "missing_content"}
         hdrs = {"Idempotency-Key": idempotency_key(args.idempotency_key)}
@@ -212,7 +231,10 @@ def build_spec(args):
             return {"error": "no_recipients"}
         if len(to_list) > BATCH_MAX:
             return {"error": "too_many_recipients", "limit": BATCH_MAX, "given": len(to_list)}
-        base = _message_body(args, [])
+        try:
+            base = _message_body(args, [])
+        except ContentError as e:
+            return {"error": "bad_content", "detail": str(e)}
         if "html" not in base and "text" not in base:
             return {"error": "missing_content"}
         emails = [dict(base, to=[rcpt]) for rcpt in to_list]
@@ -234,6 +256,9 @@ def build_spec(args):
                     k in item for k in ("from", "to", "subject")):
                 return {"error": "bad_batch_item", "index": i,
                         "detail": "each item needs from/to/subject"}
+            if not any(k in item for k in ("html", "text", "react")):
+                return {"error": "bad_batch_item", "index": i,
+                        "detail": "item needs html or text"}
         hdrs = {"Idempotency-Key": idempotency_key(args.idempotency_key)}
         return {"request": build_request("/emails/batch", method="POST", body=payload,
                                          headers=hdrs), "mutating": True}

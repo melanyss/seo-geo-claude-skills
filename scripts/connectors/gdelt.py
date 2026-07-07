@@ -48,10 +48,10 @@ def build_url(query, mode="artlist", days=7, maxrecords=25):
         "query": query,
         "mode": mode,
         "format": "json",
-        "timespan": "%dd" % days,
+        "timespan": "%dd" % max(1, days),
     }
     if mode == "artlist":
-        params["maxrecords"] = min(maxrecords, MAX_RECORDS)
+        params["maxrecords"] = min(max(1, maxrecords), MAX_RECORDS)
     return API_ENDPOINT + "?" + urlencode(params)
 
 
@@ -71,6 +71,8 @@ def parse_response(payload, mode):
         return {"articles": articles, "count": len(articles)}
     timeline = []
     for s in (payload or {}).get("timeline") or []:
+        if not isinstance(s, dict):
+            continue
         for pt in s.get("data") or []:
             timeline.append({"date": pt.get("date"), "value": pt.get("value")})
     return {"timeline": timeline, "count": len(timeline)}

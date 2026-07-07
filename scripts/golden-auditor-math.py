@@ -64,7 +64,10 @@ def parse_core_weight_table(path):
 
 
 def weighted(dims, weights):
-    return math.floor(sum(dims[d] * weights[d] for d in dims))
+    # Guard a dropped dimension (e.g. a malformed CORE weight cell that
+    # parse_core_weight_table silently omits): skip dims absent from the
+    # weight table so a parse gap yields a clean FAIL, not a KeyError traceback.
+    return math.floor(sum(dims[d] * weights[d] for d in dims if d in weights))
 
 
 print("== CORE-EEAT weight table: every content-type column sums to 100% ==")
@@ -78,11 +81,15 @@ print("== CORE-EEAT worked examples recompute to their stated raw_overall ==")
 # Example 1 — Product Review (from content-quality-auditor §2)
 ex1 = {"C": 75, "O": 77, "R": 80, "E": 75, "Exp": 78, "Ept": 77, "A": 77, "T": 85}
 if "Product Review" in core:
+    check(all(d in core["Product Review"] for d in ex1),
+          "CORE ex1: all 8 dims present in Product Review weights")
     check(weighted(ex1, core["Product Review"]) == 78,
           "CORE ex1 (Product Review) weighted == 78 (got %d)" % weighted(ex1, core["Product Review"]))
 # Example 2 — FAQ Page
 ex2 = {"C": 55, "O": 75, "R": 88, "E": 80, "Exp": 80, "Ept": 75, "A": 82, "T": 85}
 if "FAQ Page" in core:
+    check(all(d in core["FAQ Page"] for d in ex2),
+          "CORE ex2: all 8 dims present in FAQ Page weights")
     check(weighted(ex2, core["FAQ Page"]) == 73,
           "CORE ex2 (FAQ Page) weighted == 73 (got %d)" % weighted(ex2, core["FAQ Page"]))
 
@@ -134,13 +141,15 @@ check("≤ 59" in c3_text and "min(raw, 60) = 60" in c3_text,
 
 print("== ROAS RQS arithmetic weighted-mean: both goal-weight rows sum to 1.0; worked examples recompute ==")
 roas_text = open(ROAS, encoding="utf-8").read()
-wre = re.compile(r"R\s*[×xX*]\s*([\d.]+)\s*\+\s*O\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*S\s*[×xX*]\s*([\d.]+)")
-rows = wre.findall(roas_text)
-check(len(rows) >= 2, "found both ROAS goal-weight formulas (got %d)" % len(rows))
+wre = re.compile(r"RQS_(\w+)\s*=\s*R\s*[×xX*]\s*([\d.]+)\s*\+\s*O\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*S\s*[×xX*]\s*([\d.]+)")
+# Anchor each formula to its goal label (RQS_DR / RQS_PR) so a row reorder in the
+# benchmark cannot silently rebind weights to the wrong goal.
+rows = {m[0].upper(): m[1:] for m in wre.findall(roas_text)}
+check("DR" in rows and "PR" in rows, "found both ROAS goal-weight formulas (got %s)" % sorted(rows))
 ex_vec = {"R": 75, "O": 80, "A": 85, "S": 78}
-if len(rows) >= 2:
-    dr = {k: float(v) for k, v in zip("ROAS", rows[0])}
-    pr = {k: float(v) for k, v in zip("ROAS", rows[1])}
+if "DR" in rows and "PR" in rows:
+    dr = {k: float(v) for k, v in zip("ROAS", rows["DR"])}
+    pr = {k: float(v) for k, v in zip("ROAS", rows["PR"])}
     check(abs(sum(dr.values()) - 1.0) < 1e-9, "ROAS DR weights sum to 1.0 (got %.2f)" % sum(dr.values()))
     check(abs(sum(pr.values()) - 1.0) < 1e-9, "ROAS Prospecting weights sum to 1.0 (got %.2f)" % sum(pr.values()))
     check(weighted(ex_vec, dr) == 78, "ROAS DR example (R75 O80 A85 S78) == 78 (got %d)" % weighted(ex_vec, dr))
@@ -151,14 +160,15 @@ check("floor(80.25) = 80" in roas_text, "ROAS Prospecting result 80 present in r
 
 print("== SEND EQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
 send_text = open(SEND, encoding="utf-8").read()
-swe = re.compile(r"S\s*[×xX*]\s*([\d.]+)\s*\+\s*E\s*[×xX*]\s*([\d.]+)\s*\+\s*N\s*[×xX*]\s*([\d.]+)\s*\+\s*D\s*[×xX*]\s*([\d.]+)")
-srows = swe.findall(send_text)
-check(len(srows) >= 3, "found all three SEND goal-weight formulas (got %d)" % len(srows))
+swe = re.compile(r"EQS_(\w+)\s*=\s*S\s*[×xX*]\s*([\d.]+)\s*\+\s*E\s*[×xX*]\s*([\d.]+)\s*\+\s*N\s*[×xX*]\s*([\d.]+)\s*\+\s*D\s*[×xX*]\s*([\d.]+)")
+# Anchor each formula to its goal label (EQS_promo / EQS_reten / EQS_cold).
+srows = {m[0].lower(): m[1:] for m in swe.findall(send_text)}
+check(all(k in srows for k in ("promo", "reten", "cold")), "found all three SEND goal-weight formulas (got %s)" % sorted(srows))
 send_vec = {"S": 80, "E": 75, "N": 70, "D": 78}
-if len(srows) >= 3:
-    promo = {k: float(v) for k, v in zip("SEND", srows[0])}
-    reten = {k: float(v) for k, v in zip("SEND", srows[1])}
-    cold = {k: float(v) for k, v in zip("SEND", srows[2])}
+if all(k in srows for k in ("promo", "reten", "cold")):
+    promo = {k: float(v) for k, v in zip("SEND", srows["promo"])}
+    reten = {k: float(v) for k, v in zip("SEND", srows["reten"])}
+    cold = {k: float(v) for k, v in zip("SEND", srows["cold"])}
     check(abs(sum(promo.values()) - 1.0) < 1e-9, "SEND Promotional weights sum to 1.0 (got %.2f)" % sum(promo.values()))
     check(abs(sum(reten.values()) - 1.0) < 1e-9, "SEND Retention weights sum to 1.0 (got %.2f)" % sum(reten.values()))
     check(abs(sum(cold.values()) - 1.0) < 1e-9, "SEND Cold-outbound weights sum to 1.0 (got %.2f)" % sum(cold.values()))
@@ -172,14 +182,15 @@ check("floor(76.95) = 76" in send_text, "SEND Cold-outbound result 76 present in
 
 print("== RAMP LQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
 ramp_text = open(RAMP, encoding="utf-8").read()
-rmwe = re.compile(r"R\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*M\s*[×xX*]\s*([\d.]+)\s*\+\s*P\s*[×xX*]\s*([\d.]+)")
-rmrows = rmwe.findall(ramp_text)
-check(len(rmrows) >= 3, "found all three RAMP goal-weight formulas (got %d)" % len(rmrows))
+rmwe = re.compile(r"LQS_(\w+)\s*=\s*R\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*M\s*[×xX*]\s*([\d.]+)\s*\+\s*P\s*[×xX*]\s*([\d.]+)")
+# Anchor each formula to its goal label (LQS_b2b / LQS_devtool / LQS_mobile).
+rmrows = {m[0].lower(): m[1:] for m in rmwe.findall(ramp_text)}
+check(all(k in rmrows for k in ("b2b", "devtool", "mobile")), "found all three RAMP goal-weight formulas (got %s)" % sorted(rmrows))
 ramp_vec = {"R": 80, "A": 75, "M": 70, "P": 78}
-if len(rmrows) >= 3:
-    b2b = {k: float(v) for k, v in zip("RAMP", rmrows[0])}
-    devtool = {k: float(v) for k, v in zip("RAMP", rmrows[1])}
-    mobile = {k: float(v) for k, v in zip("RAMP", rmrows[2])}
+if all(k in rmrows for k in ("b2b", "devtool", "mobile")):
+    b2b = {k: float(v) for k, v in zip("RAMP", rmrows["b2b"])}
+    devtool = {k: float(v) for k, v in zip("RAMP", rmrows["devtool"])}
+    mobile = {k: float(v) for k, v in zip("RAMP", rmrows["mobile"])}
     check(abs(sum(b2b.values()) - 1.0) < 1e-9, "RAMP B2B weights sum to 1.0 (got %.2f)" % sum(b2b.values()))
     check(abs(sum(devtool.values()) - 1.0) < 1e-9, "RAMP Dev-tool weights sum to 1.0 (got %.2f)" % sum(devtool.values()))
     check(abs(sum(mobile.values()) - 1.0) < 1e-9, "RAMP Mobile weights sum to 1.0 (got %.2f)" % sum(mobile.values()))
@@ -193,14 +204,15 @@ check("min(76, 60) = 60" in ramp_text, "RAMP veto-cap example present in ramp-be
 
 print("== ECHO SQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
 echo_text = open(ECHO, encoding="utf-8").read()
-ecwe = re.compile(r"E\s*[×xX*]\s*([\d.]+)\s*\+\s*C\s*[×xX*]\s*([\d.]+)\s*\+\s*H\s*[×xX*]\s*([\d.]+)\s*\+\s*O\s*[×xX*]\s*([\d.]+)")
-ecrows = ecwe.findall(echo_text)
-check(len(ecrows) >= 3, "found all three ECHO goal-weight formulas (got %d)" % len(ecrows))
+ecwe = re.compile(r"SQS_(\w+)\s*=\s*E\s*[×xX*]\s*([\d.]+)\s*\+\s*C\s*[×xX*]\s*([\d.]+)\s*\+\s*H\s*[×xX*]\s*([\d.]+)\s*\+\s*O\s*[×xX*]\s*([\d.]+)")
+# Anchor each formula to its goal label (SQS_community / SQS_b2c / SQS_founder).
+ecrows = {m[0].lower(): m[1:] for m in ecwe.findall(echo_text)}
+check(all(k in ecrows for k in ("community", "b2c", "founder")), "found all three ECHO goal-weight formulas (got %s)" % sorted(ecrows))
 echo_vec = {"E": 80, "C": 75, "H": 70, "O": 78}
-if len(ecrows) >= 3:
-    community = {k: float(v) for k, v in zip("ECHO", ecrows[0])}
-    b2c = {k: float(v) for k, v in zip("ECHO", ecrows[1])}
-    founder = {k: float(v) for k, v in zip("ECHO", ecrows[2])}
+if all(k in ecrows for k in ("community", "b2c", "founder")):
+    community = {k: float(v) for k, v in zip("ECHO", ecrows["community"])}
+    b2c = {k: float(v) for k, v in zip("ECHO", ecrows["b2c"])}
+    founder = {k: float(v) for k, v in zip("ECHO", ecrows["founder"])}
     check(abs(sum(community.values()) - 1.0) < 1e-9, "ECHO Community weights sum to 1.0 (got %.2f)" % sum(community.values()))
     check(abs(sum(b2c.values()) - 1.0) < 1e-9, "ECHO B2C weights sum to 1.0 (got %.2f)" % sum(b2c.values()))
     check(abs(sum(founder.values()) - 1.0) < 1e-9, "ECHO Founder-led weights sum to 1.0 (got %.2f)" % sum(founder.values()))
@@ -215,14 +227,15 @@ check("min(76, 60) = 60" in echo_text, "ECHO veto-cap example present in echo-be
 
 print("== TALE NQS arithmetic weighted-mean: all three goal-weight rows sum to 1.0; worked examples recompute ==")
 tale_text = open(TALE, encoding="utf-8").read()
-tlwe = re.compile(r"T\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*L\s*[×xX*]\s*([\d.]+)\s*\+\s*E\s*[×xX*]\s*([\d.]+)")
-tlrows = tlwe.findall(tale_text)
-check(len(tlrows) >= 3, "found all three TALE goal-weight formulas (got %d)" % len(tlrows))
+tlwe = re.compile(r"NQS_(\w+)\s*=\s*T\s*[×xX*]\s*([\d.]+)\s*\+\s*A\s*[×xX*]\s*([\d.]+)\s*\+\s*L\s*[×xX*]\s*([\d.]+)\s*\+\s*E\s*[×xX*]\s*([\d.]+)")
+# Anchor each formula to its goal label (NQS_b2b / NQS_dtc / NQS_founder).
+tlrows = {m[0].lower(): m[1:] for m in tlwe.findall(tale_text)}
+check(all(k in tlrows for k in ("b2b", "dtc", "founder")), "found all three TALE goal-weight formulas (got %s)" % sorted(tlrows))
 tale_vec = {"T": 80, "A": 76, "L": 72, "E": 70}
-if len(tlrows) >= 3:
-    b2b = {k: float(v) for k, v in zip("TALE", tlrows[0])}
-    dtc = {k: float(v) for k, v in zip("TALE", tlrows[1])}
-    founder = {k: float(v) for k, v in zip("TALE", tlrows[2])}
+if all(k in tlrows for k in ("b2b", "dtc", "founder")):
+    b2b = {k: float(v) for k, v in zip("TALE", tlrows["b2b"])}
+    dtc = {k: float(v) for k, v in zip("TALE", tlrows["dtc"])}
+    founder = {k: float(v) for k, v in zip("TALE", tlrows["founder"])}
     check(abs(sum(b2b.values()) - 1.0) < 1e-9, "TALE B2B-category weights sum to 1.0 (got %.2f)" % sum(b2b.values()))
     check(abs(sum(dtc.values()) - 1.0) < 1e-9, "TALE DTC weights sum to 1.0 (got %.2f)" % sum(dtc.values()))
     check(abs(sum(founder.values()) - 1.0) < 1e-9, "TALE Founder weights sum to 1.0 (got %.2f)" % sum(founder.values()))

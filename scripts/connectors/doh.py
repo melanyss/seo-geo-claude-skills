@@ -119,8 +119,10 @@ def spf_facts(txt_records):
         first = spf_records[0].lower()
         # A record closed by neither an `all` mechanism nor a `redirect=`
         # modifier leaves unlisted senders undefined (RFC 7208 §4.7 / §6.1).
-        if (not any(m in first for m in ("-all", "~all", "?all", "+all"))
-                and "redirect=" not in first):
+        # Match any `all` mechanism token (qualified -/~/?/+ or bare, = +all).
+        has_all = any(t == "all" or t[1:] == "all"
+                      for t in first.split())
+        if not has_all and "redirect=" not in first:
             spf["flags"].append("no_all_or_redirect")
     return spf
 

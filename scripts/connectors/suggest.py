@@ -64,7 +64,7 @@ def parse_suggestions(payload):
     suggestions = payload[1]
     if not isinstance(suggestions, list):
         return []
-    return [str(s) for s in suggestions if isinstance(s, (str, int, float))]
+    return [s for s in suggestions if isinstance(s, str)]
 
 
 def fetch_one(query, hl="", gl=""):
@@ -94,11 +94,15 @@ def suggest(query, hl="", gl="", expand=False, sleep=EXPAND_SLEEP_SECONDS,
     seen_set = set()
     errors = []
     last_status = None
+    worst_status = None  # first non-2xx seen, so summary status can't be masked
     seeds = list(expand_seeds(query)) if expand else [query]
 
     for i, seed in enumerate(seeds):
         items, r = fetch_one(seed, hl=hl, gl=gl)
         last_status = r.get("status", last_status)
+        st = r.get("status")
+        if worst_status is None and isinstance(st, int) and not (200 <= st < 300):
+            worst_status = st
         if r.get("error"):
             errors.append({"seed": seed, "error": r["error"], "status": r.get("status")})
         for s in items:
@@ -116,7 +120,7 @@ def suggest(query, hl="", gl="", expand=False, sleep=EXPAND_SLEEP_SECONDS,
         "gl": gl or None,
         "expanded": bool(expand),
         "seeds_queried": len(seeds),
-        "status": last_status,
+        "status": worst_status if worst_status is not None else last_status,
         "count": len(seen),
         "suggestions": seen,
         "errors": errors,

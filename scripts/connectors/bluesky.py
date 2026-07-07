@@ -312,6 +312,11 @@ def create_session(identifier, password):
                                                     ENV_APP_PASSWORD)}
         return {"error": r.get("error") or "empty response",
                 "status": r.get("status")}
+    if not payload.get("accessJwt"):
+        return {"error": "auth_failed", "status": r.get("status"),
+                "hint": "Bluesky returned a session without an access token — "
+                        "mint a fresh app password at %s and re-export %s + %s."
+                        % (APP_PASSWORD_URL, ENV_IDENTIFIER, ENV_APP_PASSWORD)}
     return {"accessJwt": payload.get("accessJwt"),
             "handle": payload.get("handle"), "did": payload.get("did"),
             "error": None}
@@ -319,6 +324,8 @@ def create_session(identifier, password):
 
 def search(query, since_iso=None, sort="latest", limit=25):
     """Full-network post search (app password required — never keyless)."""
+    if sort not in SEARCH_SORTS:
+        sort = "latest"
     identifier, password, why = resolve_credentials()
     if why:
         return {"error": "missing_credentials", "detail": why,

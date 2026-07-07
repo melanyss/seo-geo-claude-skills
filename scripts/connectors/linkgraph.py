@@ -166,7 +166,8 @@ def analyze(pages, top=10):
         depth_hist[key] = depth_hist.get(key, 0) + 1
     depth_histogram = {
         str(k): depth_hist[k]
-        for k in sorted(depth_hist, key=lambda d: (d == "unknown", d))
+        for k in sorted(depth_hist, key=lambda d: (d == "unknown", not isinstance(d, int),
+                                                    d if isinstance(d, int) else 0, str(d)))
     }
 
     # Pages deeper than 3 clicks from a start page.

@@ -147,7 +147,10 @@ def preflight(url, ua=ROBOTS_UA):
     (allowed). FAIL-CLOSED: a 5xx or network failure means the policy could NOT be
     verified, so allowed is False (refuse; --own-site overrides). allowed is also
     False on an applicable Disallow."""
-    path = urlsplit(url).path or "/"
+    sp = urlsplit(url)
+    path = sp.path or "/"
+    if sp.query:
+        path += "?" + sp.query
     parsed = robots.fetch(url)
     if robots.status_unreliable(parsed.status):
         return {

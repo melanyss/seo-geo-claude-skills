@@ -115,23 +115,34 @@ def search(name, lang="en", limit=7):
 # entity
 # --------------------------------------------------------------------------- #
 def _resolve_labels(qids, lang="en"):
-    """Batch wbgetentities labels for a set of QIDs -> {qid: label}."""
-    qids = [q for q in qids if q]
-    if not qids:
+    """Batch wbgetentities labels for a set of QIDs -> {qid: label}.
+
+    Dedupes in stable (first-seen) order and chunks into batches of 50 (the
+    wbgetentities id cap) so no QIDs are silently dropped when there are >50.
+    """
+    seen = set()
+    unique = []
+    for q in qids:
+        if q and q not in seen:
+            seen.add(q)
+            unique.append(q)
+    if not unique:
         return {}
-    qs = urlencode({
-        "action": "wbgetentities",
-        "ids": "|".join(sorted(set(qids))[:50]),
-        "props": "labels",
-        "languages": lang,
-        "format": "json",
-    })
-    r = _http.get_json("%s?%s" % (WIKIDATA_API, qs))
     labels = {}
-    for qid, ent in ((r.get("json") or {}).get("entities", {}) or {}).items():
-        lab = (ent.get("labels") or {}).get(lang, {}).get("value")
-        if lab:
-            labels[qid] = lab
+    for i in range(0, len(unique), 50):
+        batch = unique[i:i + 50]
+        qs = urlencode({
+            "action": "wbgetentities",
+            "ids": "|".join(batch),
+            "props": "labels",
+            "languages": lang,
+            "format": "json",
+        })
+        r = _http.get_json("%s?%s" % (WIKIDATA_API, qs))
+        for qid, ent in ((r.get("json") or {}).get("entities", {}) or {}).items():
+            lab = (ent.get("labels") or {}).get(lang, {}).get("value")
+            if lab:
+                labels[qid] = lab
     return labels
 
 
@@ -162,23 +173,26 @@ def entity(qid, lang="en"):
     key = {}
     item_qids = []
     for pid, field in KEY_CLAIMS.items():
-        vals = []
+        vals = []  # list of (value, is_item) — is_item from snak datatype, not string shape
         for stmt in claims.get(pid, []):
-            v = _snak_value(stmt.get("mainsnak"))
+            snak = stmt.get("mainsnak") or {}
+            v = _snak_value(snak)
             if v is not None:
-                vals.append(v)
-                if isinstance(v, str) and v[:1] == "Q" and v[1:].isdigit():
+                dv = snak.get("datavalue") or {}
+                is_item = dv.get("type") == "wikibase-entityid" and isinstance(v, str)
+                vals.append((v, is_item))
+                if is_item:
                     item_qids.append(v)
         if vals:
             key[field] = vals
     labels = _resolve_labels(item_qids, lang)
-    # Re-present item-valued claims as {qid, label} for readability.
+    # Re-present item-valued claims as {qid, label} for readability. Literal
+    # values that merely look like QIDs (e.g. a product model "Q123") are kept
+    # verbatim because is_item is gated on the snak datatype, not string shape.
     for field, vals in list(key.items()):
         key[field] = [
-            {"qid": v, "label": labels.get(v)}
-            if isinstance(v, str) and v[:1] == "Q" and v[1:].isdigit()
-            else v
-            for v in vals
+            {"qid": v, "label": labels.get(v)} if is_item else v
+            for v, is_item in vals
         ]
     out["key_claims"] = key
 

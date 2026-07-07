@@ -362,6 +362,11 @@ def account(instance, acct, limit=20):
         return {"error": "unexpected_response",
                 "hint": "account lookup from %s did not return a JSON object" % instance}
     profile = parse_account(r["json"])
+    if not profile.get("id"):
+        return {"error": "not_found", "instance": instance,
+                "hint": ("acct %r resolved to a record without an id on %s "
+                         "(partial/federated stub) — nothing to fetch "
+                         "statuses for." % (acct, instance))}
     r = _polite_get_json(build_statuses_url(instance, profile["id"], limit))
     err = _classify(r, instance)
     if err:

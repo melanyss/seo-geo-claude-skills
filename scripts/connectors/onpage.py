@@ -36,6 +36,7 @@ import argparse
 import json
 import sys
 from html.parser import HTMLParser
+from urllib.parse import urljoin
 
 import _http  # shared polite HTTP (UA, gzip, timeout, size cap, backoff)
 
@@ -46,8 +47,9 @@ _SKIP_TEXT_TAGS = {"script", "style", "noscript", "template", "svg", "title"}
 class _OnPageParser(HTMLParser):
     """Single-pass extraction of on-page SEO signals from an HTML document."""
 
-    def __init__(self):
+    def __init__(self, base_url=None):
         super().__init__(convert_charrefs=True)
+        self.base_url = base_url    # resolve relative canonical/hreflang against this
         self.title = ""
         self.meta_description = ""
         self.meta_robots = ""
@@ -144,11 +146,15 @@ class _OnPageParser(HTMLParser):
         href = a.get("href", "")
         if not href:
             return
+        # When fetched from a URL, resolve relative/protocol-relative hrefs so
+        # canonical/hreflang are comparable to the page's final URL. When parsing
+        # stdin/file HTML (no base_url) the href is left raw.
+        resolved = urljoin(self.base_url, href) if self.base_url else href
         rels = rel.split()
         if "canonical" in rels and not self.canonical:
-            self.canonical = href
+            self.canonical = resolved
         if "alternate" in rels and a.get("hreflang"):
-            self.hreflang.append({"hreflang": a["hreflang"], "href": href})
+            self.hreflang.append({"hreflang": a["hreflang"], "href": resolved})
 
     @property
     def word_count(self):
@@ -190,7 +196,11 @@ def _jsonld_types(blocks):
 
 def analyze(html_text, fetch_info=None):
     """Parse HTML text → on-page SEO record dict."""
-    parser = _OnPageParser()
+    # When fetched from a URL, resolve relative canonical/hreflang hrefs against
+    # the final URL so comparison-based auditors can match them. Stdin/file input
+    # has no base URL, so hrefs stay raw.
+    base_url = (fetch_info or {}).get("final_url")
+    parser = _OnPageParser(base_url=base_url)
     try:
         parser.feed(html_text)
     except Exception:  # malformed markup — keep whatever we parsed so far

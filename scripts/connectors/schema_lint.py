@@ -234,10 +234,11 @@ def _flatten(parsed):
 def extract_jsonld(html):
     """Extract JSON-LD nodes from an HTML string.
 
-    Returns (nodes, parse_errors, other_formats) where:
+    Returns (nodes, parse_errors, other_formats, block_count) where:
       nodes         = list of dicts (flattened, @graph expanded)
       parse_errors  = list of {block:int, error:str} for blocks that failed JSON parse
       other_formats = sorted list of non-JSON-LD structured-data formats detected
+      block_count   = number of <script type="application/ld+json"> blocks found
     """
     ext = _LdExtractor()
     try:
@@ -253,7 +254,7 @@ def extract_jsonld(html):
             nodes.extend(_flatten(json.loads(text)))
         except ValueError as e:
             errors.append({"block": i, "error": "invalid JSON: %s" % e})
-    return nodes, errors, sorted(ext._other_formats)
+    return nodes, errors, sorted(ext._other_formats), len(ext.blocks)
 
 
 # --------------------------------------------------------------------------- #
@@ -310,7 +311,9 @@ def validate_object(obj):
             if not _has(obj, prop) and prop not in report["missing_recommended"]:
                 report["missing_recommended"].append(prop)
         if "deprecated" in rule:
-            report["warnings"].append("DEPRECATION: " + rule["deprecated"])
+            msg = "DEPRECATION: " + rule["deprecated"]
+            if msg not in report["warnings"]:
+                report["warnings"].append(msg)
 
     # Product price sanity: if Product has an embedded Offer, validate it too.
     if "Product" in matched:
@@ -325,7 +328,7 @@ def validate_object(obj):
 
 def lint_html(html, source="<stdin>"):
     """Full pipeline: extract + validate. Returns the complete report dict."""
-    nodes, parse_errors, other_formats = extract_jsonld(html)
+    nodes, parse_errors, other_formats, block_count = extract_jsonld(html)
     objects = [validate_object(n) for n in nodes]
 
     error_count = sum(len(o["missing_required"]) + len(o["sanity_issues"]) for o in objects)
@@ -349,7 +352,7 @@ def lint_html(html, source="<stdin>"):
         "tool": "schema_lint",
         "version": __version__,
         "source": source,
-        "blocks_found": len(nodes),
+        "blocks_found": block_count,
         "parse_errors": parse_errors,
         "other_formats_detected": other_formats,
         "objects": objects,
@@ -426,7 +429,7 @@ def main(argv=None):
             return 2
     else:
         r = _http.get_text(args.url, timeout=args.timeout, accept="text/html")
-        if r["status"] != 200 or not r["text"]:
+        if r["error"] or r["status"] != 200:
             print(json.dumps({
                 "tool": "schema_lint",
                 "source": args.url,
@@ -434,7 +437,9 @@ def main(argv=None):
                 "status": r["status"],
             }), file=sys.stderr)
             return 2
-        html, source = r["text"], r["url"]
+        # An empty body on HTTP 200 is not a fetch error — fall through to
+        # lint_html, which reports "No JSON-LD structured data found on this page."
+        html, source = (r["text"] or ""), r["url"]
 
     report = lint_html(html, source=source)
     if args.pretty:

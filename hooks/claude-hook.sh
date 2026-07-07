@@ -7,7 +7,15 @@ in="$(cat 2>/dev/null || true)"
 esc(){ LC_ALL=C tr -d '\000-\010\013\014\016-\037'|awk 'BEGIN{ORS=""}{gsub(/\\/,"\\\\");gsub(/"/,"\\\"");gsub(/\t/,"\\t");gsub(/\r/,"\\r");if(NR>1)printf "\\n";printf "%s",$0}'; }
 ctx(){ [ -n "$2" ] || exit 0; b="$2"; [ "${#b}" -gt 27000 ]&&b="${b:0:27000}...[truncated]"; e="$(printf "%s" "$b"|esc)"; printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"}}\n' "$1" "$e"; }
 block(){ r="$(printf "%s" "$1"|esc)"; printf '{"decision":"block","reason":"%s"}\n' "$r"; }
-jg(){ if command -v jq >/dev/null 2>&1; then printf "%s" "$in"|jq -r "$1 // empty" 2>/dev/null; else k="$(printf "%s" "$1"|sed 's/.*\.//;s/[? ].*//')"; printf "%s" "$in"|tr '\n' ' '|sed -n "s/.*\"$k\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p"|head -1; fi; }
+jg(){ if command -v jq >/dev/null 2>&1; then printf "%s" "$in"|jq -r "$1 // empty" 2>/dev/null; elif command -v python3 >/dev/null 2>&1; then printf "%s" "$in"|python3 -c 'import sys,json
+try:
+ d=json.load(sys.stdin)
+except Exception:
+ sys.exit(0)
+for k in sys.argv[1].lstrip(".").replace("?","").split("."):
+ if isinstance(d,dict) and k in d: d=d[k]
+ else: sys.exit(0)
+if isinstance(d,str): print(d)' "$1"; else k="$(printf "%s" "$1"|sed 's/.*\.//;s/[? ].*//')"; printf "%s" "$in"|tr '\n' ' '|grep -o "\"$k\"[[:space:]]*:[[:space:]]*\"[^\"]*\""|head -1|sed "s/^\"$k\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\"$/\1/"; fi; }
 root(){ r="${CLAUDE_PROJECT_DIR:-}"; [ -n "$r" ] || r="$(jg '.cwd')"; [ -n "$r" ] || r="$(pwd)"; (cd "$r" 2>/dev/null && pwd -P) || exit 0; }
 sf(){ rt="$1"; raw="$2"; [ -n "$raw" ] || return 1; case "$raw" in /*) p="$raw";; *) p="$rt/$raw";; esac; d="$(dirname "$p")"; b="$(basename "$p")"; ad="$(cd "$d" 2>/dev/null && pwd -P)" || return 1; a="$ad/$b"; [ ! -L "$a" ] || return 1; case "$a" in "$rt"/*) printf "%s\n" "$a";; *) return 1;; esac; }
 bf(){ base="$1"; rel="$2"; [ ! -L "$base" ]||return 1; p="$base"; IFS=/ read -r -a parts <<< "$rel"; for part in "${parts[@]}"; do [ -n "$part" ]&&[ "$part" != "." ]&&[ "$part" != ".." ]||return 1; p="$p/$part"; [ ! -L "$p" ]||return 1; done; d="$(dirname "$p")"; bd="$(cd "$base" 2>/dev/null&&pwd -P)"||return 1; ad="$(cd "$d" 2>/dev/null&&pwd -P)"||return 1; a="$ad/$(basename "$p")"; case "$a" in "$bd"/*) printf "%s\n" "$a";; *) return 1;; esac; }
@@ -35,7 +43,7 @@ Open loops: memory/open-loops.md tracks ${olc} item(s) — surface any that look
     ctx "UserPromptSubmit" "Runtime note: if project records were loaded, keep priorities, hero keywords, veto items, and project summaries in mind. If the request mentions SEO or analytics tools without a connected MCP server, use Tier 1 manual-data mode unless tool access is explicitly available. For cross-skill memory questions, use loaded project summary context first and render audit health in plain language with page/item, score, health label, and next action.";;
   post-tool-use)
     rt="$(root)"; raw="$(jg '.tool_input.file_path')"; [ -n "$raw" ] || raw="$(jg '.tool_input.path')"; f="$(sf "$rt" "$raw" || true)"; [ -n "$f" ] || exit 0; rel="${f#"$rt"/}"
-    if [ "$rel" = "memory/hot-cache.md" ] && [ -f "$f" ]; then l="$(wc -l < "$f"|tr -d ' ')"; b="$(wc -c < "$f"|tr -d ' ')"; { [ "$l" -gt 80 ] || [ "$b" -gt 25600 ]; } && ctx "PostToolUse" "Hot cache limit warning: memory/hot-cache.md is ${l} lines and ${b} bytes. Limit is 80 lines and 25KB. Recommend memory-management archival before relying on it as session context."; fi
+    if [ "$rel" = "memory/hot-cache.md" ] && [ -f "$f" ]; then l="$(wc -l < "$f"|tr -d ' ')"; b="$(wc -c < "$f"|tr -d ' ')"; l="${l:-0}"; b="${b:-0}"; { [ "$l" -gt 80 ] || [ "$b" -gt 25600 ]; } && ctx "PostToolUse" "Hot cache limit warning: memory/hot-cache.md is ${l} lines and ${b} bytes. Limit is 80 lines and 25KB. Recommend memory-management archival before relying on it as session context."; fi
     case "$rel" in
       memory/audits/*.md) if [ -f "$f" ] && fm "$f"; then h="$(hb "$f")"; s="$(printf "%s\n" "$h"|sed -n 's/^status:[[:space:]]*//p'|head -1)"; miss=""; printf "%s" "$s"|grep -Eq '^(DONE|DONE_WITH_CONCERNS|BLOCKED|NEEDS_INPUT)$'||miss="$miss status"; printf "%s\n" "$h"|kf||miss="$miss key_findings"; for x in evidence_summary recommended_next_skill cap_applied raw_overall_score; do printf "%s\n" "$h"|field "$x"||miss="$miss $x"; done; [ "$s" = "BLOCKED" ] || printf "%s\n" "$h"|field final_overall_score || miss="$miss final_overall_score"; [ -n "$miss" ] && block "Artifact Gate failure in $rel: missing or invalid$miss. Auditor artifacts with class: auditor-output must follow ${CLAUDE_PLUGIN_ROOT:-.}/references/auditor-runbook.md handoff schema. Do not silently fix; revise the artifact."; fi;;
       memory/*|hooks/*|commands/*|references/*|scripts/*|*.json|*.yml|*.yaml|*.cff|*SKILL.md|CLAUDE.md|README.md|docs/*) exit 0;;

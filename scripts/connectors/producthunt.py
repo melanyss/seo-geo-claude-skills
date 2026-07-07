@@ -209,27 +209,55 @@ def classify_failure(r):
     if errors and not (isinstance(payload, dict) and payload.get("data")):
         msg = "; ".join(str((e or {}).get("message", e)) for e in errors[:3])
         low = msg.lower()
-        code = 3 if ("rate" in low or "complexity" in low) else 2
-        return code, {"error": "graphql_error", "status": status,
-                      "detail": msg[:300]}
+        # Match specific throttle wording, not a bare 'rate' substring (which
+        # collides with unrelated words like 'rating'/'parameter').
+        throttled = ("rate limit" in low or "rate-limit" in low
+                     or "rate_limit" in low or "too many requests" in low
+                     or "throttl" in low or "complexity" in low)
+        if throttled:
+            reset = _header(r.get("headers"), "X-Rate-Limit-Reset")
+            return 3, {"error": "rate_limited", "status": status,
+                       "reset_seconds": reset, "detail": msg[:300],
+                       "hint": "complexity budget is 6,250 points / 15 min; "
+                               "wait %s seconds and retry"
+                               % (reset or "a few hundred")}
+        return 2, {"error": "graphql_error", "status": status,
+                   "detail": msg[:300]}
     return None
 
 
 def fetch_client_token(client_id, client_secret):
-    """client_credentials grant → access token string, or None. Network."""
+    """client_credentials grant → (access_token, error_reason). Network.
+
+    On failure the reason carries the token-endpoint HTTP status and any
+    OAuth error/error_description so callers can report WHY it failed."""
     body = json.dumps({"client_id": client_id, "client_secret": client_secret,
                        "grant_type": "client_credentials"}).encode("utf-8")
     r = _http.get(OAUTH_TOKEN_ENDPOINT, data=body, retries=1,
                   accept="application/json",
-                  headers={"Content-Type": "application/json"})
-    if r.get("status") == 200 and r.get("body"):
+                  headers={"Accept": "application/json",
+                           "Content-Type": "application/json"})
+    status = r.get("status", 0)
+    payload = None
+    if r.get("body"):
         try:
             payload = json.loads(r["body"].decode("utf-8", "replace"))
         except ValueError:
-            return None
-        if isinstance(payload, dict):
-            return payload.get("access_token")
-    return None
+            payload = None
+    if status == 200 and isinstance(payload, dict):
+        token = payload.get("access_token")
+        if token:
+            return token, None
+        return None, "token endpoint 200 but no access_token in response"
+    detail = None
+    if isinstance(payload, dict):
+        detail = (payload.get("error_description") or payload.get("error"))
+    reason = "token exchange failed (HTTP %s)" % status
+    if detail:
+        reason += ": %s" % str(detail)[:200]
+    elif r.get("error"):
+        reason += ": %s" % str(r.get("error"))[:200]
+    return None, reason
 
 
 def resolve_token(cli_token=None):
@@ -241,9 +269,10 @@ def resolve_token(cli_token=None):
     cid = os.environ.get(ENV_CLIENT_ID) or ""
     secret = os.environ.get(ENV_CLIENT_SECRET) or ""
     if cid and secret:
-        token = fetch_client_token(cid, secret) or ""
-        return token, (None if token else
-                       "client_credentials token exchange failed")
+        token, reason = fetch_client_token(cid, secret)
+        if token:
+            return token, None
+        return "", "client_credentials " + (reason or "token exchange failed")
     return "", "no token configured"
 
 

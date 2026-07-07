@@ -84,7 +84,10 @@ def scan_file(path):
     findings = []
     try:
         text = open(path, encoding="utf-8", errors="replace").read()
-    except OSError:
+    except OSError as e:
+        # Fail-closed visibility: a file we cannot read must not silently pass the
+        # gate. Surface it on stderr so the skipped file is visible in CI logs.
+        print("WARN  could not read %s: %s" % (os.path.relpath(path, ROOT), e), file=sys.stderr)
         return findings
     for n, line in enumerate(text.splitlines(), 1):
         for name, pat in PATTERNS:

@@ -164,8 +164,9 @@ def main():
 
     # Per-skill detail for this bundle's declared skills (a subset of the owner's
     # published skills — hence the table can sum to less than the owner totals).
-    names = [p[2:].split("/")[-1] for p in
-             json.load(open(REPO / ".claude-plugin/plugin.json"))["skills"]]
+    with open(REPO / ".claude-plugin/plugin.json", encoding="utf-8") as f:
+        plugin_data = json.load(f)
+    names = [p[2:].split("/")[-1] for p in plugin_data.get("skills", [])]
     rows = []
     for n in names:
         ch = clawhub(n)
@@ -217,8 +218,9 @@ def _human(n):
 
 
 def write_badges(dirpath, clawhub, skillhub, skillssh):
-    """Write shields.io endpoint-badge JSONs. A value of None/0 (transient fetch
-    failure) preserves the previously committed value so the badge never zeroes."""
+    """Write shields.io endpoint-badge JSONs. A value of None (transient fetch
+    failure) preserves the previously committed value so the badge never zeroes;
+    a genuine 0 is written normally."""
     dirpath.mkdir(parents=True, exist_ok=True)
     # label = platform name only (mirrors the skills.sh "Skills <n>" badge);
     # the number is the message. No "downloads"/"下载" suffix.
@@ -237,7 +239,7 @@ def write_badges(dirpath, clawhub, skillhub, skillssh):
                 prior = json.loads(path.read_text(encoding="utf-8"))
             except Exception:
                 prior = {}
-        if not value:  # 0 or None → keep prior committed value
+        if value is None:  # fetch failure → keep prior committed value
             if prior:
                 print(f"[badge {fname}: fetch was empty, kept existing]", file=sys.stderr)
                 continue

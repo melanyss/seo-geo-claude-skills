@@ -217,7 +217,7 @@ def videos(key, ref, limit=10):
     playlist = ch.get("uploads_playlist") or uploads_playlist(ch["channel_id"])
     r = _call(key, "playlistItems", {"part": "contentDetails",
                                      "playlistId": playlist,
-                                     "maxResults": min(limit, MAX_VIDEOS)})
+                                     "maxResults": max(1, min(limit, MAX_VIDEOS))})
     ids = [i["contentDetails"]["videoId"]
            for i in ((r.get("json") or {}).get("items")) or []
            if i.get("contentDetails", {}).get("videoId")]

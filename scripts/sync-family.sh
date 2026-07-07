@@ -112,15 +112,23 @@ check_ids_target() { # $1 repo, $2 references file, $3… repo files to scan
   local repo="$1" src="$2"; shift 2
   local remote_all="$TMP/$repo.all.md"
   : > "$remote_all"
-  local f got=0
+  local f got=0 failed=0
   for f in "$@"; do
-    if fetch_raw "$repo" "$f" >> "$remote_all" 2>/dev/null; then got=1; fi
+    if fetch_raw "$repo" "$f" >> "$remote_all" 2>/dev/null; then got=1; else failed=1; fi
     echo >> "$remote_all"
   done
   # got=0 means NOT ONE file fetched -> truly unreachable. (The per-iteration
   # `echo` pads a newline every loop, so the old `! -s` emptiness test never fired.)
   if [ $got -eq 0 ]; then
     echo "✗ $repo — unreachable"
+    DRIFT=1
+    return
+  fi
+  # A partial fetch (some files 404 while others succeed) leaves $remote_all
+  # missing IDs from the unreachable files. Comparing against it would report
+  # false "missing ID" drift, so treat any fetch failure as unreachable/partial.
+  if [ $failed -eq 1 ]; then
+    echo "✗ $repo — partial fetch (one or more files unreachable); skipping ID comparison"
     DRIFT=1
     return
   fi

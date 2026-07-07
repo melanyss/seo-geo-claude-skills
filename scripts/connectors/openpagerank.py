@@ -79,8 +79,10 @@ def parse_response(payload, requested):
     by_domain = {}
     if isinstance(payload, dict):
         for item in payload.get("response", []) or []:
-            if isinstance(item, dict) and item.get("domain"):
-                by_domain[item["domain"].lower()] = item
+            if isinstance(item, dict):
+                dom = item.get("domain")
+                if isinstance(dom, str) and dom:
+                    by_domain[dom.lower()] = item
     for d in requested:
         item = by_domain.get(d.lower(), {})
         rows.append({

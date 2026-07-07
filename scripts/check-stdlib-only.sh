@@ -46,7 +46,9 @@ path = sys.argv[1]
 try:
     with open(path, encoding="utf-8") as fh:
         tree = ast.parse(fh.read(), filename=path)
-except SyntaxError:
+except Exception:
+    # Any read/parse failure (SyntaxError, ValueError, RecursionError,
+    # UnicodeDecodeError, ...) emits the sentinel so the guard fails closed.
     print("0:UNPARSEABLE_FILE")  # not stdlib, not local -> guard fails closed
     sys.exit(0)
 for node in ast.walk(tree):

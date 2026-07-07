@@ -2,7 +2,7 @@
 
 Current versions for the plugin and all 120 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `16.0.1` (2026-07-07). Review-hardening patch — a full 7-phase review + independent adversarial acceptance. No skills added or removed (still **120 skills**); behavior-preserving except where a guard or connector was demonstrably wrong. Repo self-guards now fail **closed** (the paid-ads ToS red line scanned a non-existent `paid/` dir; check-versions / check-evals / validate-skill hardened); connector robustness fixes (`_http` truncated-gzip no longer escapes, ~14 connectors no longer report HTTP errors as success or crash on edge input); robots pre-flight fails closed on an unverifiable robots.txt (firecrawl/tavily/crawl, `--own-site` still bypasses); the `/aaron-marketing:auto` reference layer is un-frozen from the v12 four-discipline era (routing scenarios + API contract now cover all 7 disciplines, guarded by a new CI assertion); and a batch of v16 stale cross-references is cleaned. The 13 changed skills are at `16.0.1`; the rest remain at `16.0.0`.
+**Current release**: `16.0.2` (2026-07-07). Connector-robustness tail — clears the deferred LOW/NIT connector/toolchain robustness findings from the v16 review (51 edge-case fixes across 30 files), each independently adversarially accepted (the acceptance pass caught + fixed 3 regressions the fix pass introduced). **No skills changed** — all 120 keep their prior versions; connector/guard code only.
 
 ## Skills
 
@@ -130,6 +130,15 @@ Current versions for the plugin and all 120 skills. Agents can fetch this file f
 | narrative-registry | protocol | 16.0.0 | 2026-07-05 |
 
 ## Changelog
+
+### v16.0.2 — Connector-robustness tail (2026-07-07)
+
+Follow-up patch clearing the deferred LOW/NIT connector + toolchain robustness tail from the v16 review: 51 edge-case fixes across 30 files, each independently adversarially accepted. No skills changed (all 120 unchanged); connector/guard code only.
+
+- **Input validation** across connectors (non-positive --max/--months/--limit, invalid --sort, zero/negative clamps that produced invalid API params).
+- **Type/status edge guards** (non-dict JSON, non-string domain, mixed int/str depth sort order, empty-body HTTP 200 reported as a clear error instead of "HTTP 200").
+- **Fail-closed hardening**: check-pii warns on an unreadable file, check-stdlib-only fails closed on ANY parse error, check-evals verifies manifest count + required-key drift; appstore/bluesky/gdelt/pageviews status classification tightened.
+- **Correctness**: relative canonical/hreflang URL resolution (onpage), first-vs-last key match in the hook jg fallback (now stdlib json), token-less-200 -> auth_failed (bluesky), and inline HTML/text no longer misread as a file path (resend).
 
 ### v16.0.1 — Review-hardening patch (2026-07-07)
 

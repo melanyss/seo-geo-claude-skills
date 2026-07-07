@@ -77,11 +77,19 @@ if [ "$1" = "--status" ]; then
     # version string across rubric thresholds). Legitimate version mentions never look like
     # "9.9.10/mo" or "9.9.10px". (A bare trailing "+" — e.g. a "requires 9.9.10+" compat
     # note — is intentionally NOT flagged; only unit-glued forms are.)
-    CORRUPT=$(grep -rnE "${lib_plugin//./\\.}[0-9]*[[:space:]]*(/mo|px|visits|domains|estimated)" "$REPO_ROOT" --include='*.md' 2>/dev/null | grep -vE '/\.git/' | head -5)
-    if [ -n "$CORRUPT" ]; then
-        echo -e "${RED}CORRUPTION${NC}: bundle version string glued to a numeric threshold (release-bump likely clobbered a real number):"
-        echo "$CORRUPT"
+    if [ -z "$lib_plugin" ]; then
+        # An empty version prefix collapses the regex to a repo-wide catch-all for
+        # any "…/mo|px|visits|…" threshold string, producing a false CORRUPTION. Refuse
+        # to scan (and hard-fail) rather than emit a bogus failure.
+        echo -e "${RED}ERROR${NC}: could not parse library version from plugin.json — skipping threshold-corruption scan"
         SPLIT=1
+    else
+        CORRUPT=$(grep -rnE "${lib_plugin//./\\.}[0-9]*[[:space:]]*(/mo|px|visits|domains|estimated)" "$REPO_ROOT" --include='*.md' 2>/dev/null | grep -vE '/\.git/' | head -5)
+        if [ -n "$CORRUPT" ]; then
+            echo -e "${RED}CORRUPTION${NC}: bundle version string glued to a numeric threshold (release-bump likely clobbered a real number):"
+            echo "$CORRUPT"
+            SPLIT=1
+        fi
     fi
 
     echo ""
@@ -172,8 +180,11 @@ else
         pass "description is valid ($DESC_LEN chars)"
     fi
 
-    # Check for trigger phrases pattern
-    if echo "$DESCRIPTION" | grep -qiE '"[^"]+"|Use when'; then
+    # Check for trigger phrases pattern.
+    # Require an actual trigger construction — "Use when …" or a quoted phrase that
+    # follows an asks/wants/says-style lead-in — so an incidental quoted noun
+    # (a product or tool name) can't satisfy the signal on its own.
+    if echo "$DESCRIPTION" | grep -qiE 'Use when|(asks?|wants?|says?|need(s|ed)?|request(s|ed)?)( [a-z]+)? *"[^"]+"'; then
         pass "description contains trigger phrases"
     else
         warn "description should include trigger phrases (e.g., 'Use when the user asks to \"...\"')"
@@ -198,10 +209,10 @@ fi
 # --- Required field: metadata (single-line JSON object) ---
 # OpenClaw's frontmatter parser reads single-line keys only, so metadata must
 # be one strict-JSON object on the `metadata:` line — never a YAML block map.
-META_LINE=$(echo "$FRONTMATTER" | grep -E '^metadata:' | head -1)
+META_LINE=$(echo "$FRONTMATTER" | grep -E '^metadata:' | head -1 | tr -d '\r')
 if [ -n "$META_LINE" ]; then
     pass "metadata field present"
-    if echo "$META_LINE" | grep -qE '^metadata: \{.*\}$'; then
+    if echo "$META_LINE" | grep -qE '^metadata: \{.*\}[[:space:]]*$'; then
         pass "metadata is a single-line JSON object (OpenClaw-parseable)"
     else
         fail "metadata must be a single-line JSON object (OpenClaw parser reads single-line keys only) — e.g. metadata: {\"author\": \"...\", \"version\": \"...\"}"

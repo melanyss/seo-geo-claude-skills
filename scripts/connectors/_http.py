@@ -15,11 +15,13 @@ directory is on sys.path, so a plain `import _http` resolves.)
 """
 from __future__ import annotations
 
+import email.utils as eut
 import gzip
 import json as _json
 import time
 import urllib.error
 import urllib.request
+from datetime import datetime
 from urllib.parse import urlsplit
 
 USER_AGENT = (
@@ -80,15 +82,22 @@ def get(url, *, headers=None, timeout=DEFAULT_TIMEOUT, max_bytes=DEFAULT_MAX_BYT
                 }
         except urllib.error.HTTPError as e:
             if e.code in (429, 503) and attempt < retries - 1:
-                # Honor the server's Retry-After (integer seconds) when present, never
-                # waiting less than it asked; fall back to exponential backoff otherwise.
+                # Honor the server's Retry-After (integer seconds OR HTTP-date) when
+                # present, never waiting less than it asked; fall back to exponential
+                # backoff otherwise.
                 backoff = (2 ** attempt) * 2
                 ra = (getattr(e, "headers", None) or {}).get("Retry-After")
-                try:
-                    if ra is not None:
-                        backoff = max(backoff, int(str(ra).strip()))
-                except (TypeError, ValueError):
-                    pass
+                if ra is not None:
+                    ra = str(ra).strip()
+                    try:
+                        backoff = max(backoff, int(ra))
+                    except ValueError:
+                        try:
+                            dt = eut.parsedate_to_datetime(ra)
+                            secs = (dt - datetime.now(dt.tzinfo)).total_seconds()
+                            backoff = max(backoff, int(secs))
+                        except (TypeError, ValueError, OverflowError):
+                            pass
                 time.sleep(backoff)
                 last = "HTTP %s" % e.code
                 continue

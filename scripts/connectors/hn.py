@@ -211,7 +211,7 @@ def search(query, tags=None, since_epoch=None, min_points=None, max_hits=25):
     filters = build_numeric_filters(since_epoch, min_points)
     url, endpoint = build_search_url(query, tags, filters, max_hits)
     r = _polite_get_json(url)
-    if r.get("status") == 429:
+    if r.get("status") in (429, 503):
         return _rate_limited(r)
     payload = r.get("json")
     if not isinstance(payload, dict):

@@ -163,24 +163,33 @@ def parse_chart_rows(payload, maxn):
 
 def _search_api_get(url):
     """Search-API GET with the >=3s self-throttle; no throttle auto-retry."""
-    wait = MIN_INTERVAL - (time.monotonic() - _last_search_api_call[0])
-    if wait > 0:
-        time.sleep(wait)
+    if _last_search_api_call[0]:
+        wait = MIN_INTERVAL - (time.monotonic() - _last_search_api_call[0])
+        if wait > 0:
+            time.sleep(wait)
     r = _http.get_json(url, retries=1)
     _last_search_api_call[0] = time.monotonic()
     return r
 
 
-def _classify(r):
-    """Map a failed response to an error dict, or None when usable."""
+def _classify(r, rate_limit=True):
+    """Map a failed response to an error dict, or None when usable.
+
+    `rate_limit` gates the 403/429 -> rate_limited diagnosis: true for the
+    Search API (which really does throttle), false for the charts RSS route
+    where a 403/404 just means an invalid/unsupported storefront.
+    """
     status = r.get("status", 0)
-    if status in (403, 429):
+    if rate_limit and status in (403, 429):
         return {"error": "rate_limited", "status": status,
                 "hint": "iTunes Search API allows ~20 calls/min; "
                         "wait ~60s and retry."}
     if status != 200 or r.get("json") is None:
-        return {"error": r.get("error") or ("HTTP %s" % status),
-                "status": status}
+        error = r.get("error")
+        if not error:
+            error = ("empty or non-JSON response" if status == 200
+                     else "HTTP %s" % status)
+        return {"error": error, "status": status}
     return None
 
 
@@ -216,7 +225,7 @@ def charts(country="us", feed="top-free", maxn=25):
     """Top-free/top-paid chart -> (ranked rows, error)."""
     url = build_charts_url(country, feed, chart_size_for(maxn))
     r = _http.get_json(url)
-    err = _classify(r)
+    err = _classify(r, rate_limit=False)
     if err:
         return None, err
     return parse_chart_rows(r["json"], maxn), None

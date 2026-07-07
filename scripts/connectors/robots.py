@@ -49,15 +49,14 @@ AI_BOTS = [
 def normalize_robots_url(arg):
     """Return a robots.txt URL for either a bare site or an explicit robots URL.
 
-    A scheme is assumed (https) when missing. Anything that is not already a
-    .../robots.txt is reduced to <scheme>://<host>/robots.txt.
+    A scheme is assumed (https) when missing. Anything whose path is not
+    exactly /robots.txt is reduced to <scheme>://<host>/robots.txt.
     """
     raw = arg.strip()
     if "://" not in raw:
         raw = "https://" + raw
     parts = urlsplit(raw)
-    if parts.path.rstrip("/").lower().endswith("/robots.txt") or \
-            parts.path.lower() == "/robots.txt":
+    if parts.path.lower() == "/robots.txt":
         return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
     return urlunsplit((parts.scheme, parts.netloc, "/robots.txt", "", ""))
 

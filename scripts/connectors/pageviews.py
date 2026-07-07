@@ -78,7 +78,8 @@ def series(article, project="en.wikipedia", granularity="monthly",
     error = None
     if not points:
         # 404 usually means a wrong title or a window with no data.
-        error = r.get("error") or (payload or {}).get("detail") or "no data"
+        detail = payload.get("detail") if isinstance(payload, dict) else None
+        error = r.get("error") or detail or "no data"
     return {
         "article": article,
         "project": project,
@@ -89,6 +90,14 @@ def series(article, project="en.wikipedia", granularity="monthly",
         "total": sum(p["views"] or 0 for p in points),
         "error": error,
     }
+
+
+def _positive_int(value):
+    """argparse type: reject non-positive windows (an inverted range otherwise)."""
+    n = int(value)
+    if n < 1:
+        raise argparse.ArgumentTypeError("must be a positive integer (>= 1)")
+    return n
 
 
 def build_parser():
@@ -104,9 +113,9 @@ def build_parser():
                    help="Wiki project (default en.wikipedia; e.g. zh.wikipedia).")
     p.add_argument("--granularity", default="monthly",
                    choices=["monthly", "daily"])
-    p.add_argument("--months", type=int, default=12,
+    p.add_argument("--months", type=_positive_int, default=12,
                    help="Window for monthly granularity (full months).")
-    p.add_argument("--days", type=int, default=30,
+    p.add_argument("--days", type=_positive_int, default=30,
                    help="Window for daily granularity.")
     return p
 

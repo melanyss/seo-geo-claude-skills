@@ -145,6 +145,11 @@ def main():
         for s in man.get("skills", []):
             if s not in present:
                 fail("manifest skill '%s' lost its cases.md (regression)" % s)
+        if man.get("required_case_keys") != REQUIRED_CASE_KEYS:
+            fail("manifest required_case_keys drifted from the script — re-run --update")
+        if man.get("count") != len(man.get("skills", [])):
+            fail("manifest count (%s) != its skills list length (%d) — re-run --update"
+                 % (man.get("count"), len(man.get("skills", []))))
         print("== compared against structure-manifest.json (%d skills) ==" % len(man.get("skills", [])))
     else:
         print("NOTE: no structure-manifest.json yet — run with --update to create it.")

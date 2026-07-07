@@ -62,7 +62,7 @@ def collect_urls(args_urls, file_path):
     urls = list(args_urls or [])
     if file_path:
         with open(file_path, "r", encoding="utf-8") as f:
-            urls += [ln.strip() for ln in f if ln.strip() and not ln.startswith("#")]
+            urls += [s for s in (ln.strip() for ln in f) if s and not s.startswith("#")]
     # de-dupe, keep order
     return list(dict.fromkeys(urls))
 
