@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills"><img src="https://img.shields.io/github/stars/aaron-he-zhu/aaron-marketing-skills?style=flat" alt="GitHub Stars"></a>
-  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-16.0.3-orange" alt="Version"></a>
+  <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/VERSIONS.md"><img src="https://img.shields.io/badge/version-16.1.0-orange" alt="Version"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a>
   <a href="https://github.com/aaron-he-zhu/aaron-marketing-skills/commits/main"><img src="https://img.shields.io/github/last-commit/aaron-he-zhu/aaron-marketing-skills" alt="Last Commit"></a>
 </p>
@@ -221,7 +221,7 @@ The registries follow a **sole-writer rule** (other skills submit via `candidate
 
 | Event | Matcher | What it does |
 |-------|---------|--------------|
-| `SessionStart` | `startup\|resume\|clear\|compact` | Injects the **sanitized** hot-cache + an open-loops pointer (prompt-injection lines are redacted; symlinked caches are rejected). |
+| `SessionStart` | `startup\|resume\|clear\|compact` | Injects the **sanitized** hot-cache + load-time over-limit & oldest-dated-entry staleness signals + an open-loops pointer (prompt-injection lines are redacted; symlinked caches are rejected). |
 | `UserPromptSubmit` | (all) | Lightweight per-prompt context hook. |
 | `PostToolUse` | `Write\|Edit` | Hot-cache size warning **+ the Artifact Gate**: any file under `memory/audits/` that declares `class: auditor-output` is validated against the handoff schema and cap fields, or the write is blocked. The eight auditor-class gates must declare that marker by contract; unmarked files are not auditor artifacts and pass through. |
 | `Stop` | (all) | No-op (exits silently). |
@@ -648,7 +648,7 @@ Live endpoint drift is covered separately by the **manual** [`scripts/connectors
 ## Contributing & project docs
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — authoring rules, the contribution checklist, and the authoritative 8-file tracking list.
-- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `16.0.3`).
+- **[VERSIONS.md](VERSIONS.md)** — per-skill versions + changelog (current bundle: `16.1.0`).
 - **[SECURITY.md](SECURITY.md)** · **[PRIVACY.md](PRIVACY.md)** · **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** — security, privacy, and community policy.
 - **[CLAUDE.md](CLAUDE.md)** / **[AGENTS.md](AGENTS.md)** — agent-facing context for this repo.
 

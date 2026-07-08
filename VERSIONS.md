@@ -2,7 +2,7 @@
 
 Current versions for the plugin and all 120 skills. Agents can fetch this file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/VERSIONS.md` once per session.
 
-**Current release**: `16.0.3` (2026-07-07). Adds the first compute-class connector `scripts/connectors/experiment.py` — keyless pure-stdlib **statistical significance** for A/B tests on your own counts (two-proportion z-test + Wilson CI + promote decision, Mann-Whitney U + bootstrap CI, sample-size/MDE; verified against textbook values), the piece the *-test-designer skills lacked. Wired into 5 test/measurement skills so a winner is called on evidence, not a raw delta — no new skill, no key. Also wires the existing anti-slop self-check into 3 copy skills that were missing it. **No skills added/removed** (still 120); 8 skills bumped to `16.0.3`.
+**Current release**: `16.1.0` (2026-07-08). **Memory-system consolidation upgrade** — adds the two levers the HOT/WARM/COLD memory lacked (Merge + Decay-enforcement) with no new dependency. A new **supersession rule** (`superseded_by:` — recency-wins with explicit invalidation) resolves contradicting facts instead of letting stale and current values coexist; the **SessionStart hook** now surfaces over-limit and >30-day-stale hot-cache signals **at load** (not only on Write/Edit); and `memory-management` gains a **`consolidate` (reflection) mode** (dedup + conflict-resolution + distill + prune). All markdown-only, keyless, observable-by-date — no reference-frequency counting, no external store. Also fixes stale "unreferenced"/per-category-archive wording. **No skills added/removed** (still 120); `memory-management` bumped to `16.1.0` (+7 hook tests, 20 passing).
 
 ## Skills
 
@@ -110,7 +110,7 @@ Current versions for the plugin and all 120 skills. Agents can fetch this file f
 | consent-registry | protocol | 16.0.0 | 2026-07-05 |
 | launch-registry | protocol | 16.0.0 | 2026-07-05 |
 | channel-registry | protocol | 16.0.0 | 2026-07-05 |
-| memory-management | protocol | 16.0.1 | 2026-07-07 |
+| memory-management | protocol | 16.1.0 | 2026-07-08 |
 | narrative-baseline-mapper | trace | 16.0.0 | 2026-07-05 |
 | category-narrative-mapper | trace | 16.0.0 | 2026-07-05 |
 | audience-belief-mapper | trace | 16.0.0 | 2026-07-05 |
@@ -130,6 +130,16 @@ Current versions for the plugin and all 120 skills. Agents can fetch this file f
 | narrative-registry | protocol | 16.0.0 | 2026-07-05 |
 
 ## Changelog
+
+### v16.1.0 — Memory consolidation upgrade: Merge + Decay levers (2026-07-08)
+
+Research-driven upgrade of the HOT/WARM/COLD memory (benchmarked against Anthropic's memory tool, Letta/MemGPT, and the agent-memory "consolidation" literature). The file-based, agent-driven, keyless architecture was already sound; this closes the two levers it lacked — **Merge** (conflict/dedup) and **Decay-enforcement** — with no new dependency.
+
+- **Supersession rule (Merge).** New observable, date-based conflict-resolution convention: when a new fact contradicts an existing one (same entity + field), mark the old line `superseded_by: YYYY-MM-DD` (recency-wins with explicit invalidation) — never silent coexistence, never silent hard-delete. Genuine ambiguity routes to `open-loops.md`; registry facts supersede only via their candidate flow. Added to `references/state-model.md`, `promotion-demotion-rules.md`, and the skill's decision-gates/contract.
+- **Load-time decay signals (Decay).** The SessionStart hook now warns **at load** when the committed hot-cache is over the 80-line/25KB limit (previously only on Write/Edit) and surfaces the oldest `YYYY-MM-DD` dated entry as a >30-day staleness nudge — both computed from disk via portable Julian-day awk, no reference-frequency counting. +7 regression tests (`tests/test_hook_artifact_gate.sh`, now 20 passing).
+- **`consolidate` reflection mode.** `memory-management` gains a fourth mode (`review|archive|cleanup|consolidate`) + `references/consolidation-pass.md`: dedup → resolve-conflicts → distill → prune, wired into the Monthly archive routine.
+- **Consistency fixes.** Retired the stale "unreferenced in N days" wording (the lifecycle is `last_updated`-date-only) and the divergent per-category archive path (centralized `memory/archive/` + `YYYY-MM-DD-` prefix).
+- `memory-management` → `16.1.0`; bundle → `16.1.0`; no skills added or removed (still 120).
 
 ### v16.0.3 — Significance connector: closes the design->measure loop (2026-07-07)
 

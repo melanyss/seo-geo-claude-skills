@@ -213,6 +213,33 @@ printf 'SYMLINK_SECRET_MARKER\n' > "$PROJ/outside.txt"
 ln -s "$PROJ/outside.txt" "$PROJ/memory/hot-cache.md"
 assert_notcontains "symlinked hot-cache is rejected" "$(session)" "SYMLINK_SECRET_MARKER"
 
+echo "SessionStart — load-time decay signals (staleness + over-limit)"
+
+# 8. An over-limit hot-cache (>80 lines) warns AT LOAD, not only on Write/Edit
+rm -f "$PROJ/memory/hot-cache.md"
+{ for i in $(seq 1 90); do echo "line $i keyword entry"; done; } > "$PROJ/memory/hot-cache.md"
+assert_contains "over-limit cache warns at load" "$(session)" "truncated at load"
+
+# 9. An old dated entry surfaces a staleness signal that names the oldest date
+rm -f "$PROJ/memory/hot-cache.md"
+printf 'Hero keyword: running shoes\nPromoted 2020-01-01 - competitor watch\n' > "$PROJ/memory/hot-cache.md"
+out9="$(session)"
+assert_contains "old dated entry raises a staleness signal" "$out9" "Staleness signal"
+assert_contains "staleness signal names the oldest date" "$out9" "2020-01-01"
+
+# 10. A future-only date does NOT raise a staleness signal (age gate + future-date safety)
+rm -f "$PROJ/memory/hot-cache.md"
+printf 'Hero keyword: running shoes\nNext ranking check: 2999-12-31\n' > "$PROJ/memory/hot-cache.md"
+assert_notcontains "future-dated cache raises no staleness signal" "$(session)" "Staleness signal"
+
+# 11. A small, current cache injects the excerpt with no spurious load-time warnings
+rm -f "$PROJ/memory/hot-cache.md"
+printf 'Hero keyword: running shoes\n' > "$PROJ/memory/hot-cache.md"
+out11="$(session)"
+assert_contains "current cache still injects the excerpt" "$out11" "Project records excerpt"
+assert_notcontains "current cache raises no limit warning" "$out11" "limit warning"
+assert_notcontains "current cache raises no staleness signal" "$out11" "Staleness signal"
+
 echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
