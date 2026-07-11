@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/system-catalog.schema.json",
+  "title": "Aaron Marketing System Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schema_version", "architecture_version", "bundle_version",
+    "counts", "logical_order", "layers", "commands", "disciplines",
+    "protocol", "registries", "auditors", "l1_dependency", "distribution_profiles"
+  ],
+  "properties": {
+    "$schema": {"const": "./system-catalog.schema.json"},
+    "schema_version": {"const": "1.0"},
+    "architecture_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "bundle_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disciplines", "discipline_skills", "protocol_skills", "total_skills", "commands", "registries", "auditors"],
+      "properties": {
+        "disciplines": {"const": 7},
+        "discipline_skills": {"const": 112},
+        "protocol_skills": {"const": 8},
+        "total_skills": {"const": 120},
+        "commands": {"const": 8},
+        "registries": {"const": 7},
+        "auditors": {"const": 8}
+      }
+    },
+    "logical_order": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "string"}},
+    "layers": {"type": "array", "minItems": 4, "maxItems": 4},
+    "commands": {"type": "array", "minItems": 8, "maxItems": 8, "uniqueItems": true, "items": {"type": "string"}},
+    "disciplines": {"type": "object", "minProperties": 7, "maxProperties": 7},
+    "protocol": {"type": "object"},
+    "registries": {"type": "array", "minItems": 7, "maxItems": 7},
+    "auditors": {"type": "array", "minItems": 8, "maxItems": 8},
+    "l1_dependency": {"type": "object"},
+    "distribution_profiles": {"type": "object"}
+  }
+}

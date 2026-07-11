@@ -47,7 +47,7 @@ Hermes pulls from multiple hubs; three routes work for this bundle, in order of 
 
 1. **skills.sh source** (works today, full skill folders): `hermes skills install skills-sh/aaron-he-zhu/aaron-marketing-skills/<skill-name>` — e.g. `…/keyword-research`; browse with `hermes skills search seo --source skills-sh`.
 2. **ClawHub source** (after the owner publishes, see above): `hermes skills search marketing --source clawhub`.
-3. **Direct URL** (single file, no `references/` bundled — the skill's own reference pack is lost, so prefer routes 1–2): `hermes skills install https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/<discipline>/<phase>/<skill>/SKILL.md`.
+3. **Pinned direct URL** (single file, no `references/` bundled — prefer routes 1–2): `hermes skills install https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/<release-tag>/<discipline>/<phase>/<skill>/SKILL.md`. Pin a release tag; do not use a mutable branch for an execution contract.
 
 **Tap caveat**: `hermes skills tap add` assumes one `skills/` root per repo (one `path` override in `~/.hermes/.hub/taps.json`), which this multi-discipline layout deliberately doesn't have — use the skills.sh source instead; it resolves the same folders. Installed skills surface as slash commands (`/keyword-research …`) and are security-scanned at `community` trust on install. Every skill's `metadata.hermes` carries `tags`/`category` so `hermes skills browse` filters cleanly.
 
@@ -109,10 +109,10 @@ A standalone install bundles **only each skill's folder** (its `SKILL.md` + own 
 
 | Shared resource | Standalone behavior |
 |-----------------|---------------------|
-| Repo-root `references/` (auditor runbook, CORE-EEAT / CITE / C³ / ROAS / SEND / RAMP / ECHO / TALE benchmarks, skill contract, state model) | Relative links break. The 8 auditor gates carry an explicit fallback: fetch the file from `https://raw.githubusercontent.com/aaron-he-zhu/aaron-marketing-skills/main/references/<filename>` or ask for a repo clone — they never score without the runbook. `social-quality-auditor` (reading `auditor-runbook.md` + `echo-benchmark.md`) and `narrative-quality-auditor` (reading `auditor-runbook.md` + `tale-benchmark.md`) follow the same pattern with a raw.githubusercontent fallback. Non-gate skills inline their essential rules, so broken links are cosmetic. |
+| Repo-root `references/` (auditor runbook, typed catalogs, benchmarks, skill contract, state model) | Relative root links are unavailable, but every auditor folder includes a generated immutable `references/auditor-runtime.md` containing its shared runbook, typed framework slice, schemas, and benchmark. It never fetches a mutable branch or guesses missing policy. Non-gate skills inline their essential rules. |
 | `scripts/connectors/*.py` (keyless data helpers) | Not bundled. Every skill is designed Tier-1: it runs on user-provided data with no connector. Clone the repo to use the connectors. |
-| The 7 `/aaron-marketing:*` commands | Claude Code plugin only. On other hosts, describe the goal — skill descriptions carry the routing triggers. |
-| Hooks (session hot-cache injection, Artifact Gate) + temperature memory | Claude Code plugin only. Gates still emit the full handoff schema; it just isn't machine-validated. |
+| The 8 `/aaron-marketing:*` commands | Claude Code plugin only. On other hosts, describe the goal — skill descriptions carry the routing triggers. |
+| Hooks (bounded working-memory context, Artifact Gate) | Claude Code plugin only. Gates still emit the full handoff schema; it just is not machine-validated without the repository runtime. |
 | Cross-skill handoffs (`../<skill>/SKILL.md` links) | Literal paths may break, but handoffs reference skills **by name** — any host with the sibling skill installed routes fine. Install the full bundle rather than single skills to keep chains intact. |
 
 **Positioning in one line**: Claude Code plugin = the operated product (gates enforced, memory persisted, connectors wired); any other host = the same 120 skill procedures, self-contained.

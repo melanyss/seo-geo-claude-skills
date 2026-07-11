@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""experiment.py — statistical significance for marketing A/B tests (keyless, stdlib-only).
+"""experiment.py — statistical facts for marketing experiments (keyless, stdlib-only).
 
 The missing closing loop: the discipline's *-test-designer skills (ad-test-designer,
 send-experiment-designer, message-test-designer) DESIGN experiments and the
 *-measurement-loop skills roll results up, but nothing computes
-whether a result is real. This helper does that math on the USER'S OWN experiment
-data (counts / samples the user already has — no external API, no key), so a test
-can be promoted on evidence instead of a raw delta.
+whether an observed difference clears precommitted statistical and practical bars.
+This helper computes facts from the USER'S OWN experiment data; it never decides
+whether the business should promote, roll back, or continue a test.
 
 Everything is exact stdlib math (math + statistics + random). No numpy/scipy.
 
 Subcommands (all print JSON; import the functions for the pure math):
   proportion  — two-variant conversion / rate test (the common marketing A/B):
-                two-proportion z-test (two-sided) + Wilson score CIs + a promote
-                decision (significant at alpha AND relative lift >= --min-lift).
+                two-proportion z-test (two-sided), effect interval, Wilson score
+                intervals, and practical-lift flag.
       python3 experiment.py proportion --control 100 1000 --variant 130 1000
   continuous  — two-variant continuous metric (revenue/user, time-on-page, …):
                 Mann-Whitney U (tie-corrected normal approx) + a bootstrap CI for
@@ -24,12 +24,10 @@ Subcommands (all print JSON; import the functions for the pure math):
       python3 experiment.py samplesize --baseline 0.10 --mde 0.02
       python3 experiment.py samplesize --baseline 0.10 --n 4000
 
-promote decision = statistically significant (p < alpha) AND the observed relative
-lift clears --min-lift. Both gates must pass — significance without a material lift,
-or a big lift that is not significant, returns promote=false with the reason.
-
-Facts only — no verdicts about the business; the calling skill decides what to do.
-All inputs are the user's own measured counts; label outputs Measured.
+Facts only: outputs expose decision inputs, never a business verdict. Input counts
+or samples are user-provided observations; all statistics emitted here are
+Calculated. The default practical-lift reference is 15%, and callers should pass
+their preregistered bar explicitly when it differs.
 
 SECURITY: numeric inputs only; nothing is fetched. See ../../SECURITY.md.
 Python 3 stdlib only. Importable; also a JSON-printing argparse CLI.
@@ -43,6 +41,23 @@ import json
 import math
 import random
 import sys
+
+
+def _require_finite(label, *values):
+    """Reject NaN/Infinity before they can silently poison comparisons or JSON."""
+    for value in values:
+        try:
+            finite = math.isfinite(float(value))
+        except (TypeError, ValueError):
+            finite = False
+        if not finite:
+            raise ValueError("%s must contain only finite numbers" % label)
+
+
+def _finite_samples(label, values):
+    samples = [float(value) for value in values]
+    _require_finite(label, *samples)
+    return samples
 
 # --------------------------------------------------------------------------- #
 # Normal distribution helpers (exact CDF via erf; inverse via Acklam's rational
@@ -95,8 +110,13 @@ def _two_sided_p(z):
 def wilson_interval(conv, n, conf=0.95):
     """Wilson score confidence interval for a proportion (better than normal at
     small n / extreme rates). Returns (low, high). Pure."""
+    _require_finite("wilson interval", conv, n, conf)
+    if not (0.0 < conf < 1.0):
+        raise ValueError("conf must be in (0, 1), got %r" % (conf,))
     if n <= 0:
         return (0.0, 0.0)
+    if conv < 0 or conv > n:
+        raise ValueError("need 0 <= conversions <= n")
     z = norm_ppf(1.0 - (1.0 - conf) / 2.0)
     p = conv / n
     denom = 1.0 + z * z / n
@@ -105,12 +125,9 @@ def wilson_interval(conv, n, conf=0.95):
     return (max(0.0, center - half), min(1.0, center + half))
 
 
-def two_proportion(c_conv, c_n, v_conv, v_n, alpha=0.05, min_lift=0.0):
-    """Two-proportion z-test (control vs variant) with Wilson CIs and a promote
-    decision. All args are the user's own measured counts. Pure / no network.
-
-    promote = (p_value < alpha) AND (relative_lift >= min_lift).
-    """
+def two_proportion(c_conv, c_n, v_conv, v_n, alpha=0.05, min_lift=0.15):
+    """Return statistical and practical-effect facts for two observed rates."""
+    _require_finite("proportion test", c_conv, c_n, v_conv, v_n, alpha, min_lift)
     for name, conv, n in (("control", c_conv, c_n), ("variant", v_conv, v_n)):
         if n <= 0 or conv < 0 or conv > n:
             raise ValueError("%s: need 0 <= conversions <= n and n > 0" % name)
@@ -126,55 +143,56 @@ def two_proportion(c_conv, c_n, v_conv, v_n, alpha=0.05, min_lift=0.0):
     p_value = _two_sided_p(z)
     conf = 1.0 - alpha
     abs_lift = pv - pc
-    significant = p_value < alpha
+    statistically_significant = p_value < alpha
+    z_crit = norm_ppf(1.0 - alpha / 2.0)
+    effect_se = math.sqrt(pc * (1.0 - pc) / c_n + pv * (1.0 - pv) / v_n)
+    effect_interval = [max(-1.0, abs_lift - z_crit * effect_se),
+                       min(1.0, abs_lift + z_crit * effect_se)]
+    effect_interval_excludes_zero = effect_interval[0] > 0 or effect_interval[1] < 0
     if pc > 0:
         rel_lift = abs_lift / pc
-        lift_ok = rel_lift >= min_lift
-        lift_str = "%.1f%%" % (rel_lift * 100)
+        practical_lift_clears_bar = rel_lift >= min_lift
     elif pv > 0:
-        # Control converted nobody -> the relative improvement is unbounded, so it
-        # clears any finite min_lift; report rel_lift as None (undefined/infinite).
         rel_lift = None
-        lift_ok = True
-        lift_str = "infinite (control had 0 conversions)"
+        practical_lift_clears_bar = None
     else:
-        rel_lift = None            # both variants converted nobody -> no lift
-        lift_ok = False
-        lift_str = "n/a (0 conversions in both arms)"
-    promote = bool(significant and lift_ok)
-    if promote:
-        reason = "significant (p=%.4g < %.3g) and relative lift %s clears the %.1f%% bar" % (
-            p_value, alpha, lift_str, min_lift * 100)
-    elif not significant:
-        reason = "not significant (p=%.4g >= %.3g) — result is within noise" % (p_value, alpha)
-    elif rel_lift is not None and rel_lift < 0:
-        # Significant AND the variant is worse — a confirmed regression, not a near-miss win.
-        reason = "significant REGRESSION — variant is %s worse than control; do not promote" % (
-            lift_str.lstrip("-"),)
+        rel_lift = None
+        practical_lift_clears_bar = False
+    if abs_lift > 0:
+        direction = "variant_higher"
+    elif abs_lift < 0:
+        direction = "variant_lower"
     else:
-        reason = "significant but relative lift %s does not clear the required %.1f%%" % (
-            lift_str, min_lift * 100)
+        direction = "no_observed_difference"
+    control_interval = list(wilson_interval(c_conv, c_n, conf))
+    variant_interval = list(wilson_interval(v_conv, v_n, conf))
     return {
         "test": "two_proportion_z",
         "control": {"conversions": c_conv, "n": c_n, "rate": pc,
-                    "ci95": list(wilson_interval(c_conv, c_n, conf))},
+                    "confidence_interval": control_interval, "confidence": conf},
         "variant": {"conversions": v_conv, "n": v_n, "rate": pv,
-                    "ci95": list(wilson_interval(v_conv, v_n, conf))},
+                    "confidence_interval": variant_interval, "confidence": conf},
         "absolute_lift": abs_lift,
+        "absolute_lift_confidence_interval": effect_interval,
+        "confidence": conf,
         "relative_lift": rel_lift,
+        "direction": direction,
         "z": z,
         "p_value": p_value,
         "alpha": alpha,
-        "significant": significant,
-        "min_lift": min_lift,
-        "promote": promote,
-        "reason": reason,
-        "note": "Two-sided two-proportion z-test on Measured counts. promote requires "
-                "significance AND a relative lift clearing min_lift. The per-arm Wilson CIs "
-                "are descriptive; overlapping per-arm CIs do NOT imply non-significance — "
-                "p_value/significant is the significance read. p assumes a single "
-                "pre-committed read: repeated peeking or many parallel comparisons inflate "
-                "false positives, so fix the sample and read date up front.",
+        "statistically_significant": statistically_significant,
+        "effect_interval_excludes_zero": effect_interval_excludes_zero,
+        "practical_lift_bar": min_lift,
+        "practical_lift_clears_bar": practical_lift_clears_bar,
+        "provenance": {"inputs": "user-provided-observations", "outputs": "calculated"},
+        "note": "Two-sided two-proportion z-test on user-provided observed counts; all "
+                "statistics are Calculated and no business action is returned. Per-arm "
+                "intervals are Wilson intervals; the absolute "
+                "lift interval uses the unpooled standard error. Overlapping per-arm intervals "
+                "do NOT imply non-significance. A zero control makes relative lift undefined, "
+                "so preregister an absolute-effect bar for that case. p assumes a single "
+                "precommitted read; repeated peeking or parallel comparisons require an "
+                "appropriate sequential or multiplicity-aware design.",
     }
 
 
@@ -204,8 +222,8 @@ def _avg_ranks(values):
 def mann_whitney(a, b, alpha=0.05):
     """Mann-Whitney U (a vs b), tie-corrected normal approximation two-sided
     p-value. Distribution-free — no normality assumed. Pure / no network."""
-    a = [float(x) for x in a]
-    b = [float(x) for x in b]
+    a = _finite_samples("sample a", a)
+    b = _finite_samples("sample b", b)
     n1, n2 = len(a), len(b)
     if n1 == 0 or n2 == 0:
         raise ValueError("both samples must be non-empty")
@@ -232,8 +250,9 @@ def mann_whitney(a, b, alpha=0.05):
         "median_a": _median(a), "median_b": _median(b),
         "mean_a": sum(a) / n1, "mean_b": sum(b) / n2,
         "u": u, "z": z, "p_value": p_value, "alpha": alpha,
-        "significant": p_value < alpha,
-        "note": "Distribution-free rank test on Measured samples; tie-corrected "
+        "statistically_significant": p_value < alpha,
+        "provenance": {"inputs": "user-provided-observations", "outputs": "calculated"},
+        "note": "Distribution-free rank test on user-provided observed samples; tie-corrected "
                 "normal approximation (valid for n>=~20 per group). p assumes a single "
                 "pre-committed read: repeated peeking inflates false positives.",
     }
@@ -250,8 +269,8 @@ def _median(xs):
 def bootstrap_diff(a, b, stat="mean", B=10000, alpha=0.05, seed=0):
     """Percentile bootstrap CI for stat(b) - stat(a) (default difference in means).
     Distribution-free interval estimate. Deterministic given `seed`. Pure."""
-    a = [float(x) for x in a]
-    b = [float(x) for x in b]
+    a = _finite_samples("sample a", a)
+    b = _finite_samples("sample b", b)
     if not a or not b:
         raise ValueError("both samples must be non-empty")
     if B < 1:
@@ -276,13 +295,14 @@ def bootstrap_diff(a, b, stat="mean", B=10000, alpha=0.05, seed=0):
     return {
         "statistic": stat,
         "point_estimate": point,
-        "ci": [lo, hi],
-        "conf": 1.0 - alpha,
-        "excludes_zero": bool(reliable and (lo > 0 or hi < 0)),
+        "confidence_interval": [lo, hi],
+        "confidence": 1.0 - alpha,
+        "interval_excludes_zero": bool(reliable and (lo > 0 or hi < 0)),
         "reliable": reliable,
         "bootstrap_samples": B,
+        "provenance": {"inputs": "user-provided-observations", "outputs": "calculated"},
         "note": "Percentile bootstrap CI for the difference (deterministic given the "
-                "seed). excludes_zero is the effect-size significance read; it is forced "
+                "seed). interval_excludes_zero is forced "
                 "False when reliable is False (n<2 in an arm -> a degenerate zero-width CI).",
     }
 
@@ -294,6 +314,7 @@ def bootstrap_diff(a, b, stat="mean", B=10000, alpha=0.05, seed=0):
 def sample_size(baseline, mde, alpha=0.05, power=0.8):
     """Required n PER VARIANT to detect an ABSOLUTE lift `mde` on a baseline rate
     at two-sided `alpha` and `power` (two-proportion test). Pure."""
+    _require_finite("sample-size inputs", baseline, mde, alpha, power)
     if not (0.0 < baseline < 1.0):
         raise ValueError("baseline must be in (0, 1)")
     if mde <= 0 or baseline + mde >= 1.0:
@@ -318,6 +339,7 @@ def sample_size(baseline, mde, alpha=0.05, power=0.8):
 
 def min_detectable_effect(baseline, n, alpha=0.05, power=0.8, tol=1e-6):
     """Smallest absolute lift detectable with `n` per variant (inverts sample_size)."""
+    _require_finite("MDE inputs", baseline, n, alpha, power, tol)
     if not (0.0 < baseline < 1.0) or n <= 0:
         raise ValueError("baseline in (0,1) and n > 0 required")
     if not (0.0 < alpha < 1.0):
@@ -354,8 +376,8 @@ def build_parser():
     pp.add_argument("--control", nargs=2, type=int, metavar=("CONV", "N"), required=True)
     pp.add_argument("--variant", nargs=2, type=int, metavar=("CONV", "N"), required=True)
     pp.add_argument("--alpha", type=float, default=0.05)
-    pp.add_argument("--min-lift", type=float, default=0.0,
-                    help="Required RELATIVE lift to promote (e.g. 0.05 = +5%%).")
+    pp.add_argument("--min-lift", type=float, default=0.15,
+                    help="Precommitted RELATIVE practical-effect bar (default: 0.15).")
 
     pc = sub.add_parser("continuous", help="Two-variant continuous metric.")
     pc.add_argument("--a", type=_floats, required=True, help="Comma-separated control samples.")
@@ -386,10 +408,15 @@ def main(argv=None):
             boot = bootstrap_diff(args.a, args.b, stat=args.stat, B=args.boot,
                                   alpha=args.alpha, seed=args.seed)
             out = {"mann_whitney": mw, "bootstrap": boot,
-                   "significant": mw["significant"],
-                   "note": "significant is the Mann-Whitney U hypothesis test (the primary "
-                           "read); bootstrap.ci is the effect-size estimate (excludes_zero "
-                           "is reliability-gated, so a degenerate n<2 CI never claims a win)."}
+                   "decision_inputs": {
+                       "rank_test_significant": mw["statistically_significant"],
+                       "effect_interval_excludes_zero": boot["interval_excludes_zero"],
+                       "effect_interval_reliable": boot["reliable"],
+                   },
+                   "provenance": {"inputs": "user-provided-observations",
+                                  "outputs": "calculated"},
+                   "note": "Statistical facts only. The calling skill applies its "
+                           "precommitted practical-effect and business guardrail policy."}
         else:  # samplesize
             if args.mde is not None:
                 out = sample_size(args.baseline, args.mde, args.alpha, args.power)

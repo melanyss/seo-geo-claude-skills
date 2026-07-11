@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "description": "Offline behavior-conformance suites. Commands are argument arrays; no shell expansion is permitted.",
+  "suites": [
+    {
+      "id": "framework-catalog-and-scorer",
+      "command": ["{python}", "tests/test_rubric_score.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "framework-golden-behavior",
+      "command": ["{python}", "scripts/golden-auditor-math.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "registry-events-adversarial",
+      "command": ["{python}", "tests/test_registry_events.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "shared-http-and-connectors",
+      "command": ["{python}", "tests/test_connectors_local.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "audit-artifact-permissions",
+      "command": ["{python}", "tests/test_audit_artifact_validator.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "hook-artifact-gate",
+      "command": ["bash", "tests/test_hook_artifact_gate.sh"],
+      "timeout_seconds": 120
+    },
+    {
+      "id": "eval-and-routing-contracts",
+      "command": ["{python}", "scripts/check-evals.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "architecture-contracts",
+      "command": ["{python}", "scripts/check-architecture.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "standalone-auditor-runtime",
+      "command": ["{python}", "scripts/generate-auditor-runtime.py", "--check"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "generated-system-docs",
+      "command": ["{python}", "scripts/generate-system-docs.py", "--check"],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "local-links",
+      "command": ["{python}", "scripts/check-local-links.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}

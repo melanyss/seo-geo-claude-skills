@@ -2,6 +2,7 @@ import os
 import pathlib
 import sys
 import unittest
+from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -30,7 +31,102 @@ import bluesky  # noqa: E402
 import fediverse  # noqa: E402
 import discourse  # noqa: E402
 import experiment  # noqa: E402
+import _http  # noqa: E402
 import datetime as _dt  # noqa: E402
+
+
+class SharedHttpSafetyTests(unittest.TestCase):
+    def test_non_public_destinations_are_blocked_by_default(self):
+        for url in (
+            "http://127.0.0.1/admin",
+            "http://[::1]/",
+            "http://169.254.169.254/latest/meta-data/",
+            "http://10.0.0.1/",
+        ):
+            with self.subTest(url=url):
+                self.assertIn("non-public", _http.url_safety_error(url))
+
+    def test_private_access_requires_explicit_opt_in(self):
+        self.assertIsNone(_http.url_safety_error("http://127.0.0.1/", allow_private=True))
+
+    def test_non_http_and_embedded_credentials_are_blocked(self):
+        self.assertIn("scheme", _http.url_safety_error("ftp://example.com/file"))
+        self.assertIn("credentials", _http.url_safety_error("https://user:placeholder@example.com/"))
+        self.assertIn("port", _http.url_safety_error("https://example.com:not-a-port/"))
+
+    def test_all_resolved_addresses_must_be_public(self):
+        answers = [
+            (2, 1, 6, "", ("93.184.216.34", 443)),
+            (2, 1, 6, "", ("127.0.0.1", 443)),
+        ]
+        with mock.patch.object(_http.socket, "getaddrinfo", return_value=answers):
+            self.assertIn("127.0.0.1", _http.url_safety_error("https://mixed.test/"))
+
+    def test_redirect_handler_revalidates_target(self):
+        handler = _http._ValidatedRedirectHandler()
+        req = _http.urllib.request.Request("https://example.com/")
+        with self.assertRaises(_http.BlockedURL):
+            handler.redirect_request(req, None, 302, "Found", {}, "http://127.0.0.1/")
+
+    def test_connection_phase_blocks_dns_rebinding_before_socket_open(self):
+        public = [(2, 1, 6, "", ("93.184.216.34", 80))]
+        rebound = [(2, 1, 6, "", ("127.0.0.1", 80))]
+        with mock.patch.object(_http.socket, "getaddrinfo", side_effect=[public, rebound]), \
+             mock.patch.object(_http.socket, "socket") as socket_factory, \
+             mock.patch.object(_http.time, "sleep") as sleep:
+            result = _http.get("http://rebind.test/", retries=3)
+        self.assertIn("non-public", result["error"])
+        socket_factory.assert_not_called()
+        sleep.assert_not_called()
+
+    def test_pinned_connection_uses_validated_ip_without_second_dns_lookup(self):
+        public = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        sock = mock.Mock()
+        with mock.patch.object(_http.socket, "getaddrinfo", return_value=public) as resolve, \
+             mock.patch.object(_http.socket, "socket", return_value=sock):
+            connected = _http._create_pinned_connection(("example.com", 443), timeout=2)
+        self.assertIs(connected, sock)
+        resolve.assert_called_once_with("example.com", 443, type=_http.socket.SOCK_STREAM)
+        sock.connect.assert_called_once_with(("93.184.216.34", 443))
+
+    def test_connector_opener_disables_ambient_proxy_resolution(self):
+        public = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        opener = mock.Mock()
+        opener.open.side_effect = _http.urllib.error.URLError("offline")
+        with mock.patch.object(_http.socket, "getaddrinfo", return_value=public), \
+             mock.patch.object(_http.urllib.request, "build_opener", return_value=opener) as build:
+            _http.get("https://example.com/", retries=1)
+        proxy_handler = build.call_args.args[0]
+        self.assertIsInstance(proxy_handler, _http.urllib.request.ProxyHandler)
+        self.assertEqual(proxy_handler.proxies, {})
+
+    def test_gzip_decode_is_output_bounded(self):
+        import gzip
+
+        compressed = gzip.compress(b"x" * 1_000_000)
+        body, truncated, error = _http.decompress_gzip(compressed, 1024)
+        self.assertEqual(len(body), 1024)
+        self.assertTrue(truncated)
+        self.assertIsNone(error)
+
+    def test_retry_after_wait_is_capped(self):
+        errors = [
+            _http.urllib.error.HTTPError(
+                "https://example.com/", 429, "rate limited",
+                {"Retry-After": "999"}, None
+            )
+            for _ in range(2)
+        ]
+        opener = mock.Mock()
+        opener.open.side_effect = errors
+        public = [(2, 1, 6, "", ("93.184.216.34", 443))]
+        with mock.patch.object(_http.socket, "getaddrinfo", return_value=public), \
+             mock.patch.object(_http.urllib.request, "build_opener", return_value=opener), \
+             mock.patch.object(_http.time, "sleep") as sleep:
+            result = _http.get("https://example.com/", retries=2, max_retry_after=3)
+        sleep.assert_called_once_with(3)
+        self.assertEqual(result["status"], 429)
+        self.assertTrue(all(error.closed for error in errors))
 
 
 class OnPageParserTests(unittest.TestCase):
@@ -694,18 +790,22 @@ class ExperimentTests(unittest.TestCase):
         r = experiment.two_proportion(100, 1000, 130, 1000)
         self.assertAlmostEqual(r["z"], 2.1027, places=3)
         self.assertAlmostEqual(r["p_value"], 0.0355, places=3)
-        self.assertTrue(r["significant"])
-        self.assertTrue(r["promote"])              # +30% lift, min_lift 0
+        self.assertTrue(r["statistically_significant"])
+        self.assertTrue(r["practical_lift_clears_bar"])  # +30% clears 15% default
+        self.assertNotIn("promote", r)
         self.assertAlmostEqual(r["relative_lift"], 0.30, places=6)
+        self.assertTrue(r["effect_interval_excludes_zero"])
+        self.assertEqual(r["provenance"]["outputs"], "calculated")
 
-    def test_promote_requires_both_gates(self):
-        # significant but lift below threshold -> no promote
+    def test_proportion_returns_separate_decision_inputs(self):
+        # Statistical and practical flags remain distinct; no business verdict leaks out.
         r = experiment.two_proportion(100, 1000, 130, 1000, min_lift=0.40)
-        self.assertTrue(r["significant"])
-        self.assertFalse(r["promote"])
+        self.assertTrue(r["statistically_significant"])
+        self.assertFalse(r["practical_lift_clears_bar"])
+        self.assertNotIn("promote", r)
         # equal rates -> not significant, p == 1.0
         r0 = experiment.two_proportion(100, 1000, 100, 1000)
-        self.assertFalse(r0["significant"])
+        self.assertFalse(r0["statistically_significant"])
         self.assertAlmostEqual(r0["p_value"], 1.0, places=6)
         # bad input
         with self.assertRaises(ValueError):
@@ -737,7 +837,7 @@ class ExperimentTests(unittest.TestCase):
         a, b = [1, 2, 3, 4, 5], [3, 4, 5, 6, 7]
         r1 = experiment.bootstrap_diff(a, b, seed=0)
         r2 = experiment.bootstrap_diff(a, b, seed=0)
-        self.assertEqual(r1["ci"], r2["ci"])            # deterministic given seed
+        self.assertEqual(r1["confidence_interval"], r2["confidence_interval"])
         self.assertAlmostEqual(r1["point_estimate"], 2.0, places=6)
 
     def test_edge_case_validation(self):
@@ -757,6 +857,12 @@ class ExperimentTests(unittest.TestCase):
             experiment.bootstrap_diff([1, 2, 3], [4, 5, 6], B=0)
         with self.assertRaises(ValueError):
             experiment.two_proportion(100, 1000, 130, 1000, min_lift=-0.01)
+        with self.assertRaises(ValueError):
+            experiment.two_proportion(100, 1000, 130, 1000, alpha=float("nan"))
+        with self.assertRaises(ValueError):
+            experiment.mann_whitney([1, float("inf")], [2, 3])
+        with self.assertRaises(ValueError):
+            experiment.bootstrap_diff([1, 2], [3, float("nan")])
         for bad_power in (0.0, 1.0, 1.2, -0.1):
             with self.assertRaises(ValueError):
                 experiment.sample_size(0.10, 0.02, power=bad_power)
@@ -764,20 +870,21 @@ class ExperimentTests(unittest.TestCase):
                 experiment.min_detectable_effect(0.10, 4000, power=bad_power)
 
     def test_zero_control_conversions(self):
-        # 0% -> 5% is an unbounded relative lift: promote when significant, no crash
+        # Relative lift from a zero baseline is undefined; callers need an absolute bar.
         r = experiment.two_proportion(0, 1000, 50, 1000)
-        self.assertTrue(r["significant"])
-        self.assertTrue(r["promote"])
+        self.assertTrue(r["statistically_significant"])
         self.assertIsNone(r["relative_lift"])
-        self.assertIn("infinite", r["reason"])
-        z = experiment.two_proportion(0, 1000, 0, 1000)   # both arms zero -> no promote
-        self.assertFalse(z["promote"])
+        self.assertIsNone(r["practical_lift_clears_bar"])
+        self.assertEqual(r["direction"], "variant_higher")
+        z = experiment.two_proportion(0, 1000, 0, 1000)
+        self.assertFalse(z["statistically_significant"])
+        self.assertFalse(z["practical_lift_clears_bar"])
 
     def test_degenerate_bootstrap_not_significant(self):
         # n=1 per arm: CI collapses to a point -> must NOT be read as significant
         boot = experiment.bootstrap_diff([5], [9])
         self.assertFalse(boot["reliable"])
-        self.assertFalse(boot["excludes_zero"])
+        self.assertFalse(boot["interval_excludes_zero"])
 
     def test_norm_ppf_tail_branches(self):
         # Force Acklam's low/high-tail branches (p < 0.02425 / p > 0.97575), which use
@@ -806,7 +913,7 @@ class ExperimentTests(unittest.TestCase):
         self.assertAlmostEqual(b["point_estimate"], 27.0, places=6)  # median(b)-median(a)=30-3
         b2 = experiment.bootstrap_diff([1, 2, 3, 4, 5], [10, 20, 30, 40, 50],
                                        stat="median", seed=0)
-        self.assertEqual(b["ci"], b2["ci"])              # deterministic given seed
+        self.assertEqual(b["confidence_interval"], b2["confidence_interval"])
 
     def test_cli_main(self):
         # The user-facing CLI (main/build_parser/_floats/dispatch) — untested by the
@@ -822,7 +929,8 @@ class ExperimentTests(unittest.TestCase):
 
         rc, out = run(["proportion", "--control", "100", "1000", "--variant", "130", "1000"])
         self.assertEqual(rc, 0)
-        self.assertIn("promote", out)                     # JSON assembled + printed
+        self.assertIn("statistically_significant", out)
+        self.assertNotIn('"promote"', out)
         rc, out = run(["continuous", "--a", "1,2,3", "--b", "10,20,30",
                        "--stat", "median", "--seed", "0"])
         self.assertEqual(rc, 0)
@@ -838,24 +946,22 @@ class ExperimentTests(unittest.TestCase):
             rc, _ = run(["proportion", "--control", "100", "50", "--variant", "10", "100"])
         self.assertEqual(rc, 1)
 
-    def test_significant_regression_wording(self):
-        # A significant loss must be called a REGRESSION, not framed like a near-miss win.
+    def test_effect_direction_is_factual(self):
         r = experiment.two_proportion(130, 1000, 100, 1000)
-        self.assertTrue(r["significant"])
-        self.assertFalse(r["promote"])
+        self.assertTrue(r["statistically_significant"])
         self.assertLess(r["relative_lift"], 0)
-        self.assertIn("REGRESSION", r["reason"])
-        # a significant BUT immaterial positive lift keeps the "does not clear" wording
+        self.assertEqual(r["direction"], "variant_lower")
+        self.assertFalse(r["practical_lift_clears_bar"])
         pos = experiment.two_proportion(100, 1000, 130, 1000, min_lift=0.5)
-        self.assertTrue(pos["significant"])
-        self.assertFalse(pos["promote"])
-        self.assertNotIn("REGRESSION", pos["reason"])
+        self.assertTrue(pos["statistically_significant"])
+        self.assertEqual(pos["direction"], "variant_higher")
+        self.assertFalse(pos["practical_lift_clears_bar"])
 
     def test_output_notes_carry_caveats(self):
         # The overlapping-CI and no-peeking caveats must be in the emitted notes.
         prop = experiment.two_proportion(100, 1000, 130, 1000)
         self.assertIn("do NOT imply non-significance", prop["note"])
-        self.assertIn("peeking", prop["note"])
+        self.assertIn("precommitted", prop["note"])
         cont = experiment.mann_whitney([1, 2, 3, 4], [5, 6, 7, 8])
         self.assertIn("peeking", cont["note"])
 

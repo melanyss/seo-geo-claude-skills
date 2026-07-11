@@ -28,7 +28,6 @@ CLI:
 from __future__ import annotations
 
 import argparse
-import gzip
 import json
 import re
 import sys
@@ -43,7 +42,7 @@ MAX_CHILD_SITEMAPS = 200  # guard against huge indexes
 MAX_REDIRECTS = 5         # 308s are common for llms.txt / sitemaps
 
 
-def _get_following(url):
+def _get_following(url, allow_private=False):
     """_http.get(url) but also follow 301/302/307/308 ourselves.
 
     Python's urllib does not reliably auto-follow 308 (and some 307) for GET,
@@ -54,7 +53,7 @@ def _get_following(url):
     seen = set()
     current = url
     for _ in range(MAX_REDIRECTS + 1):
-        r = _http.get(current)
+        r = _http.get(current, allow_private=allow_private)
         status = r.get("status", 0)
         if status in (301, 302, 303, 307, 308) and not r.get("body"):
             loc = None
@@ -66,6 +65,12 @@ def _get_following(url):
                 r["final_url"] = current
                 return r
             nxt = urljoin(current, loc.strip())
+            safety_error = _http.url_safety_error(nxt, allow_private=allow_private)
+            if safety_error:
+                r["status"] = 0
+                r["error"] = "blocked redirect: %s" % safety_error
+                r["final_url"] = current
+                return r
             if nxt in seen or nxt == current:
                 r["final_url"] = current
                 return r
@@ -89,12 +94,8 @@ def _maybe_gunzip(body, url):
         return body
     looks_gz = url.lower().endswith(".gz") or body[:2] == b"\x1f\x8b"
     if looks_gz:
-        try:
-            return gzip.decompress(body)
-        except Exception:
-            # Truncated/corrupt gzip raises EOFError or zlib.error (neither an
-            # OSError subclass) — degrade to the raw body instead of crashing.
-            return body
+        decoded, _, error = _http.decompress_gzip(body, _http.DEFAULT_MAX_BYTES)
+        return body if error else decoded
     return body
 
 

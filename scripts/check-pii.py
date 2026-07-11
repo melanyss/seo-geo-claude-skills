@@ -23,7 +23,10 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SCAN_EXTS = {".md", ".py", ".sh", ".json", ".yml", ".yaml", ".txt", ".js", ".ts"}
+SCAN_EXTS = {
+    ".md", ".py", ".sh", ".json", ".ndjson", ".yml", ".yaml", ".txt",
+    ".csv", ".tsv", ".xml", ".html", ".toml", ".ini", ".js", ".ts",
+}
 SKIP_DIRS = {".git", "reference-oss", "node_modules", "__pycache__", ".agents", ".claude"}
 
 # High-confidence secret patterns (name, regex).
@@ -85,10 +88,7 @@ def scan_file(path):
     try:
         text = open(path, encoding="utf-8", errors="replace").read()
     except OSError as e:
-        # Fail-closed visibility: a file we cannot read must not silently pass the
-        # gate. Surface it on stderr so the skipped file is visible in CI logs.
-        print("WARN  could not read %s: %s" % (os.path.relpath(path, ROOT), e), file=sys.stderr)
-        return findings
+        return [(0, "unreadable file", str(e))]
     for n, line in enumerate(text.splitlines(), 1):
         for name, pat in PATTERNS:
             for m in pat.finditer(line):

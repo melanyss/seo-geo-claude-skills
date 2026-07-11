@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/audit-artifact.schema.json",
+  "title": "Aaron Marketing Auditor Artifact v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "class", "schema_version", "runbook_version", "framework", "profile",
+    "status", "verdict", "score_state", "objective", "target", "observed_at",
+    "key_findings", "evidence_summary", "evidence_coverage", "score_confidence",
+    "open_loops", "recommended_next_skill", "veto_count", "cap_applied"
+  ],
+  "properties": {
+    "class": {"const": "auditor-output"},
+    "schema_version": {"const": "3.0"},
+    "runbook_version": {"const": "3.0.0"},
+    "framework": {"enum": ["CORE-EEAT", "CITE", "C3", "ROAS", "SEND", "RAMP", "ECHO", "TALE", "MULTI"]},
+    "profile": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Must also be declared for the selected framework in framework-catalog.json; MULTI uses cross-framework-summary."
+    },
+    "status": {"enum": ["DONE", "DONE_WITH_CONCERNS", "BLOCKED", "NEEDS_INPUT"]},
+    "verdict": {"enum": ["SHIP", "FIX", "BLOCK", "UNDECIDED"]},
+    "score_state": {"enum": ["SCORED", "NOT_SCORED"]},
+    "objective": {"type": "string", "minLength": 1},
+    "target": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "format": "date"},
+    "key_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "severity", "evidence"],
+        "properties": {
+          "title": {"type": "string", "minLength": 1},
+          "severity": {"enum": ["veto", "high", "medium", "low"]},
+          "evidence": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "evidence_summary": {"type": "string", "minLength": 1},
+    "evidence_coverage": {"type": "integer", "minimum": 0, "maximum": 100},
+    "score_confidence": {"enum": ["high", "medium", "low", "not_scored"]},
+    "open_loops": {"type": "string", "minLength": 1},
+    "recommended_next_skill": {"type": "string", "minLength": 1},
+    "veto_count": {"type": "integer", "minimum": 0},
+    "cap_applied": {"type": "boolean"},
+    "raw_overall_score": {"type": "integer", "minimum": 0, "maximum": 100},
+    "final_overall_score": {"type": "integer", "minimum": 0, "maximum": 100}
+  }
+}

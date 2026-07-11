@@ -20,7 +20,7 @@ Wave tiering is an **Estimated** pattern (source: coreyhaines31/marketingskills 
 
 | Wave | Timing | Surfaces | Note |
 |------|--------|----------|------|
-| 1 | T-0 | the few high-traffic surfaces: launch platform of record, AlternativeTo-class, category review sites (G2/Capterra) where the category fits | submission status lines → `memory/launch-registry/candidates.md` |
+| 1 | T-0 | the few high-traffic surfaces: launch platform of record, AlternativeTo-class, category review sites (G2/Capterra) where the category fits | submission status lines → `memory/events/launches.ndjson` via an authorized `operation: propose` request to `registry-events.py` |
 | 2 | week 1 | niche/vertical directories matched to the ICP | one batch, tracked with per-directory UTM |
 | 3 | T+7 onward | long-tail directories | low individual yield; batch when idle, never at the cost of reply coverage on live threads |
 

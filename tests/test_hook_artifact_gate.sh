@@ -9,10 +9,6 @@
 # gate is awk-heavy; a regression (e.g. the hb() blank-line truncation bug) is
 # invisible to `bash -n`. These cases assert real block/pass decisions.
 #
-# Note: field() is intentionally left unchanged — the documented format always gives
-# cap fields a same-line inline value, which the good.md / blocked_ok.md fixtures
-# below exercise (cap_applied: false on its own line, value present).
-
 set -u
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 HOOK="$REPO/hooks/claude-hook.sh"
@@ -21,7 +17,7 @@ FAIL=0
 
 PROJ="$(mktemp -d)"
 trap 'rm -rf "$PROJ"' EXIT
-mkdir -p "$PROJ/memory/audits"
+mkdir -p "$PROJ/memory/audits/content"
 
 # Run the post-tool-use gate against memory/audits/<file>; echoes hook stdout.
 gate() {
@@ -48,73 +44,108 @@ assert_notcontains() { case "$2" in *"$3"*) bad "$1 (should not contain: $3)";; 
 echo "Artifact Gate — auditor-output validation"
 
 # 1. Compliant artifact (cap group after a blank line, the documented §1 format) -> PASS
-cat > "$PROJ/memory/audits/good.md" <<'EOF'
+cat > "$PROJ/memory/audits/content/good.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: CORE-EEAT
+profile: product-review
 ---
 
 status: DONE_WITH_CONCERNS
+verdict: FIX
+score_state: SCORED
 objective: "audit homepage content quality"
 target: "https://example.com/"
+observed_at: 2026-07-10
 key_findings:
   - title: thin intro
     severity: medium
     evidence: "intro is 40 words"
 evidence_summary: reviewed 3 sections
+evidence_coverage: 100
+score_confidence: high
 open_loops: none
 recommended_next_skill: seo-content-writer
 
-# Cap-related fields — AUDITOR-CLASS ONLY
+veto_count: 0
 cap_applied: false
 raw_overall_score: 78
 final_overall_score: 78
 EOF
-assert_pass "compliant artifact passes (regression guard for hb() blank-line bug)" "$(gate good.md)"
+assert_pass "compliant artifact passes (regression guard for hb() blank-line bug)" "$(gate content/good.md)"
 
 # 2. Non-BLOCKED artifact missing final_overall_score -> BLOCK
-sed '/^final_overall_score:/d' "$PROJ/memory/audits/good.md" > "$PROJ/memory/audits/missing_final.md"
-assert_block "missing final_overall_score (non-BLOCKED) blocks" "$(gate missing_final.md)"
+sed '/^final_overall_score:/d' "$PROJ/memory/audits/content/good.md" > "$PROJ/memory/audits/content/missing_final.md"
+assert_block "missing final_overall_score (non-BLOCKED) blocks" "$(gate content/missing_final.md)"
 
-# 3. Compliant BLOCKED artifact: cap_applied:false + raw_overall_score, no final -> PASS
-cat > "$PROJ/memory/audits/blocked_ok.md" <<'EOF'
+# 3. A completed multi-veto audit has status DONE + verdict BLOCK, with no final score.
+cat > "$PROJ/memory/audits/content/blocked_ok.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: CORE-EEAT
+profile: product-review
 ---
 
-status: BLOCKED
+status: DONE
+verdict: BLOCK
+score_state: SCORED
 objective: "audit homepage"
 target: "https://example.com/"
-key_findings: []
+observed_at: 2026-07-10
+key_findings:
+  - title: unsubstantiated medical claim
+    severity: veto
+    evidence: no primary source supports the treatment claim
+  - title: manipulated comparison
+    severity: veto
+    evidence: competitor result uses a different measurement window
 evidence_summary: 2 veto items failed
-open_loops: "artifact_gate_failed: multi-veto"
+evidence_coverage: 100
+score_confidence: high
+open_loops: "two verified veto findings require remediation"
 recommended_next_skill: technical-seo-checker
+veto_count: 2
 cap_applied: false
-raw_overall_score: 0
+raw_overall_score: 70
 EOF
-assert_pass "compliant BLOCKED (cap_applied+raw_overall_score, no final) passes" "$(gate blocked_ok.md)"
+assert_pass "completed multi-veto BLOCK verdict passes without conflating status" "$(gate content/blocked_ok.md)"
 
-# 4. BLOCKED artifact missing the required cap_applied/raw_overall_score -> BLOCK (per §2/§4)
-cat > "$PROJ/memory/audits/blocked_nocap.md" <<'EOF'
+# 4. An execution failure is unscored/undecided and still requires typed control fields.
+cat > "$PROJ/memory/audits/content/blocked_nocap.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: CORE-EEAT
+profile: product-review
 ---
 
 status: BLOCKED
+verdict: UNDECIDED
+score_state: NOT_SCORED
 objective: "audit homepage"
 target: "https://example.com/"
+observed_at: 2026-07-10
 key_findings: []
 evidence_summary: could not fetch page
+evidence_coverage: 0
+score_confidence: not_scored
 open_loops: site returned 503
 recommended_next_skill: technical-seo-checker
+veto_count: 0
 EOF
-assert_block "BLOCKED missing cap_applied/raw_overall_score blocks" "$(gate blocked_nocap.md)"
+assert_block "execution BLOCKED missing cap_applied blocks" "$(gate content/blocked_nocap.md)"
 
-# 5. A file without the class marker is not treated as an audit artifact -> PASS
+# 5. The audit sink is fail-closed: omitting the marker does not bypass validation.
 cat > "$PROJ/memory/audits/not_auditor.md" <<'EOF'
 # just some notes
 no frontmatter class here
 EOF
-assert_pass "non-auditor file (no class marker) is ignored" "$(gate not_auditor.md)"
+assert_block "unmarked file in audit sink is blocked" "$(gate not_auditor.md)"
 
 echo "Artifact Gate — C3 influencer (content-reviewer) artifacts"
 mkdir -p "$PROJ/memory/audits/influencer" "$PROJ/memory/audits/ad" "$PROJ/memory/influencer/content-reviewer"
@@ -123,41 +154,65 @@ mkdir -p "$PROJ/memory/audits/influencer" "$PROJ/memory/audits/ad" "$PROJ/memory
 cat > "$PROJ/memory/audits/influencer/cr_good.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: C3
+profile: art-awareness
 ---
 
 status: DONE
+verdict: SHIP
+score_state: SCORED
 objective: "review sponsored Reel for brand + FTC compliance"
 target: "creator @example, IG Reel"
+observed_at: 2026-07-10
 key_findings:
   - title: disclosure present
     severity: low
     evidence: "#ad in first line"
 evidence_summary: ART reviewed — appeal/relevance/transparency
+evidence_coverage: 100
+score_confidence: high
 open_loops: none
 recommended_next_skill: contract-helper
+veto_count: 0
 cap_applied: false
 raw_overall_score: 86
 final_overall_score: 86
 EOF
 assert_pass "C3 content-reviewer ART artifact (DONE) passes the gate" "$(gate influencer/cr_good.md)"
 
-# C3-2. T1/T2 veto -> Rejected -> status BLOCKED (cap_applied:false + raw_overall_score, no final) -> PASS
+# C3-2. One verified veto is a completed FIX with the universal Low-band ceiling.
 cat > "$PROJ/memory/audits/influencer/cr_veto.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: C3
+profile: art-awareness
 ---
 
-status: BLOCKED
+status: DONE_WITH_CONCERNS
+verdict: FIX
+score_state: SCORED
 objective: "review sponsored post"
 target: "creator @example, TikTok"
-key_findings: []
+observed_at: 2026-07-10
+key_findings:
+  - title: disclosure absent
+    severity: veto
+    evidence: paid relationship confirmed and no disclosure appears in the asset
 evidence_summary: "T1 veto — no disclosure on paid post (FTC 16 CFR 255)"
-open_loops: "artifact_gate_failed: ART T1 veto -> Reject"
+evidence_coverage: 100
+score_confidence: high
+open_loops: "disclosure must be fixed before publication"
 recommended_next_skill: content-reviewer
-cap_applied: false
+veto_count: 1
+cap_applied: true
 raw_overall_score: 70
+final_overall_score: 59
 EOF
-assert_pass "C3 veto Reject (BLOCKED, no final) passes the gate" "$(gate influencer/cr_veto.md)"
+assert_pass "C3 single-veto FIX uses the universal 59 ceiling" "$(gate influencer/cr_veto.md)"
 
 # C3-3. Marked influencer artifact missing cap_applied -> BLOCK (gate enforces on the influencer subdir too)
 sed '/^cap_applied:/d' "$PROJ/memory/audits/influencer/cr_good.md" > "$PROJ/memory/audits/influencer/cr_bad.md"
@@ -178,23 +233,37 @@ assert_pass "content-reviewer draft outside memory/audits/ is not gated (fail-op
 cat > "$PROJ/memory/audits/ad/aa_good.md" <<'EOF'
 ---
 class: auditor-output
+schema_version: "3.0"
+runbook_version: "3.0.0"
+framework: ROAS
+profile: direct-response
 ---
 
 status: DONE
+verdict: SHIP
+score_state: SCORED
 objective: "ROAS audit of the search campaign"
 target: "Google Ads acct 123, DR goal"
+observed_at: 2026-07-10
 key_findings:
   - title: negative keywords thin
     severity: medium
     evidence: "12 broad terms, no negatives"
 evidence_summary: RQS scored R/O/A/S from manual export
+evidence_coverage: 100
+score_confidence: high
 open_loops: none
 recommended_next_skill: paid-measurement-loop
+veto_count: 0
 cap_applied: false
 raw_overall_score: 78
 final_overall_score: 78
 EOF
-assert_pass "ROAS paid/ ad-account-auditor artifact passes the gate" "$(gate paid/aa_good.md)"
+assert_pass "ROAS ad/ artifact passes the gate" "$(gate ad/aa_good.md)"
+
+# C3-6. Path ownership is enforced.
+sed 's/framework: ROAS/framework: SEND/' "$PROJ/memory/audits/ad/aa_good.md" > "$PROJ/memory/audits/ad/aa_wrong_framework.md"
+assert_block "audit sink rejects the wrong framework" "$(gate ad/aa_wrong_framework.md)"
 
 echo "SessionStart — sanitization & symlink rejection"
 

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aaron-he-zhu/aaron-marketing-skills/references/c3-rollup.schema.json",
+  "title": "C3 Campaign Value Index Rollup Input",
+  "type": "object",
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "required": ["scopes"],
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"$ref": "#/$defs/scoredResult"}
+        }
+      }
+    },
+    {
+      "required": ["components"],
+      "properties": {
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ace", "art", "roi"],
+          "properties": {
+            "ace": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"$ref": "#/$defs/aceComponent"}
+            },
+            "art": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"$ref": "#/$defs/equalComponent"}
+            },
+            "roi": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {"$ref": "#/$defs/equalComponent"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "scoredResult": {
+      "type": "object",
+      "required": [
+        "framework", "catalog_version", "profile", "target", "observed_at",
+        "context", "score_state", "final_overall_score"
+      ],
+      "properties": {
+        "framework": {"const": "C3"},
+        "catalog_version": {"type": "string", "minLength": 1},
+        "profile": {"pattern": "^(ace|art|roi)-(awareness|engagement|conversion|brand-building)$"},
+        "target": {"type": "string", "minLength": 1},
+        "observed_at": {"type": "string", "format": "date"},
+        "context": {
+          "type": "object",
+          "required": ["scope", "goal", "assessment_time", "rollup_id"]
+        },
+        "score_state": {"const": "SCORED"},
+        "final_overall_score": {"type": "integer", "minimum": 0, "maximum": 100}
+      }
+    },
+    "aceComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result"],
+      "properties": {
+        "result": {"$ref": "#/$defs/scoredResult"},
+        "weight": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "equalComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result"],
+      "properties": {"result": {"$ref": "#/$defs/scoredResult"}}
+    }
+  }
+}

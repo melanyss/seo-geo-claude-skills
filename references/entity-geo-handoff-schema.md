@@ -1,158 +1,71 @@
-# Entity ↔ GEO Handoff Schema
+# Entity to GEO Handoff Contract
 
-Formalizes the data contract between `entity-optimizer` (writes canonical entity profiles) and `geo-content-optimizer` (reads entity facts to produce AI-citable content).
+This contract connects `entity-optimizer` to entity-aware content/schema builders. Canonical history is `memory/events/entities.ndjson`; current accepted records are in `memory/projections/entities.json`. Files under `memory/entities/` are optional generated views.
 
-Referenced by:
-- [entity-optimizer/SKILL.md](../protocol/entity-optimizer/SKILL.md) — as an authoritative contract for its Writes
-- [geo-content-optimizer/SKILL.md](../seo-geo/build/geo-content-optimizer/SKILL.md) — as an authoritative contract for its Reads
+## Accepted Entity Data
 
----
-
-## Canonical entity profile location
-
-`memory/entities/<slug>.md` — one file per canonical entity. Slug uses kebab-case (`acme-analytics`, `jane-doe-founder`, `acme-corp-2026`).
-
-## Profile frontmatter (authoritative — entity-optimizer is sole writer)
-
-```yaml
----
-name: acme-analytics                     # slug matches filename
-display_name: "Acme Analytics"           # as shown in user-facing output
-type: organization                     # organization | person | product | event | location
-primary_domain: acme-analytics.example
-also_known_as:                         # aliases, for AI disambiguation
-  - "Cloud Metrics"
-  - "Acme Analytics Inc"
-  - "CM Analytics"
-founded: 2019                          # ISO year or full date
-founders:                              # list of person entities (link to their files)
-  - jane-doe-founder
-headquarters: "San Francisco, CA, USA"
-industry: "analytics platform"          # plain-English category
-categories:                            # 3-5 Google Knowledge Graph style
-  - "B2B SaaS"
-  - "Data Analytics"
-  - "Business Intelligence"
-wikidata_q: Q123456789                 # null if not yet in Wikidata
-wikipedia_url: null                    # null if not yet in Wikipedia
-knowledge_graph_id: null               # Google KG MID if known
-same_as:                               # authoritative external profiles
-  - https://www.linkedin.com/company/acme-analytics
-  - https://www.crunchbase.com/organization/acme-analytics
-  - https://github.com/acme-analytics
-schema_type: Organization              # Schema.org type
-schema_sub_type: SoftwareApplication   # if more specific applies
-primary_products:                      # list of product entity slugs
-  - acme-analytics-platform
-brand_colors_hex:                      # optional visual identity
-  - "#0066CC"
-logo_url: https://acme-analytics.example/logo.svg
-description_short: "B2B SaaS analytics platform for enterprise data teams, founded 2019, based in San Francisco."  # ≤160 chars; used as meta description fallback
-description_long: |
-  Acme Analytics is a business intelligence platform designed for enterprise
-  data teams, specializing in real-time dashboards, anomaly detection, and
-  cross-source data joins. Founded in 2019 by Jane Doe and John Smith, the
-  company serves Fortune 500 customers including [redacted] and [redacted].
-last_verified: 2026-04-15              # ISO date of last AI resolution test
-ai_resolution_status:                  # auditor-populated; geo-content reads this
-  chatgpt: recognized                  # recognized | partial | unrecognized | confused
-  perplexity: recognized
-  claude: partial
-  gemini: unrecognized
-  last_tested: 2026-04-10
-ai_resolution_notes:
-  - "Claude confuses Acme Analytics with Cloud Monitor (Alibaba product)"
-  - "Gemini has no entry; likely needs Wikidata canonicalization"
-gap_type: null                         # knowledge_graph | wikidata | content_signals | ai_recognition | null if no gap
-next_action: null                      # null if entity is healthy
----
-
-# Acme Analytics
-
-<body: richer context, sameAs URLs, key facts, citations, founder bios...>
+```json
+{
+  "aggregate_id": "entity-acme-analytics",
+  "revision": 4,
+  "status": "active",
+  "data": {
+    "entity_type": "organization",
+    "display_name": "Acme Analytics",
+    "primary_domain": "acme.example",
+    "aliases": ["Acme Analytics Inc"],
+    "same_as": ["https://www.wikidata.org/wiki/Q123"],
+    "wikidata_qid": "Q123",
+    "schema_type": "Organization",
+    "recognition_observations": [
+      {
+        "system": "wikidata",
+        "state": "recognized",
+        "source_ref": "kg-query-2026-07-10",
+        "observed_at": "2026-07-10",
+        "evidence_type": "measured"
+      }
+    ],
+    "narrative_canon_id": "brand-acme",
+    "narrative_canon_version": "3",
+    "claims_projection_offset": 42
+  }
+}
 ```
 
-### Field descriptions
+## Required Fields
 
-| Field | Type | Required | Consumed by |
-|-------|------|----------|-------------|
-| `name` | slug string | Yes | all |
-| `display_name` | string | Yes | geo-content-optimizer (as entity display) |
-| `type` | enum | Yes | serp-markup-builder (picks Schema.org type), geo-content-optimizer |
-| `primary_domain` | URL | Yes | geo-content-optimizer (first-party citation) |
-| `also_known_as[]` | strings | Recommended | geo-content-optimizer (alias coverage for AI disambiguation) |
-| `same_as[]` | URLs | Recommended | serp-markup-builder (`sameAs` property), geo-content-optimizer |
-| `wikidata_q` | QID or null | Optional | geo-content-optimizer (as authoritative signal) |
-| `description_short` | string ≤160 chars | Yes | serp-markup-builder (fallback meta desc), geo-content-optimizer (first-paragraph boilerplate) |
-| `description_long` | markdown paragraph | Yes | geo-content-optimizer (about-page source of truth) |
-| `ai_resolution_status` | per-engine enum | Yes | geo-content-optimizer (decides which engines need targeting; its [AI-overview-recovery playbook](../seo-geo/build/geo-content-optimizer/references/ai-overview-recovery.md) scopes rewrite effort) |
-| `ai_resolution_notes[]` | strings | Recommended | geo-content-optimizer (what disambiguation to add in body) |
-| `gap_type` | enum or null | Yes | next-best-skill routing for downstream |
-| `next_action` | string or null | Yes | Open loop if non-null |
+| Field | Required | Consumer behavior |
+|---|---|---|
+| aggregate ID/revision/status | yes | Trace source state and reject erased/tombstoned records |
+| `entity_type` | yes | Select schema/entity behavior |
+| `display_name` | yes | Canonical first mention |
+| `primary_domain` | yes for organizations/products | First-party identity pointer |
+| `aliases` | recommended | Disambiguation coverage |
+| `same_as` | recommended | Verified identity links; never guessed |
+| `schema_type` | recommended | JSON-LD type selection |
+| recognition observations | yes | Per-system state/source/date; Unknown when unobserved |
+| Narrative/claims tuple | required for descriptions | Prevent machine identity from inventing brand copy/claims |
 
-## Contract rules
+## Producer Rules
 
-### Writes (entity-optimizer — sole writer)
+1. `entity-optimizer` alone accepts/rejects/upserts entity state through `registry-events.py`.
+2. Ordinary skills submit authorized `operation: propose` events with idempotency/source/date/current revision.
+3. Natural-person records use pseudonymous aggregate IDs and minimum necessary professional facts. Keep direct contact PII out of events/views.
+4. Never merge identities on name/logo similarity alone.
+5. Recognition observations are per system/date. Unobserved is Unknown, not Partial/Fail.
+6. Description text derives from accepted Narrative/claims state and carries the dependency tuple; entity state cannot redefine L1 canon.
 
-1. One file per canonical entity. Never split across files.
-2. Updates to any field bump `last_verified` to today.
-3. AI resolution test MUST run at least quarterly; update `ai_resolution_status` per engine.
-4. If `gap_type != null`, also append a one-line entry to `memory/open-loops.md`.
-5. Never write `memory/entities/<slug>.md` for a candidate entity. Candidates go to `memory/entities/candidates.md` only.
+## Consumer Rules
 
-### Reads (geo-content-optimizer — primary consumer)
+Before entity-aware content or schema generation:
 
-1. BEFORE writing content that mentions a brand, person, product, or org, check if a canonical profile exists at `memory/entities/<slug>.md`.
-2. If the profile exists:
-   - Use `display_name` for all first mentions.
-   - Use `description_short` for meta description fallback if page-specific isn't provided.
-   - Use `ai_resolution_status` to decide whether disambiguation boilerplate is needed (add it if ANY engine is `unrecognized` or `confused`).
-   - Use `also_known_as` and `ai_resolution_notes` to add alias-coverage sentences in body.
-3. If the profile is missing OR `last_verified` is > 90 days stale:
-   - Set Status = `DONE_WITH_CONCERNS`
-   - Add `open_loop`: "Entity <display_name> needs re-verification — profile not updated since <date>. Recommend running entity-optimizer."
-4. If `ai_resolution_status` shows the target engine as `unrecognized`, emit a recommendation handoff to entity-optimizer BEFORE publishing content on that query.
-
-### Reads (serp-markup-builder — secondary consumer)
-
-1. When generating `Organization` / `Product` / `Person` schema, look up `memory/entities/<slug>.md` first.
-2. Populate `name`, `sameAs`, `logo`, `founder`, `foundingDate`, `url`, `address` from the profile. No guessing.
-3. If profile missing, ask user to confirm fields before embedding in JSON-LD.
+1. Query the projection by aggregate ID and record revision/offset.
+2. Reject erased/tombstoned records and surface stale/conflicting identity evidence.
+3. Populate schema only from accepted fields; ask for missing required values rather than guessing.
+4. For external copy, independently verify the Narrative/claims dependency tuple. A stale/missing tuple sets `dependency_status: blocked` or an explicitly authorized exploratory fallback.
+5. Route durable corrections as proposals to `entity-optimizer`; do not edit JSON or Markdown views.
 
 ## Versioning
 
-- Profile format version: **1.0** (2026-04)
-- Future additions MUST preserve backward compatibility:
-  - New optional fields OK
-  - Removing a field requires a major version bump
-  - Changing a field's type (string → list) requires a major version bump
-
-## Examples
-
-### Minimum viable profile
-
-```yaml
----
-name: acme-saas
-display_name: "Acme SaaS"
-type: organization
-primary_domain: acme-saas.com
-description_short: "Acme SaaS builds team collaboration tools for remote engineering teams."
-description_long: |
-  Acme SaaS is a collaboration platform for remote engineering teams,
-  founded in 2023. The product integrates with GitHub, Jira, and Slack.
-ai_resolution_status:
-  chatgpt: unrecognized
-  perplexity: partial
-  claude: unrecognized
-  last_tested: 2026-04-17
-gap_type: ai_recognition
-next_action: "Submit Wikidata entry; add founder bio page; run geo-content-optimizer's AI-overview-recovery playbook on brand queries"
----
-
-# Acme SaaS
-```
-
-### Fully populated (enterprise brand)
-
-See the example in the entity-optimizer skill's worked example reference.
+Contract version **2.0 (v17)**. New optional fields are backward-compatible. Field removal/type changes or authority changes require a major contract version plus migration and behavior tests.

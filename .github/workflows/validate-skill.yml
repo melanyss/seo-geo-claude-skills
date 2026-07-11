@@ -25,8 +25,11 @@ on:
       - "AGENTS.md"
       - "CONTRIBUTING.md"
       - "CONNECTORS.md"
+      - "PRIVACY.md"
+      - "SECURITY.md"
       - "VERSIONS.md"
       - "marketplace.json"
+      - "openclaw.plugin.json"
       - "skills.sh.json"
       - "docs/mcp-catalog.json"
   pull_request:
@@ -53,8 +56,11 @@ on:
       - "AGENTS.md"
       - "CONTRIBUTING.md"
       - "CONNECTORS.md"
+      - "PRIVACY.md"
+      - "SECURITY.md"
       - "VERSIONS.md"
       - "marketplace.json"
+      - "openclaw.plugin.json"
       - "skills.sh.json"
       - "docs/mcp-catalog.json"
 
@@ -91,17 +97,11 @@ jobs:
       - name: Lint connector code (py_compile)
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/connectors/*.py scripts/golden-auditor-math.py scripts/check-evals.py scripts/check-pii.py
-          echo "connectors compile clean"
+          python3 -m py_compile scripts/*.py scripts/connectors/*.py
+          echo "all Python helpers compile clean"
 
-      - name: Connector unit tests
-        run: python3 tests/test_connectors_local.py
-
-      - name: Golden auditor-math check
-        run: python3 scripts/golden-auditor-math.py
-
-      - name: Eval structural lint (no runner — structure only)
-        run: python3 scripts/check-evals.py
+      - name: Deterministic behavior conformance
+        run: python3 scripts/run-behavior-evals.py
 
       - name: PII / secret scan
         run: python3 scripts/check-pii.py
@@ -109,7 +109,7 @@ jobs:
       - name: Dependency-creep guard (stdlib-only)
         run: bash scripts/check-stdlib-only.sh
 
-      - name: Version-sync guard (8 tracking files)
+      - name: Version-sync guard (10 tracking surfaces)
         run: bash scripts/check-versions.sh
 
       - name: Cross-agent discovery guard (npx skills)
@@ -128,7 +128,13 @@ jobs:
       - name: Validate JSON / shell manifests
         run: |
           set -euo pipefail
-          for f in .claude-plugin/plugin.json marketplace.json .claude-plugin/marketplace.json docs/mcp-catalog.json skills.sh.json; do
+          for f in .claude-plugin/plugin.json marketplace.json .claude-plugin/marketplace.json openclaw.plugin.json \
+            docs/mcp-catalog.json skills.sh.json references/system-catalog.json \
+            references/system-catalog.schema.json references/framework-catalog.json \
+            references/framework-catalog.schema.json references/audit-run.schema.json \
+            references/audit-artifact.schema.json references/c3-rollup.schema.json \
+            references/registry-event.schema.json \
+            evals/deterministic-suites.json evals/behavior-adapter.schema.json; do
             python3 -c "import json,sys; json.load(open('$f')); print('ok: $f')"
           done
           # skills.sh.json (registry page groupings) must cover exactly the
@@ -153,6 +159,3 @@ jobs:
           # hook script must parse
           bash -n hooks/claude-hook.sh && echo "hooks/claude-hook.sh parses"
           python3 -c "import json; json.load(open('hooks/hooks.json')); print('ok: hooks/hooks.json')"
-
-      - name: Hook behavior tests (Artifact Gate + SessionStart safety)
-        run: bash tests/test_hook_artifact_gate.sh

@@ -35,7 +35,7 @@
 
 | ID | Item | Pass (10) | Partial (5) | Fail (0) |
 |----|------|-----------|-------------|----------|
-| O1 | Creator–Brand Fit | Roster strongly fits brand / audience (high ACE-fit) | mixed | misaligned picks |
+| O1 | Creator–Brand Fit | Campaign-specific fit is strong using ACE facts plus brand/category evidence | mixed | materially misaligned picks or active conflict |
 | O2 | Roster Mix | Tier mix & count suit the goal | workable but lopsided | wrong mix (all-mega for a conversion play) |
 | O3 | Budget Allocation | Efficient, justified split incl. paid amplification | defensible but suboptimal | concentrated / unjustified |
 | O4 | Timing & Sequencing | Well-timed (trend / season), good cadence & sequencing | ok | poorly timed / clustered / missed window |
@@ -72,18 +72,18 @@ Campaign exec    =  ROI  (this rubric)
 ```
 
 Read them together via the [Creator × Content diagnosis matrix](scoring-architecture.md#9-combined-diagnosis-creator--content).
-- **O1 (Creator-Brand Fit)** consumes the per-creator ACE scores.
+- **O1 (Creator-Brand Fit)** consumes brand-independent ACE facts plus campaign-specific brand/category evidence; ACE itself does not score fit.
 - **I2 (Conversion)** is where the appeal ART scored gets *verified* as real action.
 
 ---
 
-## 5. Predict → measure → recalibrate (the feedback loop)
+## 5. Forecast → Measure → Calibrate (Separate Reads)
 
 The advantage static rubrics lack — ROI has a time axis:
 
-1. **Before spend** — fix the **R** target and score **O**, with *predicted* I / R → a go/no-go forecast.
-2. **After** — score *actual* I / R → compare to forecast.
-3. **Recalibrate** — feed actuals back to tune ACE / ART weights (did high ACE actually predict high Impact?). This closes the loop.
+1. **Before spend** — lock the goal, target, assumptions, and an all-forecast ROI run. Items requiring actual outcomes are `na` only where catalog policy permits; otherwise remain Unknown and no forecast scope score is emitted.
+2. **After the declared lag** — create a separate all-actual ROI run and compare it with the preserved forecast record.
+3. **Calibrate** — test whether version-locked ACE/ART/ROI scores predict preregistered outcomes across a defensible sample. Never tune weights from one campaign or rewrite the forecast in place.
 
 ---
 
@@ -95,7 +95,7 @@ The advantage static rubrics lack — ROI has a time axis:
 | O (Orchestration) | judgeable from the **plan**, upfront — no tooling needed |
 | I (Impact) | needs **post-campaign analytics + attribution** tooling |
 
-> ROI is the most data-dependent and most retrospective scope. Judge **O** early as a gate; treat **I / R** as a forecast before launch and as measured fact after.
+> ROI is the most data-dependent scope. Keep forecast and actual states separate, provenance-labeled, and linked; never mix them in one score or CVI.
 
 ---
 

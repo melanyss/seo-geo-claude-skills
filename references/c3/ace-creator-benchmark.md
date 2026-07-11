@@ -10,7 +10,7 @@
 
 | Dim | Question | Threshold |
 |-----|----------|-----------|
-| **A — Audience** | Who follows them — real, sized-right, on-target? | relative |
+| **A — Audience** | Who follows them — real, compositionally understood, and stable? | relative |
 | **C — Credibility** 〔veto〕 | Is the creator safe, honest, reliable? | absolute |
 | **E — Engagement** | Do they actually move their audience? | relative |
 
@@ -24,9 +24,9 @@
 
 | ID | Item | Pass (10) | Partial (5) | Fail (0) |
 |----|------|-----------|-------------|----------|
-| A1 | Audience–Brand Match | Demographics/interests align with target on key attributes | partial overlap | mismatch / unknown |
-| A2 | Real-Follower Rate 〔**VETO**〕 | ≥ 85% estimated real | 70–84% | < 70% or audit refused |
-| A3 | Reach Fit | Follower count sits in the campaign's target tier | adjacent tier | far off |
+| A1 | Audience Composition & Stability | Composition is measured on a stated window and materially stable | partial/older composition evidence | verified instability or material contradiction |
+| A2 | Real-Follower Rate 〔**VETO**〕 | ≥ 85% estimated real | 70–84% | verified < 70% |
+| A3 | Reach Reliability | Typical reach is stable relative to the creator's tier × platform × niche cohort | variable but explainable | persistently unreliable against the locked cohort |
 | A4 | Growth Integrity | Organic growth curve | 1–2 explainable spikes | bought-follower spikes |
 
 ### C — Credibility 〔veto home〕
@@ -36,7 +36,7 @@
 | C1 | Brand Safety 〔**VETO**〕 | No disqualifying content | minor / old, contextual | hate / illegal / active controversy |
 | C2 | Disclosure History | Sponsored posts consistently disclosed (#ad etc.) | usually | routinely undisclosed |
 | C3 | Professional Reliability | Clean delivery & comms record | minor issues | ghosting / disputes / missed deadlines |
-| C4 | Category Conflict | No competing exclusivity | expired / soft conflict | active competitor lock-in |
+| C4 | Commercial Saturation & History | Sponsored density and disclosed category history are healthy for the cohort | elevated but transparent | materially saturated or repeatedly undisclosed commercial history |
 
 ### E — Engagement
 
@@ -44,7 +44,7 @@
 |----|------|-----------|-------------|----------|
 | E1 | Engagement Rate | ≥ niche × tier × platform median | below median but active | far below / declining |
 | E2 | Engagement Authenticity 〔**VETO**〕 | Organic comments / saves | minor anomalies | pod / bought engagement |
-| E3 | Audience Action | Documented past action-driving (clicks / conversions) | likes only | no evidence / negative |
+| E3 | Repeat Audience Action | Repeat saves, shares, replies, or other audience actions are observed on a stated window | one-off/directional action | verified absence or deterioration of repeat action |
 | E4 | Relationship Depth | Meaningful comment sentiment + creator replies | mixed | shallow / negative |
 
 ---
@@ -55,7 +55,8 @@
 - Dimension = mean(items) × 10 → 0–100
 - **ACE = A·w_A + C·w_C + E·w_E** (weights by campaign goal — see [architecture §6](scoring-architecture.md#6-weights-by-campaign-goal-scope-level))
 - Bands: 90–100 Excellent · 75–89 Good · 60–74 Medium · 40–59 Low · 0–39 Poor
-- **Veto:** failing **A2**, **E2**, or **C1** caps ACE at **Low (≤ 59)** and raises a Manipulation / Safety flag.
+- A score requires complete applicable evidence. Missing/refused tool access is `unknown`, never Partial or Fail.
+- **Veto:** one verified failure of **A2**, **E2**, or **C1** caps ACE at 59; 2+ verified vetoes produce `BLOCK` with no final score.
 
 ---
 
@@ -63,14 +64,14 @@
 
 | Item | Assessable from a public profile? | Needs a tool |
 |------|:----------------------------------------:|--------------|
-| A1, A3 | partial (visible audience cues) | audience-analytics for precise demographics |
+| A1, A3 | partial evidence only (visible audience/reach cues) | audience analytics for composition and windowed reach reliability |
 | A2, A4 | ⚠️ no | fake-follower auditor (HypeAuditor / Modash-class) |
-| C1, C2, C4 | ✅ yes (review recent posts / disclosures) | — |
+| C1, C2, C4 | partial evidence (review recent posts / disclosures) | longer commercial-history export where available |
 | C3 | partial | CRM / references |
 | E1 | ✅ computable from public counts | benchmark data for the niche median |
-| E2, E3, E4 | ✅ partial (read the comments) | engagement-authenticity tool for rigor |
+| E2, E3, E4 | partial evidence (read the comments) | engagement/authenticity export for rigor |
 
-> When a tool-dependent item can't be verified, score it **Partial** and flag *"unverified"* — **never default to Pass.**
+> When a tool-dependent item cannot be verified, mark it `unknown` and do not emit ACE. Never convert missing evidence to Partial, Fail, or Pass.
 
 ---
 
@@ -89,5 +90,7 @@
 | Fake followers / bought audience | A2 | ✅ |
 | Brand safety / scandal | C1 | ✅ |
 | Pod / bought engagement | E2 | ✅ |
-| Reach scale (tier fit) | A3 | — |
+| Reach reliability (tier × platform × niche) | A3 | — |
+| Creator × brand fit / exclusivity conflict | ROI.O1 | — |
+| Campaign conversion | ROI.I2 | — |
 | Real influence (engagement rate) | E1 | — |

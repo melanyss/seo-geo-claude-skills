@@ -1,6 +1,6 @@
 # Owned-Community Loop — Entry, Lifecycle, and Share Instrumentation
 
-Shared reference for the **owned-space variant** of the social discipline: the community the brand runs itself — Discord, Slack, a self-hosted forum (Discourse-class), or a 微信 私域 space (微信群/企业微信). Two skills consume it: [participation-warmup-planner](../../social/explore/participation-warmup-planner/SKILL.md) designs the entry incentives and member lifecycle (the ECHO `E` *owned-space entry and member-lifecycle health* sub-item — see [echo-benchmark.md](../echo-benchmark.md)), and [dark-social-attributor](../../social/observe/dark-social-attributor/SKILL.md) consumes the share-loop instrumentation spec below. Registry-grade facts (the space's dossier, cadence commitments, state transitions) live in `memory/channels/` via `candidates.md` — [channel-registry](../../protocol/channel-registry/SKILL.md) is the sole writer.
+Shared reference for brand-owned spaces such as Discord, Slack, Discourse, or 微信私域. [participation-warmup-planner](../../social/explore/participation-warmup-planner/SKILL.md) designs entry/lifecycle behavior and [dark-social-attributor](../../social/observe/dark-social-attributor/SKILL.md) consumes share instrumentation. Durable channel facts are submitted as authorized `operation: propose` events; [channel-registry](../../protocol/channel-registry/SKILL.md) owns acceptance and canonical transitions.
 
 ## The loop
 

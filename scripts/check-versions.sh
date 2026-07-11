@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# check-versions.sh — version-sync guard for the 8-file tracking contract.
+# check-versions.sh — version-sync guard for the 10-surface tracking contract.
 #
 # CONTRIBUTING.md §6 requires the bundle version and every skill version to
-# stay in sync across VERSIONS.md, plugin.json, both marketplace.json
-# mirrors, both README badges, and CLAUDE.md. Keeping eight files aligned by
+# stay in sync across the typed system catalog, VERSIONS.md, plugin.json, both
+# marketplace mirrors, root/localized README badges, and CLAUDE.md. Keeping
+# these release surfaces aligned by
 # hand is exactly the kind of mechanical step that drifts, so CI enforces it:
 #
 #   1. Bundle version (plugin.json) == every "version" field in both
@@ -45,6 +46,8 @@ else
       done <<< "$vers"
     fi
   done
+  catalog_bundle=$(sed -n 's/.*"bundle_version": "\([0-9][0-9.]*\)".*/\1/p' references/system-catalog.json | head -1)
+  [ "$catalog_bundle" = "$BUNDLE" ] || err "references/system-catalog.json bundle_version $catalog_bundle != bundle $BUNDLE"
   grep -q "version-$BUNDLE-orange" README.md || err "README.md badge != $BUNDLE"
   grep -q "version-$BUNDLE-orange" docs/README.zh.md || err "docs/README.zh.md badge != $BUNDLE"
   # Full version-lock over the localized README set (owner decision 2026-07-05):
@@ -145,6 +148,6 @@ for disc in seo-geo influencer ad email launch social narrative; do
 done
 
 if [ $fail -eq 0 ]; then
-  echo "version-sync clean — bundle $BUNDLE, $skill_count skills consistent across the 8 tracking files + the About SSOT; auto-routing covers all 7 disciplines; every discipline command lists its full skill set"
+  echo "version-sync clean — bundle $BUNDLE, $skill_count skills consistent across the 10 tracking surfaces + localized badges + OpenClaw manifest + About SSOT; auto-routing covers all 7 disciplines; every discipline command lists its full skill set"
 fi
 exit $fail

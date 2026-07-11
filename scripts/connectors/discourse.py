@@ -67,7 +67,7 @@ from urllib.parse import urlencode, urlsplit, urlunsplit
 import _http
 import robots
 
-USER_AGENT = ("aaron-marketing-skills/15.0 "
+USER_AGENT = ("aaron-marketing-skills/17.0 "
               "(+https://github.com/aaron-he-zhu/aaron-marketing-skills)")
 ROBOTS_UA = "aaron-marketing-skills"
 MIN_INTERVAL = 1.0     # seconds between consecutive requests (politeness)

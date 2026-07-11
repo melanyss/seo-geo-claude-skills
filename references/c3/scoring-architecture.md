@@ -23,9 +23,9 @@
 
 | Scope | Dim | Owns | Threshold |
 |-------|-----|------|-----------|
-| **ACE** | **A**udience | who follows: reach-fit, real-follower %, demographic match | relative |
-| | **C**redibility 〔veto〕 | integrity: brand-safety, disclosure history, reliability, conflicts | absolute |
-| | **E**ngagement | influence: engagement rate & authenticity, audience action | relative |
+| **ACE** | **A**udience | who follows: composition/stability, real-follower %, reach reliability | relative |
+| | **C**redibility 〔veto〕 | integrity: safety, disclosure history, reliability, commercial saturation | mixed |
+| | **E**ngagement | influence: engagement rate/authenticity and repeat audience action | relative |
 | **ART** | **A**ppeal | craft: hook, creativity, production, integration naturalness | absolute |
 | | **R**elevance | fit: brand/audience/brief alignment, message accuracy | absolute |
 | | **T**ransparency 〔veto〕 | honesty: FTC disclosure, no false claims, brand-safe | absolute |
@@ -45,6 +45,8 @@
 | Rating bands | 90–100 Excellent · 75–89 Good · 60–74 Medium · 40–59 Low · 0–39 Poor |
 | **Veto-cap** | any failed veto item caps the scope's rating at **Low (≤ 59)** and raises a flag |
 
+A scope score requires 100% coverage of applicable items. Missing or refused evidence is `unknown`, not Partial/Fail; catalog-authorized inapplicability is `na` with reason. One verified veto caps at 59; 2+ verified vetoes produce `BLOCK` with no final score. See [`../scoring-semantics.md`](../scoring-semantics.md).
+
 ---
 
 ## 4. Two threshold regimes
@@ -60,7 +62,7 @@ Influencer metrics are platform/tier/niche-relative — **never hard-code platfo
 
 | Scope | Veto | Trigger |
 |-------|------|---------|
-| ACE | **A2** Real-Follower Rate | < 70% real / audit refused (follower fraud) |
+| ACE | **A2** Real-Follower Rate | verified < 70% real (refused/missing audit = Unknown) |
 | ACE | **C1** Brand Safety | disqualifying content / active scandal |
 | ACE | **E2** Engagement Authenticity | pod / bought engagement |
 | ART | **T1** FTC Disclosure | missing / inadequate disclosure on sponsored content |
@@ -81,17 +83,17 @@ Weights shift per objective. Example for **ACE** (Creator):
 | Conversion | 35% | 30% | 35% |
 | Brand-building | 30% | 45% | 25% |
 
-(ART and ROI carry their own goal-weight tables in their benchmark files.)
+(ART and ROI carry their own typed profile tables in their benchmark files.)
 
 ---
 
-## 7. Cross-scope MECE boundaries (no double-count)
+## 7. Cross-Scope Ownership Boundaries (No Double-Count)
 
 Each cross-cutting concept is scored in **exactly one** place:
 
 | Concept | Scored once in | Not scored in |
 |---------|----------------|---------------|
-| Reach / scale | ACE.Audience | ROI, ART |
+| Audience composition and typical reach reliability | ACE.Audience | ROI, ART |
 | Conversion / outcome | ROI.Impact | ART (ART scores appeal + compliance, **not** conversion) |
 | Compliance | content disclosure → ART.Transparency; creator safety → ACE.Credibility | (different objects — not a duplicate) |
 | Creator × brand fit | ROI.Orchestration | ACE (ACE is brand-independent) |
@@ -108,13 +110,15 @@ Each cross-cutting concept is scored in **exactly one** place:
 | Veto | **cap** (override) | a failed veto item caps the scope at Low (≤ 59) |
 | Across scopes | **multiplicative** (geometric mean) | a weak link wastes the rest — great creator + great content + flopped campaign ≠ a decent average |
 
-The scopes nest — **ACE** per creator (portable; score once & reuse), **ART** per content piece, **ROI** per campaign — and roll up into one soft-multiplicative index that penalizes imbalance without zeroing:
+The scopes link — **ACE** per creator baseline, **ART** per content piece, **ROI** per campaign — and may roll up into one soft-multiplicative index that penalizes imbalance without zeroing:
 
 ```
 Campaign Value Index (CVI) = ( ACE_avg × ART_avg × ROI )^(1/3) = ∛( C × C × C )
 ```
 
-ACE_avg = budget-weighted mean of the campaign's creators · ART_avg = mean of its contents.
+ACE_avg = budget-weighted mean of the campaign's creators · ART_avg = mean of its contents. Every component must be complete and share one campaign `rollup_id`, goal, observation date, `assessment_time`, and catalog version. Forecast and actual components never mix. A blocked component prevents CVI.
+
+Use the `components` input in [`c3-rollup.schema.json`](../c3-rollup.schema.json) for multi-creator/multi-asset campaigns. The deterministic runtime requires a positive budget weight for every ACE component when more than one creator is present, applies equal weight to ART, and requires exactly one ROI component.
 
 **The name encodes the math:** three **C**'s, multiplied and cube-rooted → **C³** (a "3C" additive list would mislabel it). Keep the three scope scores **separate** beside the CVI — the index ranks & alerts, the three scores diagnose (§9).
 

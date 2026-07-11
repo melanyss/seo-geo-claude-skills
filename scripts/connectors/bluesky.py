@@ -84,7 +84,7 @@ AUTH_BASE = "https://bsky.social/xrpc"
 APP_PASSWORD_URL = "https://bsky.app/settings/app-passwords"
 ENV_IDENTIFIER = "BSKY_IDENTIFIER"
 ENV_APP_PASSWORD = "BSKY_APP_PASSWORD"
-USER_AGENT = ("aaron-marketing-skills/15.0 "
+USER_AGENT = ("aaron-marketing-skills/17.0 "
               "(+https://github.com/aaron-he-zhu/aaron-marketing-skills)")
 MAX_LIMIT = 100          # API maximum for limit= on all four reads
 MIN_INTERVAL = 1.0       # seconds between consecutive requests (politeness)

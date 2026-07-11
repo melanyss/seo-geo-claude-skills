@@ -23,6 +23,15 @@ reference-oss/
 .claude/
 .codex/
 .docs/
+.planning/
+
+# Operational marketing memory. Runtime records may contain consent, creator,
+# campaign, and customer data; keep only the documentation/templates below.
+memory/**
+!memory/
+!memory/README.md
+!memory/templates/
+!memory/templates/**
 
 # Environment variables
 .env

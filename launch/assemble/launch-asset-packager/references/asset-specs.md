@@ -10,7 +10,7 @@ Nine sections, per the presskit() industry convention (Rami Ismail's presskit() 
 |---------|----------|-------|
 | Factsheet | Company/developer, release date, platforms, price, website, social links, press contact | The release date must match the `memory/launch-registry/` record — one authoritative date |
 | Description | Short (1-2 sentence) + long product description | Copy comes from the message house — do not write a second, diverging description here |
-| History | Origin story, milestones | Facts only; company claims marked `[needs source]` route to `memory/claims/candidates.md` |
+| History | Origin story, milestones | Facts only; company claims marked `[needs source]` route to `memory/events/claims.ndjson` via an authorized `operation: propose` request to `registry-events.py` |
 | Features | Bulleted feature list | Mirror the message house value pillars; comparative claims need ledger backing |
 | Videos | Trailer / demo video, downloadable + embeddable | Demo script beats come from the SKILL.md step 4 shot list |
 | Images | Screenshots, product shots, lifestyle images in a downloadable bundle | Original resolution + web-sized; name files predictably |
@@ -64,4 +64,4 @@ One row per channel-artifact; status is one of `missing` / `draft` / `final` / `
 | Go-live checklist | Site | §3 above | | | missing |
 | Localization variants | Non-EN channels (where the audience requires) | Per-channel spec | | | missing |
 
-Freeze = version + date assigned, pointer submitted to `memory/launch-registry/candidates.md`. Gaps (missing rows for the declared tier, budget overruns, unverified go-live items) go into the handoff summary for [launch-readiness-auditor](../../../mobilize/launch-readiness-auditor/SKILL.md).
+Freeze = version + date assigned, pointer submitted to `memory/events/launches.ndjson` via an authorized `operation: propose` request to `registry-events.py`. Gaps (missing rows for the declared tier, budget overruns, unverified go-live items) go into the handoff summary for [launch-readiness-auditor](../../../mobilize/launch-readiness-auditor/SKILL.md).

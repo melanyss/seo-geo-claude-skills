@@ -48,7 +48,7 @@ Freshness is self-documenting: every `body`/`list` mirror carries its synced umb
 
 Every family repo README opens with the same recognizable block. Three variants — parameterize, don't improvise:
 
-### A. Signpost (paid-ads / email-marketing / product-launch agent-skills)
+### A. Signpost (paid / email / launch / social / narrative agent-skills)
 
 ```markdown
 > [!IMPORTANT]
@@ -67,7 +67,7 @@ Variant A plus a preserved-line pointer in the banner, and an old→new `<detail
 > no updates — already-installed copies keep working; new installs come from the bundle.
 ```
 
-### C. Provenance note (the five benchmark repos)
+### C. Provenance note (the eight benchmark repos)
 
 ```markdown
 > **Working copy:** this standard is maintained in [aaron-marketing-skills — `references/<file>.md`](https://github.com/aaron-he-zhu/aaron-marketing-skills/blob/main/references/<file>.md)

@@ -1,0 +1,617 @@
+{
+  "$schema": "./system-catalog.schema.json",
+  "schema_version": "1.0",
+  "architecture_version": "17.0.0",
+  "bundle_version": "17.0.0",
+  "counts": {
+    "disciplines": 7,
+    "discipline_skills": 112,
+    "protocol_skills": 8,
+    "total_skills": 120,
+    "commands": 8,
+    "registries": 7,
+    "auditors": 8
+  },
+  "logical_order": [
+    "narrative",
+    "seo-geo",
+    "social",
+    "email",
+    "ad",
+    "influencer",
+    "launch",
+    "protocol"
+  ],
+  "layers": [
+    {
+      "id": "L1",
+      "name": "Strategy",
+      "purpose": "what we say and who we are",
+      "disciplines": [
+        "narrative"
+      ],
+      "cadence": "always-on"
+    },
+    {
+      "id": "L2",
+      "name": "Channels",
+      "purpose": "always-on engines that express strategy",
+      "disciplines": [
+        "seo-geo",
+        "social",
+        "email",
+        "ad",
+        "influencer"
+      ],
+      "cadence": "always-on"
+    },
+    {
+      "id": "L3",
+      "name": "Orchestration",
+      "purpose": "time-boxed moments coordinated across channels",
+      "disciplines": [
+        "launch"
+      ],
+      "cadence": "episodic"
+    },
+    {
+      "id": "L4",
+      "name": "Protocol",
+      "purpose": "truth registries, governance, and working memory",
+      "disciplines": [
+        "protocol"
+      ],
+      "cadence": "continuous"
+    }
+  ],
+  "commands": [
+    "auto",
+    "narrative",
+    "seo-geo",
+    "social",
+    "email",
+    "ad",
+    "influencer",
+    "launch"
+  ],
+  "disciplines": {
+    "narrative": {
+      "display_name": "Brand Narrative",
+      "layer": "L1",
+      "frameworks": [
+        "TALE"
+      ],
+      "loop": "Trace -> Architect -> Land -> Evaluate",
+      "phase_order": [
+        "trace",
+        "architect",
+        "land",
+        "evaluate"
+      ],
+      "phases": {
+        "trace": [
+          "narrative-baseline-mapper",
+          "category-narrative-mapper",
+          "audience-belief-mapper",
+          "positioning-truth-tracer"
+        ],
+        "architect": [
+          "strategic-narrative-designer",
+          "message-system-architect",
+          "brand-language-codifier",
+          "story-bank-builder"
+        ],
+        "land": [
+          "narrative-cascade-planner",
+          "pitch-narrative-builder",
+          "narrative-enablement-kit",
+          "proof-point-packager"
+        ],
+        "evaluate": [
+          "narrative-quality-auditor",
+          "message-test-designer",
+          "narrative-resonance-monitor",
+          "narrative-drift-monitor"
+        ]
+      }
+    },
+    "seo-geo": {
+      "display_name": "SEO/GEO",
+      "layer": "L2",
+      "frameworks": [
+        "CORE-EEAT",
+        "CITE"
+      ],
+      "loop": "Research -> Build -> Optimize -> Monitor",
+      "phase_order": [
+        "research",
+        "build",
+        "optimize",
+        "monitor"
+      ],
+      "phases": {
+        "research": [
+          "keyword-research",
+          "competitor-analysis",
+          "serp-analysis",
+          "content-gap-analysis"
+        ],
+        "build": [
+          "content-writer",
+          "geo-content-optimizer",
+          "serp-markup-builder",
+          "page-play-builder"
+        ],
+        "optimize": [
+          "content-quality-auditor",
+          "technical-seo-checker",
+          "on-page-seo-auditor",
+          "site-structure-optimizer"
+        ],
+        "monitor": [
+          "domain-authority-auditor",
+          "rank-tracker",
+          "performance-monitor",
+          "offsite-signal-analyzer"
+        ]
+      }
+    },
+    "social": {
+      "display_name": "Organic Social",
+      "layer": "L2",
+      "frameworks": [
+        "ECHO"
+      ],
+      "loop": "Explore -> Craft -> Host -> Observe",
+      "phase_order": [
+        "explore",
+        "craft",
+        "host",
+        "observe"
+      ],
+      "phases": {
+        "explore": [
+          "channel-portfolio-planner",
+          "voice-dossier-builder",
+          "platform-norm-profiler",
+          "participation-warmup-planner"
+        ],
+        "craft": [
+          "social-calendar-builder",
+          "social-creative-builder",
+          "short-video-scripter",
+          "advocacy-program-designer"
+        ],
+        "host": [
+          "social-quality-auditor",
+          "engagement-inbox-manager",
+          "social-selling-planner",
+          "crisis-response-planner"
+        ],
+        "observe": [
+          "social-pulse-monitor",
+          "share-of-voice-tracker",
+          "dark-social-attributor",
+          "social-measurement-loop"
+        ]
+      }
+    },
+    "email": {
+      "display_name": "Email Marketing",
+      "layer": "L2",
+      "frameworks": [
+        "SEND"
+      ],
+      "loop": "Setup -> Engage -> Nurture -> Deliver",
+      "phase_order": [
+        "setup",
+        "engage",
+        "nurture",
+        "deliver"
+      ],
+      "phases": {
+        "setup": [
+          "deliverability-qa",
+          "list-segment-builder",
+          "list-growth-designer",
+          "list-hygiene-monitor"
+        ],
+        "engage": [
+          "email-creative-builder",
+          "subject-line-lab",
+          "email-render-builder",
+          "dynamic-content-personalizer"
+        ],
+        "nurture": [
+          "email-sequence-designer",
+          "newsletter-monetization-planner",
+          "preference-frequency-manager",
+          "reactivation-specialist"
+        ],
+        "deliver": [
+          "email-quality-auditor",
+          "send-experiment-designer",
+          "inbox-placement-monitor",
+          "cold-outbound-sequencer"
+        ]
+      }
+    },
+    "ad": {
+      "display_name": "Paid Ads",
+      "layer": "L2",
+      "frameworks": [
+        "ROAS"
+      ],
+      "loop": "Research -> Orchestrate -> Activate -> Scale",
+      "phase_order": [
+        "research",
+        "orchestrate",
+        "activate",
+        "scale"
+      ],
+      "phases": {
+        "research": [
+          "campaign-architect",
+          "audience-segment-builder",
+          "search-term-miner",
+          "product-feed-optimizer"
+        ],
+        "orchestrate": [
+          "ad-creative-builder",
+          "ad-test-designer",
+          "bid-strategy-planner",
+          "landing-experience-checker"
+        ],
+        "activate": [
+          "ad-account-auditor",
+          "conversion-signal-qa",
+          "placement-exclusion-manager",
+          "conversion-value-mapper"
+        ],
+        "scale": [
+          "paid-measurement-loop",
+          "attribution-reconciler",
+          "budget-pacing-monitor",
+          "fatigue-frequency-manager"
+        ]
+      }
+    },
+    "influencer": {
+      "display_name": "Influencer Marketing",
+      "layer": "L2",
+      "frameworks": [
+        "C3"
+      ],
+      "loop": "Discover -> Plan -> Activate -> Measure",
+      "phase_order": [
+        "discover",
+        "plan",
+        "activate",
+        "measure"
+      ],
+      "phases": {
+        "discover": [
+          "audience-mapper",
+          "trend-spotter",
+          "influencer-discovery",
+          "fit-scorer"
+        ],
+        "plan": [
+          "competitor-tracker",
+          "campaign-planner",
+          "brief-generator",
+          "budget-optimizer"
+        ],
+        "activate": [
+          "outreach-manager",
+          "content-reviewer",
+          "contract-helper",
+          "content-amplifier"
+        ],
+        "measure": [
+          "landing-optimizer",
+          "performance-analyzer",
+          "roi-calculator",
+          "report-generator"
+        ]
+      }
+    },
+    "launch": {
+      "display_name": "Product Launch",
+      "layer": "L3",
+      "frameworks": [
+        "RAMP"
+      ],
+      "loop": "Research -> Assemble -> Mobilize -> Prove",
+      "phase_order": [
+        "research",
+        "assemble",
+        "mobilize",
+        "prove"
+      ],
+      "phases": {
+        "research": [
+          "positioning-mapper",
+          "launch-tier-planner",
+          "launch-window-planner",
+          "early-access-designer"
+        ],
+        "assemble": [
+          "message-house-builder",
+          "launch-asset-packager",
+          "pricing-packaging-planner",
+          "sales-enablement-kit"
+        ],
+        "mobilize": [
+          "launch-readiness-auditor",
+          "launch-day-conductor",
+          "community-launch-runner",
+          "press-media-relations"
+        ],
+        "prove": [
+          "launch-monitor",
+          "launch-feedback-synthesizer",
+          "launch-retro-analyzer",
+          "momentum-planner"
+        ]
+      }
+    }
+  },
+  "protocol": {
+    "display_name": "Shared Protocol",
+    "layer": "L4",
+    "skills": [
+      "entity-optimizer",
+      "creator-registry",
+      "offer-claims-registry",
+      "consent-registry",
+      "launch-registry",
+      "channel-registry",
+      "narrative-registry",
+      "memory-management"
+    ]
+  },
+  "registries": [
+    {
+      "key": "entities",
+      "owner": "entity-optimizer",
+      "stream": "memory/events/entities.ndjson",
+      "projection": "memory/projections/entities.json",
+      "human_view": "memory/entities/"
+    },
+    {
+      "key": "creators",
+      "owner": "creator-registry",
+      "stream": "memory/events/creators.ndjson",
+      "projection": "memory/projections/creators.json",
+      "human_view": "memory/creators/"
+    },
+    {
+      "key": "claims",
+      "owner": "offer-claims-registry",
+      "stream": "memory/events/claims.ndjson",
+      "projection": "memory/projections/claims.json",
+      "human_view": "memory/claims/"
+    },
+    {
+      "key": "consent",
+      "owner": "consent-registry",
+      "stream": "memory/events/consent.ndjson",
+      "projection": "memory/projections/consent.json",
+      "human_view": "memory/consent/"
+    },
+    {
+      "key": "launches",
+      "owner": "launch-registry",
+      "stream": "memory/events/launches.ndjson",
+      "projection": "memory/projections/launches.json",
+      "human_view": "memory/launch-registry/",
+      "state_machine": {
+        "initial": "draft",
+        "transitions": {
+          "draft": [
+            "concept"
+          ],
+          "concept": [
+            "alpha"
+          ],
+          "alpha": [
+            "beta"
+          ],
+          "beta": [
+            "general-availability"
+          ],
+          "general-availability": [
+            "archived"
+          ],
+          "archived": []
+        }
+      }
+    },
+    {
+      "key": "channels",
+      "owner": "channel-registry",
+      "stream": "memory/events/channels.ndjson",
+      "projection": "memory/projections/channels.json",
+      "human_view": "memory/channels/",
+      "state_machine": {
+        "initial": "proposed",
+        "transitions": {
+          "proposed": [
+            "warming",
+            "retired"
+          ],
+          "warming": [
+            "active",
+            "paused",
+            "retired"
+          ],
+          "active": [
+            "paused",
+            "retired"
+          ],
+          "paused": [
+            "warming",
+            "retired"
+          ],
+          "retired": []
+        }
+      }
+    },
+    {
+      "key": "narrative",
+      "owner": "narrative-registry",
+      "stream": "memory/events/narrative.ndjson",
+      "projection": "memory/projections/narrative.json",
+      "human_view": "memory/narrative-registry/"
+    }
+  ],
+  "auditors": [
+    {
+      "skill": "narrative-quality-auditor",
+      "framework": "TALE",
+      "path": "narrative/evaluate/narrative-quality-auditor",
+      "sink": "memory/audits/narrative/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/tale-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "content-quality-auditor",
+      "framework": "CORE-EEAT",
+      "path": "seo-geo/optimize/content-quality-auditor",
+      "sink": "memory/audits/content/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/core-eeat-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "domain-authority-auditor",
+      "framework": "CITE",
+      "path": "seo-geo/monitor/domain-authority-auditor",
+      "sink": "memory/audits/domain/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/cite-domain-rating.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "social-quality-auditor",
+      "framework": "ECHO",
+      "path": "social/host/social-quality-auditor",
+      "sink": "memory/audits/social/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/echo-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "email-quality-auditor",
+      "framework": "SEND",
+      "path": "email/deliver/email-quality-auditor",
+      "sink": "memory/audits/email/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/send-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "ad-account-auditor",
+      "framework": "ROAS",
+      "path": "ad/activate/ad-account-auditor",
+      "sink": "memory/audits/ad/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/roas-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "content-reviewer",
+      "framework": "C3",
+      "path": "influencer/activate/content-reviewer",
+      "sink": "memory/audits/influencer/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/c3-benchmark.md",
+                      "references/c3/art-content-benchmark.md",
+                      "references/c3/scoring-architecture.md",
+                      "references/c3-rollup.schema.json",
+                      "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    },
+    {
+      "skill": "launch-readiness-auditor",
+      "framework": "RAMP",
+      "path": "launch/mobilize/launch-readiness-auditor",
+      "sink": "memory/audits/launch/",
+      "runtime_sources": [
+        "references/auditor-runbook.md",
+        "references/scoring-semantics.md",
+        "references/ramp-benchmark.md",
+        "references/audit-run.schema.json",
+        "references/audit-artifact.schema.json"
+      ]
+    }
+  ],
+  "l1_dependency": {
+    "required_fields": [
+      "narrative_canon_id",
+      "narrative_canon_version",
+      "claims_projection_offset",
+      "dependency_status"
+    ],
+    "dependency_status_values": [
+      "verified",
+      "approved-fallback",
+      "blocked"
+    ],
+    "builders": [
+      "seo-geo/build/content-writer",
+      "social/craft/social-creative-builder",
+      "email/engage/email-creative-builder",
+      "ad/orchestrate/ad-creative-builder",
+      "influencer/plan/brief-generator",
+      "launch/assemble/message-house-builder",
+      "launch/assemble/launch-asset-packager"
+    ]
+  },
+  "distribution_profiles": {
+    "repository": {
+      "shared_references": true,
+      "executable_runtime": true,
+      "auditor_contract": "root references plus typed scorer"
+    },
+    "standalone-skill": {
+      "shared_references": false,
+      "executable_runtime": false,
+      "auditor_contract": "generated immutable references/auditor-runtime.md"
+    },
+    "npx-skills": {
+      "shared_references": false,
+      "executable_runtime": "host-dependent",
+      "auditor_contract": "skill directory including generated references"
+    }
+  }
+}

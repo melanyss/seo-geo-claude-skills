@@ -20,7 +20,7 @@ Infer the phase from the goal (or honor `--phase`) and route to the matching ski
 
 - Start where the goal sits in the funnel; do not force the full four-phase chain when the user only needs one stage.
 - `content-reviewer` is the pre-publish gate: any creator content goes through its C³ **ART** check (FTC disclosure T1, claim integrity T2) before it ships.
-- `creator-registry` is the roster SSOT: only it writes canonical records under `memory/creators/`; other skills submit updates to `memory/creators/candidates.md`, and it should be run when 3+ candidate updates accumulate for one creator or a campaign cycle closes.
+- `memory/events/creators.ndjson` is the roster history. Other skills submit authorized `operation: propose` events; `creator-registry` alone accepts/rejects or mutates canonical creator state. Run it when proposals are pending or a campaign cycle closes; `memory/creators/` contains generated views.
 - Score creators/content/campaigns on C³ (ACE/ART/ROI → CVI); label every metric Measured / User-provided / Estimated; never fabricate reach or rates.
 - Tier 1 by default — works from user-provided data; connectors only automate retrieval. Compliance checks are guidance, not legal advice.
 - Follow each skill's Next Best Skill handoff; stop at the documented termination rules rather than auto-chaining the whole discipline.

@@ -79,7 +79,7 @@ from urllib.parse import quote, urlencode
 
 import _http
 
-USER_AGENT = ("aaron-marketing-skills/15.0 "
+USER_AGENT = ("aaron-marketing-skills/17.0 "
               "(+https://github.com/aaron-he-zhu/aaron-marketing-skills)")
 DEFAULT_INSTANCE = "mastodon.social"
 DEFAULT_LEMMY_INSTANCE = "lemmy.world"
