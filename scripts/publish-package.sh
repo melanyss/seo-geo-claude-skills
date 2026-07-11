@@ -78,7 +78,7 @@ echo "Mode    : $([ $LIVE -eq 1 ] && echo LIVE || echo dry-run)"
 cmd=(clawhub package publish "$SOURCE"
      --family bundle-plugin --name "$NAME" --display-name "$DISPLAY"
      --owner "$OWNER" --version "$VER"
-     --source-repo "$REPO_SLUG"
+     --source-repo "$REPO_SLUG" --source-commit "$COMMIT"
      --changelog "aaron-marketing bundle-plugin @ $VER — 120 skills + 8 commands, seven disciplines + protocol layer.")
 [ "$LIVE" -eq 0 ] && cmd+=(--dry-run)
 
